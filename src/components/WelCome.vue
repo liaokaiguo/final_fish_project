@@ -656,6 +656,16 @@ export default {
     passPort,
     workModeSta
   },
+  created() {
+        /* 向后台请求数据 */
+        this.axios.get('http://192.168.0.221:8080/test').then((response) => {
+            // this.normalNum = response.data.normal;
+            // this.illegalNum = response.data.illegal;
+            console.log(response.data)
+        }).catch((response) => {
+            console.log(response)
+        })
+   },
   mounted() {
     //the draw left-bottom echarts function
     this.drawLeftBottomCharts();
