@@ -56,7 +56,7 @@
               </el-form-item>
 
               <el-form-item align="center">
-                <el-button type="primary">航行轨迹回放</el-button>
+                <el-button type="primary" @click="loadTrackPath">航行轨迹回放</el-button>
                 <el-button  @click="resetForm('selectForm')">重置</el-button>
               </el-form-item>
 
@@ -108,8 +108,12 @@ export default {
               beginDate:'',
               endDate:'',
               workType:'',
-          }
-
+          },
+          Points :[
+              {lng: 114.014, lat: 22.687},
+              {lng: 114.0143, lat: 22.742},
+              {lng: 114.09746, lat: 22.745}
+          ]
 
       }
 
@@ -129,11 +133,64 @@ export default {
           //初始化实例，传入坐标点并设置地图级别
           map.centerAndZoom(point, 15);
           map.enableScrollWheelZoom(true);
+          window.map = map;
 
       },
       ///重置表单
       resetForm(formName) {
+          //表单重置
           this.$refs[formName].resetFields();
+          //地图重置
+          let map = window.map;
+          var point = new BMap.Point(122.20, 30.00);
+          map.centerAndZoom(point, 15);
+      },
+
+      loadTrackPath(){
+          let map = window.map;
+          var point = new BMap.Point(122.20, 30.00);
+          //初始化实例，传入坐标点并设置地图级别
+          map.centerAndZoom(point, 15);
+
+          var myP1 = new BMap.Point(122.220967,30.913285);    //起点
+          var myP2 = new BMap.Point(122.254374,30.914668);    //终点
+          var myIcon = new BMap.Icon("../../assets/logo.png", new BMap.Size(70, 70), {    //小车图片
+              //offset: new BMap.Size(0, -5),    //相当于CSS精灵
+              imageOffset: new BMap.Size(0, 0)    //图片的偏移量。为了是图片底部中心对准坐标点。
+          });
+          var driving2 = new BMap.DrivingRoute(map, {renderOptions:{map: map, autoViewport: true}});    //驾车实例
+          driving2.search(myP1, myP2);
+
+          window.run = function (){
+              var driving = new BMap.DrivingRoute(map);    //驾车实例
+              driving.search(myP1, myP2);
+              driving.setSearchCompleteCallback(function(){
+                  var pts = driving.getResults().getPlan(0).getRoute(0).getPath();    //通过驾车实例，获得一系列点的数组
+                  var paths = pts.length;    //获得有几个点
+
+                  var carMk = new BMap.Marker(pts[0],{icon:myIcon});
+                  map.addOverlay(carMk);
+                  var i=0;
+                  function resetMkPoint(i){
+                      carMk.setPosition(pts[i]);
+                      if(i < paths){
+                          setTimeout(function(){
+                              i++;
+                              resetMkPoint(i);
+                          },100);
+                      }
+                  }
+                  setTimeout(function(){
+                      resetMkPoint(5);
+                  },100)
+
+              });
+          }
+
+          setTimeout(function(){
+              run();
+          },1500);
+
       }
   }
 }
