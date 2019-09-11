@@ -261,14 +261,14 @@ export default {
     return {
       TitleMsg: "渔船作业方式智能识别系统",
       //fishing number out or in the harbour
-      LoutNum: "123",
-      LinNum: "834",
+      LoutNum: "",
+      LinNum: "",
       // no-local fishing number out or in the harbour
-      NLoutNum: "103",
-      NLinNum: "889",
+      NLoutNum: "",
+      NLinNum: "",
       // the vessel normal fishing number and the illegel fishing number
-      normalFishingNum: "890",
-      illegelFishingNum: "897",
+      normalFishingNum: "",
+      illegelFishingNum: "",
       //define
       leftBottomOption: {
         tooltip: {
@@ -291,8 +291,8 @@ export default {
             radius: "55%",
             center: ["50%", "60%"],
             data: [
-              { value: 890, name: "正常作业" },
-              { value: 200, name: "非法作业" }
+               // { value: 890, name: "正常作业" },
+               // { value: 200, name: "非法作业" }// 请求后台
             ],
             itemStyle: {
               emphasis: {
@@ -359,7 +359,8 @@ export default {
             name: "每月数量",
             type: "line",
             smooth: true,
-            data: [995, 666, 444, 858, 654, 236, 645, 546, 846, 225, 547, 356],
+            // data: [995, 666, 444, 858, 654, 236, 645, 546, 846, 225, 547, 356],
+            data:[],
             lineStyle: {
               color: {
                 type: "linear",
@@ -437,7 +438,8 @@ export default {
             name: "每月数量",
             type: "line",
             smooth: true,
-            data: [895, 566, 744, 348, 554, 736, 245, 446, 746, 425, 547, 356],
+            // data: [895, 566, 744, 348, 554, 736, 245, 446, 746, 425, 547, 356],
+            data:[],
             lineStyle: {
               color: {
                 type: "radial",
@@ -500,10 +502,10 @@ export default {
               }
             },
             data: [
-              { value: 335, name: "拖网" },
-              { value: 310, name: "刺网" },
-              { value: 234, name: "围网" },
-              { value: 135, name: "其它" }
+              // { value: 335, name: "拖网" }, 请求后台数据
+              // { value: 310, name: "刺网" },
+              // { value: 234, name: "围网" },
+              // { value: 135, name: "其它" }
             ]
           }
         ],
@@ -530,9 +532,9 @@ export default {
             radius: "55%",
             center: ["50%", "60%"],
             data: [
-              { value: 890, name: "拖网" },
-              { value: 123, name: "张网" },
-              { value: 200, name: "围网" }
+              // { value: 890, name: "拖网" },
+              // { value: 123, name: "张网" },
+              // { value: 200, name: "围网" }
             ],
             itemStyle: {
               emphasis: {
@@ -599,7 +601,8 @@ export default {
             name: "每月数量",
             type: "line",
             smooth: true,
-            data: [995, 566, 744, 348, 554, 736, 245, 446, 746, 425, 547, 356],
+            // data: [995, 566, 744, 348, 554, 736, 245, 446, 746, 425, 547, 356],
+            data:[],
             lineStyle: {
               color: {
                 type: "radial",
@@ -656,16 +659,7 @@ export default {
     passPort,
     workModeSta
   },
-  created() {
-        /* 向后台请求数据 */
-        this.axios.get('http://192.168.0.221:8080/test').then((response) => {
-            // this.normalNum = response.data.normal;
-            // this.illegalNum = response.data.illegal;
-            console.log(response.data)
-        }).catch((response) => {
-            console.log(response)
-        })
-   },
+
   mounted() {
     //the draw left-bottom echarts function
     this.drawLeftBottomCharts();
@@ -676,28 +670,250 @@ export default {
     window.addEventListener("resize", function() {
       leftbottomChart.resize();
     });*/
+
+    /* 向后台请求数据 */
+
+    this.initPortData()// 出港入港数量
+    this.initMiddleBottomLEchartsOption(); //拖网
+    this.initMiddleBottomREchartsOption(); //张网
+    this.initRightTopEchartsOption(); //作业方式统计
+    this.initRightMiddleEchartsOption(); //非法作业统计
+    this.initRightBottomEchartsOption(); //刺网
     this.baiduMap();
   },
   methods: {
-    //the function of draw left-bottom echarts
+    //the function of draw left-bottom echarts 左下角
     drawLeftBottomCharts() {
       var leftbottomChart = this.$echarts.init(
         document.getElementById("leftbottomEchartId")
       );
       leftbottomChart.setOption(this.leftBottomOption);
+        //数据没有加载出来显示加载动画,样式添加todo
+        leftbottomChart.showLoading();
+        //获取数据
+        this.axios.get('/getIllegal').then(res => {
+            // setTimeout(()=>{  //未来让加载动画效果明显,这里加入了setTimeout,实现2s延时
+            this.normalFishingNum = res.data.normal;
+            this.illegelFishingNum = res.data.illegal;
+            leftbottomChart.hideLoading(); //加载出来隐藏加载动画
+            leftbottomChart.setOption({  //数据添加
+                series: [{
+                    data: [
+                        {value: res.data.normal, name: "正常作业"},
+                        {value: res.data.illegal, name: "非法作业"}
+                    ]
+                }]
+            })
+            // }, 1000 )
+        })
+
       window.addEventListener("resize", function() {
         leftbottomChart.resize();
       });
     },
+
+      /*出入港口后台数据 */
+      initPortData(){
+          this.axios.get('/getPortTraffic').then((response) => {
+              this.LinNum = response.data.in[0];
+              this.LoutNum = response.data.out[0];
+              this.NLinNum = response.data.in[1];
+              this.NLoutNum = response.data.out[1];
+          }).catch((response) => {
+              console.log(response)
+          })
+      },
+
+      /*拖网后台数据 */
+      initMiddleBottomLEchartsOption(){
+          var middleBottomLeftEChart = this.$echarts.init(
+              document.getElementById("middleBottomLEchartsId")
+          );
+          middleBottomLeftEChart.setOption(this.middleBottomLOption);
+          //数据没有加载出来显示加载动画,样式添加todo
+          middleBottomLeftEChart.showLoading();
+          this.axios.get('/getTuowangStatistic').then(res => {
+              middleBottomLeftEChart.hideLoading(); //加载出来隐藏加载动画
+              middleBottomLeftEChart.setOption({  //数据添加
+                  series: [{
+                      data: res.data.tuowang
+                  }]
+              })
+
+          })
+      },
+
+      /*张网后台数据 */
+      initMiddleBottomREchartsOption(){
+          var middleBottomRightEChart = this.$echarts.init(
+              document.getElementById("middleBottomREchartsId")
+          );
+          middleBottomRightEChart.setOption(this.middleBottomROption);
+          //数据没有加载出来显示加载动画,样式添加todo
+          middleBottomRightEChart.showLoading();
+          this.axios.get('/getZhangwangStatistic').then(res => {
+              middleBottomRightEChart.hideLoading(); //加载出来隐藏加载动画
+              middleBottomRightEChart.setOption({  //数据添加
+                  series: [{
+                      data: res.data.zhangwang
+                  }]
+              })
+
+          })
+      },
+
+      /*作业方式统计后台数据 */
+      initRightTopEchartsOption() {
+          var rightTopEChart = this.$echarts.init(
+              document.getElementById("rightTopEchartsId")
+          );
+          rightTopEChart.setOption(this.rightTopOption);
+          //数据没有加载出来显示加载动画,样式添加todo
+          rightTopEChart.showLoading();
+          this.axios.get('/getOperationStatistic').then(res => {
+              rightTopEChart.hideLoading(); //加载出来隐藏加载动画
+              rightTopEChart.setOption({  //数据添加
+                  series: [{
+                      data: [
+                          { value: res.data.tuowang, name: "拖网" },
+                          { value: res.data.ciwang, name: "刺网" },
+                          { value: res.data.weiwang, name: "围网" },
+                          { value: res.data.other, name: "其它" }]
+                  }]
+              })
+
+          })
+      },
+
+      /*非法作业方式统计后台数据 */
+      initRightMiddleEchartsOption(){
+          var rightMiddleEChart = this.$echarts.init(
+              document.getElementById("rightMiddleEchartsId")
+          );
+          rightMiddleEChart.setOption(this.rightMiddleOption);
+          //数据没有加载出来显示加载动画,样式添加todo
+          rightMiddleEChart.showLoading();
+          this.axios.get('/getIllegalOperationStatistic').then(res => {
+              console.log(res.data)
+              rightMiddleEChart.hideLoading(); //加载出来隐藏加载动画
+              rightMiddleEChart.setOption({  //数据添加
+                  series: [{
+                      data: [
+                          { value: res.data.tuowang, name: "拖网" },
+                          { value: res.data.zhangwang, name: "张网" },
+                          { value: res.data.weiwang, name: "围网" }]
+                  }]
+              })
+
+          })
+      },
+
+      /*刺网后台数据 */
+      initRightBottomEchartsOption() {
+          var rightBottomEChart = this.$echarts.init(
+              document.getElementById("rightBottomEchartsId")
+          );
+          rightBottomEChart.setOption(this.rightBottomOption);
+          //数据没有加载出来显示加载动画,样式添加todo
+          rightBottomEChart.showLoading();
+          this.axios.get('/getCiwangStatistic').then(res => {
+              rightBottomEChart.hideLoading(); //加载出来隐藏加载动画
+              rightBottomEChart.setOption({  //数据添加
+                  series: [{
+                      data: res.data.ciwang
+                  }]
+              })
+
+          })
+      },
+
+
+      /*首页中间的地图显示*/
       baiduMap() {
          //创建实例
           var map = new BMap.Map("MiddleTopMainMap");
           //创建坐标点
           var point = new BMap.Point(122.20, 30.00);
+          map.addControl(new BMap.MapTypeControl({
+              mapTypes:[
+                  BMAP_NORMAL_MAP,
+                  BMAP_SATELLITE_MAP,
+                  BMAP_HYBRID_MAP
+              ]}));
+          // map.addControl(new BMap.NavigationControl()); 缩放比例尺
+
           //初始化实例，传入坐标点并设置地图级别
           map.centerAndZoom(point, 12);
           map.enableScrollWheelZoom(true);
-      }
+          window.map = map;//将map变量存储在全局
+
+          /* 渔船标注位置*/
+          this.addMarker();
+
+      },
+      addMarker(){
+
+          // var markerArr=this.deviceArry
+          var markerArr = [
+              {name :"船1",terminalid: "草帽",speed : 100,locationdate:"2019-09-12 14:44:20",longitude : 122.21,latitude :29.8991},
+              {name :"船2",terminalid: "红发",speed : 98,locationdate:"2019-09-12 14:44:20",longitude : 122.012123,latitude :30.0111},
+              {name :"船3",terminalid: "百兽",speed : 94,locationdate:"2019-09-12 14:44:20",longitude : 122.43531,latitude :30.04511},
+              {name :"船4",terminalid: "黑胡子",speed : 97,locationdate:"2019-09-12 14:44:20",longitude : 122.39631,latitude :30.08911},
+              {name :"船5",terminalid: "大麻",speed : 92,locationdate:"2019-09-12 14:44:20",longitude : 122.42631,latitude :30.02311},
+              {name :"船6",terminalid: "海军",speed : 95,locationdate:"2019-09-12 14:44:20",longitude : 122.3139631,latitude :30.07611},
+              {name :"船7",terminalid: "和之国",speed : 88,locationdate:"2019-09-12 14:44:20",longitude : 122.181131,latitude :29.90411},
+              {name :"船8",terminalid: "名1",speed : 82,locationdate:"2019-09-12 14:44:20",longitude : 122.095131,latitude :29.90411},
+              {name :"船9",terminalid: "名2",speed : 81,locationdate:"2019-09-12 14:44:20",longitude : 122.011331,latitude :29.97451},
+              {name :"船10",terminalid: "名3",speed : 83,locationdate:"2019-09-12 14:44:20",longitude : 122.081131,latitude :29.91721},
+              {name :"船11",terminalid: "和2",speed : 84,locationdate:"2019-09-12 14:44:20",longitude : 122.180131,latitude :29.94411},
+              {name :"船12",terminalid: "国5",speed : 58,locationdate:"2019-09-12 14:44:20",longitude : 122.282116,latitude :29.88481},
+              {name :"船13",terminalid: "国6",speed : 28,locationdate:"2019-09-12 14:44:20",longitude : 122.282131,latitude :29.91411}];
+          var point = new Array();//定义数组标注经纬信息
+          var marker = new Array();//定义数组点对象信息
+          var info = new Array();//定义悬浮提示信息
+          //设置icon信息
+          var width = 32;
+          var height = 32;
+          var imgSrc = require("../assets/ship32.png"); //引入icon图片 本地图要用require
+          var myIcon = new BMap.Icon(imgSrc, new BMap.Size(width,height));//配置icon
+          for(var i = 0; i < markerArr.length; i++){//遍历
+              point[i] = new window.BMap.Point(markerArr[i].longitude,markerArr[i].latitude);
+              marker[i] = new window.BMap.Marker(point[i],{icon:myIcon});//把icon和坐标添加到Marker中
+              map.addOverlay(marker[i]);
+              var label = new window.BMap.Label(markerArr[i].name);
+              label.setStyle({  //设置提示框的样式
+                  color : "#000",
+                  fontSize : "12px",
+                  backgroundColor :"#d5fdff",
+                  border :"1px solid #ccc",
+                  borderRadius:"2px",
+                  padding :"2px 6px"
+              });
+              // marker[i].setLabel(label);
+              info[i] = new window.BMap.InfoWindow(
+                  "<div style='width:300px;'>"
+                  +"<p>渔船编号："+markerArr[i].name+"</p>"
+                  +"<p>渔船名："+markerArr[i].terminalid+"</p>"
+                  +"<p>航行时速(m/s)："+markerArr[i].speed+"</p>"
+                  +"<p>定位时间："+markerArr[i].locationdate+"</p>"
+                  +"<p>地址经度："+markerArr[i].longitude+"</p>"
+                  +"<p>地址纬度："+markerArr[i].latitude+"</p>"
+                  // +"<p>详细地址："+markerArr[i].address+"</p>"
+                  +"</div>"
+              );//悬浮提示信息
+              this.addInfo(info[i],marker[i])
+          }
+      },
+      addInfo(info,marker){
+          marker.addEventListener("click", function(e){
+              var p = e.target
+              var point = new BMap.Point(p.getPosition().lng, p.getPosition().lat)
+              map.centerAndZoom(point, 14);
+              this.openInfoWindow(info)
+          })
+      },
+
+
 
   }
 };
