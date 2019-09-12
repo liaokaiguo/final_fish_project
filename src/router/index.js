@@ -56,5 +56,13 @@ export default new Router({
       component: workModeSta
     }
 
-  ]
+  ],
+  /*页面跳转滚动条在顶端*/
+  scrollBehavior(to, from, saveTop){
+    if (saveTop) {
+      return saveTop;
+    } else {
+      return {x: 0, y: 0}
+    }
+  }
 })
