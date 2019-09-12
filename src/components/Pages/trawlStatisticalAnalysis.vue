@@ -89,7 +89,8 @@ export default {
             name: "每月数量",
             type: "line",
             smooth: true,
-            data: [995, 566, 744, 348, 554, 736, 245, 446, 746, 425, 547, 356],
+            // data: [995, 566, 744, 348, 554, 736, 245, 446, 746, 425, 547, 356],
+            data: [],
             lineStyle: {
               color: {
                 type: "radial",
@@ -145,8 +146,20 @@ export default {
       var trawlEChart = this.$echarts.init(
         document.getElementById("trawlEchartsId")
       );
-      trawlEChart.setOption(this.trawlOption);
-      window.addEventListener("resize", function() {
+        trawlEChart.setOption(this.trawlOption);
+        //数据没有加载出来显示加载动画,样式添加todo
+        trawlEChart.showLoading();
+        //获取数据
+        this.axios.get('/getTuowangStatistic').then(res => {
+            trawlEChart.hideLoading(); //加载出来隐藏加载动画
+            trawlEChart.setOption({  //数据添加
+                series: [{
+                    data: res.data.tuowang
+                }]
+            })
+
+        })
+        window.addEventListener("resize", function() {
         trawlEChart.resize();
       });
     }
