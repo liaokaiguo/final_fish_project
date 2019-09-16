@@ -46,13 +46,15 @@
                 </el-date-picker>
               </el-form-item>
 
-              <el-form-item  prop="workType" >
-                <el-input
-                  type="textarea"
-                  :rows="1"
-                  placeholder="作业方式识别结果"
-                  v-model="select.workType">
-                </el-input>
+              <el-form-item  prop="algorithmMode" >
+                <el-select v-model="select.algorithmMode" placeholder="请选择算法库">
+                  <el-option
+                    v-for="item in algorithmOptions"
+                    :key="item.value"
+                    :label="item.label"
+                    :value="item.value">
+                  </el-option>
+                </el-select>
               </el-form-item>
 
               <el-form-item align="center">
@@ -62,10 +64,7 @@
 
             </el-form>
 
-<!--            <span >作业方式识别结果:</span>-->
-
           </div>
-
 
         </el-col>
       </el-row>
@@ -80,6 +79,16 @@ export default {
   data() {
       return{
           user: {},
+          algorithmOptions: [{
+              value: '1',
+              label: 'XGBOOT'
+          }, {
+              value: '2',
+              label: '卷积神经网络'
+          }, {
+              value: '3',
+              label: '小波神经网络'
+          }, ],
 
           pickerOptions: {
               shortcuts: [{
@@ -107,7 +116,7 @@ export default {
               boatId:'',
               beginDate:'',
               endDate:'',
-              workType:'',
+              algorithmMode:'',
           },
           Points :[
               {lng: 114.014, lat: 22.687},
@@ -151,18 +160,18 @@ export default {
       loadTrackPath() {
           // 渔船轨迹点
           var shipTrackArr = [
-              {name :"船1",terminalid: "草帽",speed : 100,locationdate:"2019-09-12 14:44:20",longitude : 122.012123,latitude :30.0111},
-              {name :"船1",terminalid: "草帽",speed : 98,locationdate:"2019-09-12 14:48:20",longitude : 122.011331,latitude :29.97451},
-              {name :"船1",terminalid: "草帽",speed : 94,locationdate:"2019-09-12 14:54:20",longitude : 122.081131,latitude :29.91721},
-              {name :"船1",terminalid: "草帽",speed : 97,locationdate:"2019-09-12 15:14:20",longitude : 122.095131,latitude :29.90411},
-              {name :"船1",terminalid: "草帽",speed : 92,locationdate:"2019-09-12 15:34:20",longitude : 122.180131,latitude :29.94411},
-              {name :"船1",terminalid: "草帽",speed : 95,locationdate:"2019-09-12 15:44:20",longitude : 122.181131,latitude :29.90411},
-              {name :"船1",terminalid: "草帽",speed : 88,locationdate:"2019-09-12 15:54:20",longitude : 122.21,latitude :29.8991},
-              {name :"船1",terminalid: "草帽",speed : 82,locationdate:"2019-09-12 16:04:20",longitude : 122.282116,latitude :29.88481},
-              {name :"船1",terminalid: "草帽",speed : 81,locationdate:"2019-09-12 17:14:20",longitude : 122.42631,latitude :30.02311},
-              {name :"船1",terminalid: "草帽",speed : 83,locationdate:"2019-09-12 17:24:20",longitude : 122.43531,latitude :30.04511},
-              {name :"船1",terminalid: "草帽",speed : 84,locationdate:"2019-09-12 17:34:20",longitude : 122.39631,latitude :30.08911},
-              {name :"船1",terminalid: "草帽",speed : 58,locationdate:"2019-09-12 17:44:20",longitude : 122.3139631,latitude :30.07611}];
+              {name :"船1",terminalid: "草帽",workMode:"",speed : 100,locationdate:"2019-09-12 14:44:20",longitude : 122.012123,latitude :30.0111},
+              {name :"船1",terminalid: "草帽",workMode:"拖网",speed : 98,locationdate:"2019-09-12 14:48:20",longitude : 122.011331,latitude :29.97451},
+              {name :"船1",terminalid: "草帽",workMode:"拖网",speed : 94,locationdate:"2019-09-12 14:54:20",longitude : 122.081131,latitude :29.91721},
+              {name :"船1",terminalid: "草帽",workMode:"拖网",speed : 97,locationdate:"2019-09-12 15:14:20",longitude : 122.095131,latitude :29.90411},
+              {name :"船1",terminalid: "草帽",workMode:"拖网",speed : 92,locationdate:"2019-09-12 15:34:20",longitude : 122.180131,latitude :29.94411},
+              {name :"船1",terminalid: "草帽",workMode:"拖网",speed : 95,locationdate:"2019-09-12 15:44:20",longitude : 122.181131,latitude :29.90411},
+              {name :"船1",terminalid: "草帽",workMode:"拖网",speed : 88,locationdate:"2019-09-12 15:54:20",longitude : 122.21,latitude :29.8991},
+              {name :"船1",terminalid: "草帽",workMode:"拖网",speed : 82,locationdate:"2019-09-12 16:04:20",longitude : 122.282116,latitude :29.88481},
+              {name :"船1",terminalid: "草帽",workMode:"拖网",speed : 81,locationdate:"2019-09-12 17:14:20",longitude : 122.42631,latitude :30.02311},
+              {name :"船1",terminalid: "草帽",workMode:"拖网",speed : 83,locationdate:"2019-09-12 17:24:20",longitude : 122.43531,latitude :30.04511},
+              {name :"船1",terminalid: "草帽",workMode:"拖网",speed : 84,locationdate:"2019-09-12 17:34:20",longitude : 122.39631,latitude :30.08911},
+              {name :"船1",terminalid: "草帽",workMode:"",speed : 58,locationdate:"2019-09-12 17:44:20",longitude : 122.3139631,latitude :30.07611}];
 
           // 轨迹线设置
           var sy = new BMap.Symbol(BMap_Symbol_SHAPE_BACKWARD_OPEN_ARROW, {
@@ -222,6 +231,7 @@ export default {
                   +"<p>定位时间："+shipTrackArr[i].locationdate+"</p>"
                   +"<p>地址经度："+shipTrackArr[i].longitude+"</p>"
                   +"<p>地址纬度："+shipTrackArr[i].latitude+"</p>"
+                  +"<p>作业方式："+shipTrackArr[i].workMode+"</p>"
                   +"</div>"
               );//悬浮提示信息
               this.addInfo(info[i],marker[i])
