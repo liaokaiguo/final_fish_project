@@ -8,6 +8,7 @@ import seineSA from '@/components/Pages/seineStatisticalAnalysis'
 import mapShow from "@/components/Pages/BaiduMapShow";
 import passPort from "@/components/Pages/EntryAndExitPort";
 import workModeSta from "@/components/Pages/WorkModeStatistics";
+import loginIndex from '@/components/LoginIndex'
 //import ElementUI from 'element-ui'
 //import '/element-ui/lib/theme-default/index.css'
 //Vue.use(ElementUI)
@@ -15,11 +16,19 @@ import workModeSta from "@/components/Pages/WorkModeStatistics";
 Vue.use(Router)
 
 export default new Router({
-  routes: [{
+  mode:'history',
+  routes: [
+    {
       path: '/',
+      name: 'loginIndex',
+      component: loginIndex
+    },
+    {
+      path: '/welcome',
       name: 'WelCome',
       component: WelCome
     },
+
     {
       path: '/he',
       name: 'he',
