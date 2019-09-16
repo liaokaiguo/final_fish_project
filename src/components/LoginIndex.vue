@@ -90,13 +90,13 @@
                             }
                         }).then((response)=>{
                             if (response.data.status === 1) {
-
+                                sessionStorage.setItem('ms_username',this.user.name);
                                     this.$notify({
                                         type: 'success',
                                         message: '欢迎你，' + this.user.name + '!',
                                         duration: 3000
                                     })
-                                    this.$router.replace("/welcome")
+                                    this.$router.push("/welcome")
 
                             } else {
                                 this.$message({
@@ -281,7 +281,7 @@
     width: 86%;
     height: 45px;
     background-color: #ee7700;
-    font-size: 26px;
+    font-size: 20px;
     color: white;
     margin-top: 18px;
     margin-right: auto;
