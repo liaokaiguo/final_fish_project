@@ -5,6 +5,7 @@
         <li class="centTitle">{{TitleMsg}}</li>
       </ul>
     </div>
+
     <!--the left/ middle /right/ model-->
     <!--the left model-->
     <div class="wholeleft">
@@ -145,6 +146,19 @@
     <!--the middle whole div style end -->
     <!--the whole right model code-->
     <div class="wholeright">
+      <div class="user-info">
+        <el-dropdown trigger="click" @command="handleCommand">
+                <span class="el-dropdown-link">
+                    <img class="user-logo" src="../assets/img/dog.jpg">
+                    {{username}}
+                  <i class="el-icon-arrow-down el-icon--right"></i>
+                </span>
+          <el-dropdown-menu slot="dropdown" >
+            <el-dropdown-item command="userCenter">个人中心</el-dropdown-item>
+            <el-dropdown-item command="loginOut">退出</el-dropdown-item>
+          </el-dropdown-menu>
+        </el-dropdown>
+      </div>
       <!--the left-top model code-->
       <div class="righttopbackground">
         <ul>
@@ -259,6 +273,7 @@ export default {
   name: "WelCome",
   data() {
     return {
+      name: '夹克',//默认登录用户名
       TitleMsg: "渔船作业方式智能识别系统",
       //fishing number out or in the harbour
       LoutNum: "",
@@ -660,6 +675,12 @@ export default {
     workModeSta
   },
 
+  computed:{
+      username() {
+          let username = sessionStorage.getItem('ms_username');
+          return username ? username : this.name;
+      }
+  },
   mounted() {
     //the draw left-bottom echarts function
     this.drawLeftBottomCharts();
@@ -913,6 +934,19 @@ export default {
           })
       },
 
+      /*用户中心/退出*/
+      handleCommand(command) {
+          if(command == 'loginOut'){
+              sessionStorage.removeItem('ms_username')
+              this.$router.push('/');
+          } else if (command == 'userCenter') {
+              this.$message({
+                  message: '啊哈，用户中心还没实现',
+                  type: 'warning'
+              });
+          }
+      }
+
 
 
   }
@@ -955,7 +989,7 @@ table {
 }
 /*the whole div style*/
 .wholeleft {
-  margin-top: 58px;
+  margin-top: 88px;
   margin-bottom: 0px;
   margin-right: 0px;
   margin-left: 35px;
@@ -1151,7 +1185,7 @@ table {
   position: absolute;
   background-color: blue;
   width: 100%;
-  height: 61%;
+  height: 66%;
   margin: 0px;
   padding-bottom: 0px;
 
@@ -1162,7 +1196,7 @@ table {
   /*background-color: red;*/
   width: 100%;
   height: 38.8%;
-  margin-top: 529px;
+  margin-top: 559px;
   padding: 0;
 }
 .middlebottomleftbackground {
@@ -1200,7 +1234,7 @@ table {
 }
 /*the whole right div style*/
 .wholeright {
-  margin-top: 58px;
+  margin-top: 38px;
   margin-bottom: 0px;
   margin-right: 0px;
   margin-left: 1436px;
@@ -1220,7 +1254,7 @@ table {
   position: absolute;
   height: 33%;
   width: 99%;
-  margin: 0px;
+  margin-top: 40px;
   padding: 0px;
   float: left;
 }
@@ -1232,7 +1266,7 @@ table {
   position: absolute;
   height: 33%;
   width: 99%;
-  margin-top: 304px;
+  margin-top: 344px;
   padding-bottom: 1px;
   float: left;
 }
@@ -1244,7 +1278,7 @@ table {
   position: absolute;
   height: 33%;
   width: 99%;
-  margin-top: 606px;
+  margin-top: 646px;
   padding-bottom: 1px;
   float: left;
 }
@@ -1311,6 +1345,36 @@ table {
   letter-spacing: -1px;
   color: #f7f7f7;
   text-decoration: none;
+}
+
+/*用户信息*/
+
+.user-info {
+  float: right;
+  padding-right: 10px;
+  margin-top: 5px;
+  font-size: 16px;
+  color: #fff;
+}
+.user-info .el-dropdown-link{
+  position: relative;
+  display: inline-block;
+  padding-left: 50px;
+  color: #fff;
+  cursor: pointer;
+  vertical-align: middle;
+}
+.user-info .user-logo{
+  position: absolute;
+  left:-10px;
+  top:-10px;
+  width:40px;
+  height:40px;
+  border-radius: 50%;
+}
+.el-dropdown-menu__item{
+  width :80px;
+  text-align: center;
 }
 
 </style>
