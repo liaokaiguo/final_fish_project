@@ -8,7 +8,7 @@
             <span v-on:click="$router.back(-1)">
               <img src="../../assets/rebackLastIcon.png" style="cursor:pointer" alt="返回">
             </span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-            <router-link to="/">
+            <router-link to="/welcome">
               <img src="../../assets/rebackMainIcon.png">
             </router-link>
           </div>
