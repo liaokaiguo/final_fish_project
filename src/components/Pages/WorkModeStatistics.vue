@@ -25,10 +25,13 @@
          <el-col :span="24" >
           <div >
             <el-form ref="selectForm" :model="select" :inline="true" class="searchBox">
-              <el-form-item prop="workDate" >
-                <el-input v-model="select.wordDate"
-                          placeholder="作业日期">
-                </el-input>
+              <el-form-item prop="startDate" >
+                <el-date-picker
+                  v-model="select.startDate"
+                  type="date"
+                  placeholder="作业开始日期"
+                value-format="yyyy-MM-dd">
+                </el-date-picker>
               </el-form-item>
 
               <el-form-item prop="legal" >
@@ -66,7 +69,7 @@
         <el-col :span="16" >
           <div class="dataBox">
             <el-table
-            :data="tableData"
+            :data="tableData.slice((currentPage-1)*pageSize,currentPage*pageSize)"
             style="width: 100%"
             border
             :header-cell-style="{color:'#333',fontFamily:'MicrosoftYaHeiUI',fontSize:'14px',fontWeight:900}">
@@ -74,42 +77,55 @@
                 prop="legal"
                 label="是否合规"
                 width="120">
+                <template slot-scope="scope">
+                  <span>{{scope.row.idtfyFlag=== 1?'正常作业':'违规作业'}}</span>
+                </template>
               </el-table-column>
               <el-table-column
-                prop="boatid"
+                prop="ship.shipNo"
                 label="渔船编号"
-                width="180">
+                width="200">
               </el-table-column>
               <el-table-column
-                prop="workmode"
+                prop="idtfyJobtype"
                 label="作业方式"
                 width="120">
               </el-table-column>
               <el-table-column
-                prop="starttime"
+                prop="startTime"
                 label="开始时间"
                 width="200">
               </el-table-column>
               <el-table-column
-                prop="endtime"
+                prop="endTime"
                 label="结束时间"
                 width="200">
               </el-table-column>
               <el-table-column
-                prop="duration"
+                prop="jobTime"
                 label="作业持续时间"
                 width="140">
               </el-table-column>
             </el-table>
           </div>
+          <!-- 分页器 -->
+          <div class="pagingBox" >
+            <el-pagination align='cneter' @size-change="handleSizeChange"
+                           @current-change="handleCurrentChange"
+                           :current-page="currentPage"
+                           :page-sizes="[1,5,10,20]"
+                           :page-size="pageSize"
+                           layout="total, sizes, prev, pager, next, jumper"
+                           :total="tableData.length">
+            </el-pagination>
+          </div>
         </el-col>
+
         <el-col :span="8">
           <div class="wmEchartsBox" id="workModeEcharts" >
-
           </div>
         </el-col>
       </el-row>
-
 
     </div>
 
@@ -120,6 +136,10 @@
 export default {
   data() {
       return{
+          currentPage: 1, // 当前页码
+          total: 20, // 总条数
+          pageSize: 10, // 每页的数据条数
+
           options: [{
               value: '1',
               label: '正常作业'
@@ -128,58 +148,118 @@ export default {
               label: '违规作业'
           }],
           workOptions: [{
-              value: '1',
+              value: '拖网',
               label: '拖网'
           },  {
-              value: '2',
+              value: '张网',
               label: '张网'
           }, {
-              value: '3',
+              value: '刺网',
               label: '刺网'
           }, {
-              value: '4',
+              value: '围网',
               label: '围网'
           }, {
-              value: '5',
+              value: '钓网',
               label: '钓网'
           }],
 
           select:{
-              wordDate:'',
+              startDate:'',
               legal:'',
               workMode:'',
           },
 
-          tableData: [{
-              legal: '正常作业',
-              boatid: 'MESS3377373',
-              workmode: '拖网',
-              starttime: '2019-08-08 12:22:33',
-              endtime: '2019-08-08 19:22:33',
-              duration:'7h'
-          }, {
-              legal: '正常作业',
-              boatid: 'MSDS33567',
-              workmode: '拖网',
-              starttime: '2019-08-18 10:22:33',
-              endtime: '2019-08-18 14:22:33',
-              duration:'4h'
-          }, {
-              legal: '正常作业',
-              boatid: 'WWDSQ1233473',
-              workmode: '张网',
-              starttime: '2019-08-12 08:22:33',
-              endtime: '2019-08-12 18:22:33',
-              duration:'10h'
-          }, {
-              legal: '违规作业',
-              boatid: 'WSDW987876',
-              workmode: '刺网',
-              starttime: '2019-08-31 20:22:33',
-              endtime: '2019-08-31 23:22:33',
-              duration:'3h'
-          }],
+          // tableData: [{
+          //     legal: '正常作业',
+          //     boatid: 'MESS3377373',
+          //     workmode: '拖网',
+          //     starttime: '2019-08-08 12:22:33',
+          //     endtime: '2019-08-08 19:22:33',
+          //     duration:'7h'
+          // },
+          //     {
+          //     legal: '正常作业',
+          //     boatid: 'MSDS33567',
+          //     workmode: '拖网',
+          //     starttime: '2019-08-18 10:22:33',
+          //     endtime: '2019-08-18 14:22:33',
+          //     duration:'4h'
+          // },
+          //     {
+          //     legal: '正常作业',
+          //     boatid: 'WWDSQ1233473',
+          //     workmode: '张网',
+          //     starttime: '2019-08-12 08:22:33',
+          //     endtime: '2019-08-12 18:22:33',
+          //     duration:'10h'
+          // },
+          //     {
+          //     legal: '违规作业',
+          //     boatid: 'WSDW987876',
+          //     workmode: '刺网',
+          //     starttime: '2019-08-31 20:22:33',
+          //     endtime: '2019-08-31 23:22:33',
+          //     duration:'3h'
+          // },
+          //     {
+          //     legal: '违规作业',
+          //     boatid: 'WSDW987876',
+          //     workmode: '刺网',
+          //     starttime: '2019-08-31 20:22:33',
+          //     endtime: '2019-08-31 23:22:33',
+          //     duration:'3h'
+          // },
+          //     {
+          //     legal: '违规作业',
+          //     boatid: 'WSDW987876',
+          //     workmode: '刺网',
+          //     starttime: '2019-08-31 20:22:33',
+          //     endtime: '2019-08-31 23:22:33',
+          //     duration:'3h'
+          // },
+          //     {
+          //     legal: '违规作业',
+          //     boatid: 'WSDW987876',
+          //     workmode: '刺网',
+          //     starttime: '2019-08-31 20:22:33',
+          //     endtime: '2019-08-31 23:22:33',
+          //     duration:'3h'
+          // },
+          //     {
+          //     legal: '违规作业',
+          //     boatid: 'WSDW987876',
+          //     workmode: '刺网',
+          //     starttime: '2019-08-31 20:22:33',
+          //     endtime: '2019-08-31 23:22:33',
+          //     duration:'3h'
+          // },
+          //     {
+          //     legal: '违规作业',
+          //     boatid: 'WSDW987876',
+          //     workmode: '刺网',
+          //     starttime: '2019-08-31 20:22:33',
+          //     endtime: '2019-08-31 23:22:33',
+          //     duration:'3h'
+          // },
+          //     {
+          //     legal: '违规作业',
+          //     boatid: 'WSDW987876',
+          //     workmode: '刺网',
+          //     starttime: '2019-08-31 20:22:33',
+          //     endtime: '2019-08-31 23:22:33',
+          //     duration:'3h'
+          // },
+          //     {
+          //     legal: '违规作业',
+          //     boatid: 'WSDW987876',
+          //     workmode: '刺网',
+          //     starttime: '2019-08-31 20:22:33',
+          //     endtime: '2019-08-31 23:22:33',
+          //     duration:'3h'
+          // }],
 
+           tableData:[],
           workModeEchartsOption: {
               tooltip: {
                   trigger: "item",
@@ -237,8 +317,19 @@ export default {
   },
     mounted() {
         this.drawGraph();
+        this.initWorkModeStatistic();
     },
     methods: {
+        //分页
+        handleSizeChange(val) {
+            // console.log(`每页 ${val} 条`);
+            this.currentPage = 1;
+            this.pageSize = val;
+        },
+        handleCurrentChange(val) {
+            // console.log(`当前页: ${val}`);
+            this.currentPage = val;
+        },
         drawGraph() {
 
             let myEcharts = this.$echarts.init(document.getElementById("workModeEcharts"));
@@ -254,9 +345,47 @@ export default {
         ///重置表单
         resetForm(formName) {
             this.$refs[formName].resetFields();
+            this.initWorkModeStatistic();
         },
+        initWorkModeStatistic(){
+
+            this.axios({
+                method:"post",
+                url:"/queryShipJob",
+                data:{
+                    dateTime:"" ,
+                    idtfyJobtype:"",
+                    idtfyFlag: "",
+                }
+            }).then((response)=>{
+                 console.log(response.data)
+
+                this.tableData= response.data;
+
+            }).catch((response)=>{
+                console.log(response);
+            })
+        },
+        /*按条件查询*/
         search(select) {
-            console.log(select.inOrOut)
+            console.log(this.select.startDate)
+            console.log(this.select.workMode)
+            console.log(this.select.legal)
+            this.axios({
+                method:"post",
+                url:"/queryShipJob",
+                data:{
+                    dateTime : this.select.startDate ,
+                    idtfyJobtype : this.select.workMode,
+                    idtfyFlag :  this.select.legal,
+                }
+            }).then((response)=>{
+
+                this.tableData= response.data;
+
+            }).catch((response)=>{
+                console.log(response);
+            })
         },
     },
 
@@ -323,7 +452,13 @@ table {
   height: 400px;
   float: left;
 }
-
+.pagingBox{
+  position: relative;
+  right: 16%;
+  float: right;
+  background-color: white;
+  margin-top: 15px;
+}
 
 
 
