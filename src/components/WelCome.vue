@@ -712,16 +712,24 @@ export default {
         //数据没有加载出来显示加载动画,样式添加todo
         leftbottomChart.showLoading();
         //获取数据
-        this.axios.get('/getIllegal').then(res => {
+        this.axios(
+            {
+                method:'post',
+                url:'/getIllegal',
+                data:{
+                    DATATIME:""
+                }
+            }).then(res => {
+                console.log(res.data)
             // setTimeout(()=>{  //未来让加载动画效果明显,这里加入了setTimeout,实现2s延时
-            this.normalFishingNum = res.data.normal;
-            this.illegelFishingNum = res.data.illegal;
+            this.normalFishingNum = res.data.Normal;
+            this.illegelFishingNum = res.data.Illegal;
             leftbottomChart.hideLoading(); //加载出来隐藏加载动画
             leftbottomChart.setOption({  //数据添加
                 series: [{
                     data: [
-                        {value: res.data.normal, name: "正常作业"},
-                        {value: res.data.illegal, name: "非法作业"}
+                        {value: res.data.Normal, name: "正常作业"},
+                        {value: res.data.Illegal, name: "非法作业"}
                     ]
                 }]
             })
