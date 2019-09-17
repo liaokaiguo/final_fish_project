@@ -42,14 +42,15 @@
                 </el-select>
               </el-form-item>
 
-              <el-form-item  prop="beginDate"  >
-                <el-date-picker class="input-date-class"
+              <el-form-item  prop="passDate"  >
+                <el-date-picker style="width: 230px"
                                 v-model="select.passDate"
                                 type="datetime"
                                 placeholder="日期时间"
                                 align="right"
                                 default-time="12:00:00"
-                                :picker-options="pickerOptions">
+                                :picker-options="pickerOptions"
+                                value-format="yyyy-MM-dd HH:mm:ss">
                 </el-date-picker>
               </el-form-item>
 
@@ -77,22 +78,25 @@
             border
             :header-cell-style="{color:'#333',fontFamily:'MicrosoftYaHeiUI',fontSize:'14px',fontWeight:900}">
               <el-table-column
-                prop="boatid"
+                prop="ship.shipNo"
                 label="渔船编号"
                 width="260">
               </el-table-column>
               <el-table-column
-                prop="inorout"
+                prop="iof"
                 label="出港/入港"
                 width="260">
+                <template slot-scope="scope">
+                  <span>{{scope.row.iof===-1?'出港':'入港'}}</span>
+                </template>
               </el-table-column>
               <el-table-column
-                prop="passdate"
+                prop="acqTime"
                 label="时间"
                 width="300">
               </el-table-column>
               <el-table-column
-                prop="portname"
+                prop="ship.portName"
                 label="港口名"
                 width="300">
               </el-table-column>
@@ -131,10 +135,10 @@ export default {
           pageSize: 10, // 每页的数据条数
 
           options: [{
-              value: '1',
+              value: '-1',
               label: '出港'
           },  {
-              value: '2',
+              value: '1',
               label: '入港'
           }],
 
@@ -167,80 +171,132 @@ export default {
               portName:'',
           },
 
-          tableData: [{
-              boatid: 'MESS3377373',
-              inorout: '出港',
-              passdate: '2019-08-08',
-              portname:'舟山南港'
-          }, {
-              boatid: 'FXGG778688',
-              inorout: '入港',
-              passdate: '2018-12-02',
-              portname:'舟山东港'
-          }, {
-              boatid: 'DRDRR3328688',
-              inorout: '入港',
-              passdate: '2019-02-21',
-              portname:'舟山东港'
-          }, {
-              boatid: 'AAWW12121',
-              inorout: '出港',
-              passdate: '2019-07-13',
-              portname:'舟山港'
-          }, {
-              boatid: 'GGTT342342',
-              inorout: '入港',
-              passdate: '2019-07-25',
-              portname:'舟山南港'
-          }, {
-              boatid: 'UUYN887997',
-              inorout: '出港',
-              passdate: '2019-05-23',
-              portname:'舟山东港'
-          }, {
-              boatid: 'AAWW12121',
-              inorout: '出港',
-              passdate: '2019-07-13',
-              portname:'舟山港'
-          }, {
-              boatid: 'AAWW12121',
-              inorout: '出港',
-              passdate: '2019-07-13',
-              portname:'舟山港'
-          }, {
-              boatid: 'KKLI734348',
-              inorout: '入港',
-              passdate: '2019-06-23',
-              portname:'舟山东港'
-          }, {
-              boatid: 'TTYY7313123',
-              inorout: '入港',
-              passdate: '2019-06-10',
-              portname:'舟山东港'
-          }, {
-              boatid: 'MMJJ731238',
-              inorout: '入港',
-              passdate: '2019-06-30',
-              portname:'宁波东港'
-          }, {
-              boatid: 'OPPS761009',
-              inorout: '出港',
-              passdate: '2019-08-29',
-              portname:'上海港'
-          }]
-
+          // tableData: [{
+          //     boatid: 'MESS3377373',
+          //     inorout: '出港',
+          //     passdate: '2019-08-08',
+          //     portname:'舟山南港'
+          // },
+          //     {
+          //     boatid: 'FXGG778688',
+          //     inorout: '入港',
+          //     passdate: '2018-12-02',
+          //     portname:'舟山东港'
+          // },
+          //     {
+          //     boatid: 'DRDRR3328688',
+          //     inorout: '入港',
+          //     passdate: '2019-02-21',
+          //     portname:'舟山东港'
+          // },
+          //     {
+          //     boatid: 'AAWW12121',
+          //     inorout: '出港',
+          //     passdate: '2019-07-13',
+          //     portname:'舟山港'
+          // },
+          //     {
+          //     boatid: 'GGTT342342',
+          //     inorout: '入港',
+          //     passdate: '2019-07-25',
+          //     portname:'舟山南港'
+          // },
+          //     {
+          //     boatid: 'UUYN887997',
+          //     inorout: '出港',
+          //     passdate: '2019-05-23',
+          //     portname:'舟山东港'
+          // },
+          //     {
+          //     boatid: 'AAWW12121',
+          //     inorout: '出港',
+          //     passdate: '2019-07-13',
+          //     portname:'舟山港'
+          // },
+          //     {
+          //     boatid: 'AAWW12121',
+          //     inorout: '出港',
+          //     passdate: '2019-07-13',
+          //     portname:'舟山港'
+          // },
+          //     {
+          //     boatid: 'KKLI734348',
+          //     inorout: '入港',
+          //     passdate: '2019-06-23',
+          //     portname:'舟山东港'
+          // },
+          //     {
+          //     boatid: 'TTYY7313123',
+          //     inorout: '入港',
+          //     passdate: '2019-06-10',
+          //     portname:'舟山东港'
+          // },
+          //     {
+          //     boatid: 'MMJJ731238',
+          //     inorout: '入港',
+          //     passdate: '2019-06-30',
+          //     portname:'宁波东港'
+          // },
+          //     {
+          //     boatid: 'OPPS761009',
+          //     inorout: '出港',
+          //     passdate: '2019-08-29',
+          //     portname:'上海港'
+          // }]
+          tableData:[],
       }
 
   },
+
+    mounted(){
+        this.initTableData();
+    },
 
   methods: {
 
       ///重置表单
       resetForm(formName) {
           this.$refs[formName].resetFields();
+          this.initTableData();
       },
+      /*页面初始加载获取后台数据*/
+      initTableData(){
+          this.axios({
+              method:"post",
+              url:"/queryPortTraffic",
+              data:{
+                  shipNo :'',
+                  iof : '-1', //目前数据库iof均为-1，原因不明
+                  acqTime : '',
+                  portName : '',
+              }
+          }).then((response)=>{
+              // console.log(response.data)
+
+              this.tableData= response.data;
+
+          }).catch((response)=>{
+              console.log(response);
+          })
+
+      },
+      /*搜索特定船只信息*/
       search(select){
-          console.log(select.inOrOut)
+          this.axios({
+              method:"post",
+              url:"/queryPortTraffic",
+              data:{
+                  shipNo : this.select.boatId,
+                  iof : -1, //目前数据库iof均为-1，原因不明
+                  acqTime :  this.select.passDate,
+                  portName :  this.select.portName,
+              }
+          }).then((response)=>{
+              this.tableData= response.data;
+
+          }).catch((response)=>{
+              console.log(response);
+          })
       },
 
       //分页
