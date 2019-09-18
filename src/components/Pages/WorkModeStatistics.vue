@@ -162,6 +162,9 @@ export default {
           }, {
               value: '钓网',
               label: '钓网'
+          }, {
+              value: '拉网',
+              label: '拉网'
           }],
 
           select:{
@@ -301,10 +304,10 @@ export default {
                           }
                       },
                       data: [
-                          { value: 335, name: "拖网" },
-                          { value: 310, name: "刺网" },
-                          { value: 234, name: "围网" },
-                          { value: 135, name: "其它" }
+                          { value: 300, name: "拖网" },
+                          { value: 300, name: "刺网" },
+                          { value: 300, name: "围网" },
+                          { value: 300, name: "其它" }
                       ]
                   }
               ],
@@ -330,10 +333,32 @@ export default {
             // console.log(`当前页: ${val}`);
             this.currentPage = val;
         },
-        drawGraph() {
 
+        /*画饼图*/
+        drawGraph() {
             let myEcharts = this.$echarts.init(document.getElementById("workModeEcharts"));
             myEcharts.setOption(this.workModeEchartsOption);
+            //获取后端数据
+            this.axios(
+                {
+                    method:'post',
+                    url:'/statisShipJob',
+                    data:{
+                        dateTime:"",
+                        idtfyFlag:"",
+                    }
+                }).then(res => {
+                myEcharts.hideLoading(); //加载出来隐藏加载动画
+                myEcharts.setOption({  //数据添加
+                    series: [{
+                        data: [
+                            {value: res.data.tuoWang, name: "拖网"},
+                            {value: res.data.ciWang, name: "刺网"},
+                            {value: res.data.weiWang, name: "围网"},
+                            {value: res.data.other, name: "其它"}]
+                    }]
+                })
+            })
 
         },
         beforeDestroy() {
@@ -342,13 +367,15 @@ export default {
             }
         },
 
-        ///重置表单
+        /*重置表单*/
         resetForm(formName) {
             this.$refs[formName].resetFields();
             this.initWorkModeStatistic();
+            this.drawGraph();
         },
-        initWorkModeStatistic(){
 
+        /*列表数据初始加载*/
+        initWorkModeStatistic(){
             this.axios({
                 method:"post",
                 url:"/queryShipJob",
@@ -358,16 +385,16 @@ export default {
                     idtfyFlag: "",
                 }
             }).then((response)=>{
-                 console.log(response.data)
-
+                 // console.log(response.data)
                 this.tableData= response.data;
-
             }).catch((response)=>{
                 console.log(response);
             })
         },
+
         /*按条件查询*/
         search(select) {
+            //列表数据更新
             console.log(this.select.startDate)
             console.log(this.select.workMode)
             console.log(this.select.legal)
@@ -386,7 +413,31 @@ export default {
             }).catch((response)=>{
                 console.log(response);
             })
+
+            //饼图数据更新
+            let myEcharts = this.$echarts.init(document.getElementById("workModeEcharts"));
+            this.axios(
+                {
+                    method:'post',
+                    url:'/statisShipJob',
+                    data:{
+                        dateTime:this.select.startDate ,
+                        idtfyFlag:this.select.legal,
+                    }
+                }).then(res => {
+                myEcharts.hideLoading(); //加载出来隐藏加载动画
+                myEcharts.setOption({  //数据添加
+                    series: [{
+                        data: [
+                            {value: res.data.tuoWang, name: "拖网"},
+                            {value: res.data.ciWang, name: "刺网"},
+                            {value: res.data.weiWang, name: "围网"},
+                            {value: res.data.other, name: "其它"}]
+                    }]
+                })
+            })
         },
+
     },
 
 
