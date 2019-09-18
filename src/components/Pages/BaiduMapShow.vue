@@ -69,6 +69,7 @@
         </el-col>
       </el-row>
 
+
     </div>
 
 
@@ -118,48 +119,25 @@ export default {
               endDate:'',
               algorithmMode:'',
           },
-          Points :[
-              {lng: 114.014, lat: 22.687},
-              {lng: 114.0143, lat: 22.742},
-              {lng: 114.09746, lat: 22.745}
-          ]
 
-      }
+          //渔船信息
+          shipArr : [
+              {name :"船1",terminalid: "草帽",speed : 100,locationdate:"2019-09-12 14:44:20",longitude : 122.22341,latitude :29.8231},
+              {name :"船2",terminalid: "红发",speed : 98,locationdate:"2019-09-12 14:44:20",longitude : 122.07957123,latitude :30.178611},
+              {name :"船3",terminalid: "百兽",speed : 94,locationdate:"2019-09-12 14:44:20",longitude : 122.41231,latitude :30.03451},
+              {name :"船4",terminalid: "黑胡子",speed : 97,locationdate:"2019-09-12 14:44:20",longitude : 122.5731,latitude :30.03411},
+              {name :"船5",terminalid: "大麻",speed : 92,locationdate:"2019-09-12 14:44:20",longitude : 122.00091,latitude :30.034521},
+              {name :"船6",terminalid: "海军",speed : 95,locationdate:"2019-09-12 14:44:20",longitude : 122.3345631,latitude :30.0523511},
+              {name :"船7",terminalid: "和之国",speed : 88,locationdate:"2019-09-12 14:44:20",longitude : 122.1687131,latitude :29.880411},
+              {name :"船8",terminalid: "名1",speed : 82,locationdate:"2019-09-12 14:44:20",longitude : 122.0678131,latitude :29.89611},
+              {name :"船9",terminalid: "名2",speed : 81,locationdate:"2019-09-12 14:44:20",longitude : 122.008331,latitude :29.972551},
+              {name :"船10",terminalid: "名3",speed : 83,locationdate:"2019-09-12 14:44:20",longitude : 122.36131,latitude :29.972521},
+              {name :"船11",terminalid: "和2",speed : 84,locationdate:"2019-09-12 14:44:20",longitude : 122.364131,latitude :29.95611},
+              {name :"船12",terminalid: "国5",speed : 58,locationdate:"2019-09-12 14:44:20",longitude : 122.01116,latitude :29.983481},
+              {name :"船13",terminalid: "国6",speed : 28,locationdate:"2019-09-12 14:44:20",longitude : 122.286731,latitude :29.8937411}],
 
-  },
-  mounted() {
-    this.mapReady();
-  },
-  methods: {
-      reback() {
-          this.$router.go(-1); //reback the last step
-      },
-      mapReady() {
-          //创建实例
-          var map = new BMap.Map("allmap");
-          //创建坐标点
-          var point = new BMap.Point(122.20, 30.00);
-          //初始化实例，传入坐标点并设置地图级别
-          map.centerAndZoom(point, 13);
-          map.enableScrollWheelZoom(true);
-          window.map = map;
-
-      },
-      /*重置表单*/
-      resetForm(formName) {
-          //表单重置
-          this.$refs[formName].resetFields();
-          //地图重置
-          let map = window.map;
-          map.clearOverlays();//删除覆盖物
-          var point = new BMap.Point(122.20, 30.00);
-          map.centerAndZoom(point, 13);
-      },
-
-      /*轨迹回放*/
-      loadTrackPath() {
-          // 渔船轨迹点
-          var shipTrackArr = [
+          // 单只渔船特定时间段航行轨迹点
+          shipTrackArr : [
               {name :"船1",terminalid: "草帽",workMode:"",speed : 100,locationdate:"2019-09-12 14:44:20",longitude : 122.012123,latitude :30.0111},
               {name :"船1",terminalid: "草帽",workMode:"拖网",speed : 98,locationdate:"2019-09-12 14:48:20",longitude : 122.011331,latitude :29.97451},
               {name :"船1",terminalid: "草帽",workMode:"拖网",speed : 94,locationdate:"2019-09-12 14:54:20",longitude : 122.081131,latitude :29.91721},
@@ -171,8 +149,91 @@ export default {
               {name :"船1",terminalid: "草帽",workMode:"拖网",speed : 81,locationdate:"2019-09-12 17:14:20",longitude : 122.42631,latitude :30.02311},
               {name :"船1",terminalid: "草帽",workMode:"拖网",speed : 83,locationdate:"2019-09-12 17:24:20",longitude : 122.43531,latitude :30.04511},
               {name :"船1",terminalid: "草帽",workMode:"拖网",speed : 84,locationdate:"2019-09-12 17:34:20",longitude : 122.39631,latitude :30.08911},
-              {name :"船1",terminalid: "草帽",workMode:"",speed : 58,locationdate:"2019-09-12 17:44:20",longitude : 122.3139631,latitude :30.07611}];
+              {name :"船1",terminalid: "草帽",workMode:"",speed : 58,locationdate:"2019-09-12 17:44:20",longitude : 122.3139631,latitude :30.07611}],
 
+
+  }
+
+  },
+  mounted() {
+    this.mapReady();
+  },
+  methods: {
+      reback() {
+          this.$router.go(-1); //reback the last step
+      },
+
+      /*重置表单*/
+      resetForm(formName) {
+          //表单重置
+          this.$refs[formName].resetFields();
+          //地图重置
+          let map = window.map;
+          map.clearOverlays();//删除覆盖物
+          var point = new BMap.Point(122.20, 30.00);
+          map.centerAndZoom(point, 12);
+
+          //重新添加标注
+          this.addShipMarker();
+      },
+
+      /*大地图显示*/
+      mapReady() {
+          //创建实例
+          var map = new BMap.Map("allmap");
+          //创建坐标点
+          var point = new BMap.Point(122.20, 30.00);
+          //初始化实例，传入坐标点并设置地图级别
+          map.centerAndZoom(point, 12);
+          map.enableScrollWheelZoom(true);
+          window.map = map;
+          //渔船标注位置
+          this.addShipMarker();
+
+      },
+
+      /* 初始加载所有渔船标注位置*/
+      addShipMarker(){
+          var point = new Array();//定义数组标注经纬信息
+          var marker = new Array();//定义数组点对象信息
+          var info = new Array();//定义悬浮提示信息
+          //设置icon信息
+          var width = 32;
+          var height = 32;
+          var imgSrc = require("../../assets/ship32.png"); //引入icon图片 本地图要用require
+          var myIcon = new BMap.Icon(imgSrc, new BMap.Size(width,height));//配置icon
+          for(var i = 0; i < this.shipArr.length; i++){//遍历
+              point[i] = new window.BMap.Point(this.shipArr[i].longitude,this.shipArr[i].latitude);
+              marker[i] = new window.BMap.Marker(point[i],{icon:myIcon});//把icon和坐标添加到Marker中
+              map.addOverlay(marker[i]);
+              var label = new window.BMap.Label(this.shipArr[i].name);
+              label.setStyle({  //设置提示框的样式
+                  color : "#000",
+                  fontSize : "12px",
+                  backgroundColor :"#d5fdff",
+                  border :"1px solid #ccc",
+                  borderRadius:"2px",
+                  padding :"2px 6px"
+              });
+              // marker[i].setLabel(label);
+              info[i] = new window.BMap.InfoWindow(
+                  "<div style='width:300px;'>"
+                  +"<p>渔船编号："+this.shipArr[i].name+"</p>"
+                  +"<p>渔船名："+this.shipArr[i].terminalid+"</p>"
+                  +"<p>航行时速(m/s)："+this.shipArr[i].speed+"</p>"
+                  +"<p>定位时间："+this.shipArr[i].locationdate+"</p>"
+                  +"<p>地址经度："+this.shipArr[i].longitude+"</p>"
+                  +"<p>地址纬度："+this.shipArr[i].latitude+"</p>"
+                  +"</div>"
+              );//悬浮提示信息
+              this.addInfo(info[i],marker[i])
+          }
+      },
+
+      /*轨迹回放*/
+      loadTrackPath() {
+          //先清除覆盖物
+          map.clearOverlays();
           // 轨迹线设置
           var sy = new BMap.Symbol(BMap_Symbol_SHAPE_BACKWARD_OPEN_ARROW, {
               scale: 0.5,//图标缩放大小
@@ -183,8 +244,8 @@ export default {
 
          // 创建polyline对象
           var pois=[];
-          for(var i = 0; i < shipTrackArr.length; i++) {//遍历添加轨迹点
-              pois.push(new BMap.Point(shipTrackArr[i].longitude, shipTrackArr[i].latitude));
+          for(var i = 0; i < this.shipTrackArr.length; i++) {//遍历添加轨迹点
+              pois.push(new BMap.Point(this.shipTrackArr[i].longitude, this.shipTrackArr[i].latitude));
           }
           var polyline = new BMap.Polyline(pois, {
               enableEditing: false,//是否启用线编辑，默认为false
@@ -198,9 +259,9 @@ export default {
           map.addOverlay(polyline);          //增加折线
 
           var point = new BMap.Point(pois[0].lng, pois[0].lat)
-          map.centerAndZoom(point, 14);
+          map.centerAndZoom(point, 13);
 
-          /*同首页相同 轨迹点标注*/
+          /*轨迹点标注*/
           var point = new Array();//定义数组标注经纬信息
           var marker = new Array();//定义数组点对象信息
           var info = new Array();//定义悬浮提示信息
@@ -209,11 +270,11 @@ export default {
           var height = 32;
           var imgSrc = require("../../assets/shipTrack.png"); //引入icon图片 本地图片要用require
           var myIcon = new BMap.Icon(imgSrc, new BMap.Size(width,height));//配置icon
-          for(var i = 0; i < shipTrackArr.length; i++){//遍历
-              point[i] = new window.BMap.Point(shipTrackArr[i].longitude,shipTrackArr[i].latitude);
+          for(var i = 0; i < this.shipTrackArr.length; i++){//遍历
+              point[i] = new window.BMap.Point(this.shipTrackArr[i].longitude,this.shipTrackArr[i].latitude);
               marker[i] = new window.BMap.Marker(point[i],{icon:myIcon});//把icon和坐标添加到Marker中
               map.addOverlay(marker[i]);
-              var label = new window.BMap.Label(shipTrackArr[i].name);
+              var label = new window.BMap.Label(this.shipTrackArr[i].name);
               label.setStyle({  //设置提示框的样式
                   color : "#000",
                   fontSize : "12px",
@@ -225,18 +286,19 @@ export default {
               // marker[i].setLabel(label);
               info[i] = new window.BMap.InfoWindow(
                   "<div style='width:300px;'>"
-                  +"<p>渔船编号："+shipTrackArr[i].name+"</p>"
-                  +"<p>渔船名："+shipTrackArr[i].terminalid+"</p>"
-                  +"<p>航行时速(m/s)："+shipTrackArr[i].speed+"</p>"
-                  +"<p>定位时间："+shipTrackArr[i].locationdate+"</p>"
-                  +"<p>地址经度："+shipTrackArr[i].longitude+"</p>"
-                  +"<p>地址纬度："+shipTrackArr[i].latitude+"</p>"
-                  +"<p>作业方式："+shipTrackArr[i].workMode+"</p>"
+                  +"<p>渔船编号："+this.shipTrackArr[i].name+"</p>"
+                  +"<p>渔船名："+this.shipTrackArr[i].terminalid+"</p>"
+                  +"<p>航行时速(m/s)："+this.shipTrackArr[i].speed+"</p>"
+                  +"<p>定位时间："+this.shipTrackArr[i].locationdate+"</p>"
+                  +"<p>地址经度："+this.shipTrackArr[i].longitude+"</p>"
+                  +"<p>地址纬度："+this.shipTrackArr[i].latitude+"</p>"
+                  +"<p>作业方式："+this.shipTrackArr[i].workMode+"</p>"
                   +"</div>"
               );//悬浮提示信息
               this.addInfo(info[i],marker[i])
           }
       },
+
       /*点击渔船 悬浮渔船信息*/
       addInfo(info,marker){
           marker.addEventListener("click", function(e){
