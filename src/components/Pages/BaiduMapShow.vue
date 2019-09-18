@@ -7,7 +7,77 @@
           <div  class="mapContext" id="allmap"></div>
         </el-col>
         <el-col>
-          <div class="centTitle"><a src="#"><span>渔船作业方式智能识别系统</span></a></div>
+          <div class="centTitle"><a src="#">
+            <el-menu
+              class="el-menu-demo"
+              mode="horizontal"
+              @select="handleSelect"
+              background-color="#ffffff"
+              text-color="#000"
+              active-text-color="#ffd04b">
+
+              <el-submenu index="1">
+                <template slot="title">
+                  <span>渔船位置</span>
+                  <i class="el-icon-location"></i>
+                </template>
+                <el-menu-item index="1-1">
+                  <i class="el-icon-refresh"></i>
+                  <span>实时刷新</span>
+                </el-menu-item>
+                <el-menu-item index="1-2">
+                  <i class="el-icon-edit-outline"></i>
+                  <span>条件选择</span>
+                </el-menu-item>
+              </el-submenu>
+
+              <el-submenu index="2">
+                <template slot="title">
+                  <span>违规作业分布图</span>
+                  <i class="el-icon-picture-outline"></i>
+                </template>
+                <el-submenu index="2-1">
+                  <template slot="title">拖网</template>
+                  <el-menu-item index="2-1-1">热力图</el-menu-item>
+                  <el-menu-item index="2-1-2">分布图</el-menu-item>
+                  <el-menu-item index="2-1-3">卫星图</el-menu-item>
+                </el-submenu>
+                <el-menu-item index="2-2">围网</el-menu-item>
+                <el-menu-item index="2-3">张网</el-menu-item>
+                <el-menu-item index="2-4">刺网</el-menu-item>
+                <el-menu-item index="2-5">拉网</el-menu-item>
+                <el-menu-item index="2-6">钓网</el-menu-item>
+              </el-submenu>
+
+              <el-submenu index="3">
+                <template slot="title">
+                  <span>渔船轨迹回放</span>
+                  <i class="el-icon-document"></i>
+                </template>
+                <el-menu-item index="3-1">
+                  <i class="el-icon-edit-outline"></i>
+                  <span>条件选择</span>
+                </el-menu-item>
+              </el-submenu>
+
+              <el-submenu index="4">
+                <template slot="title">
+                  <span>渔场区域选择</span>
+                  <i class="el-icon-search"></i>
+                </template>
+                <el-menu-item index="4-1">
+                  <i class="el-icon-picture-outline"></i>
+                  <span>渔场图层覆盖</span>
+                </el-menu-item>
+                <el-menu-item index="4-2">
+                  <i class="el-icon-edit-outline"></i>
+                  <span>条件选择</span>
+                </el-menu-item>
+              </el-submenu>
+
+            </el-menu>
+
+          </a></div>
           <div class="rightleftIcon">
             <span v-on:click="$router.back(-1)">
               <img src="../../assets/rebackLastIcon.png" style="cursor:pointer" alt="返回">
@@ -18,57 +88,106 @@
           </div>
         </el-col>
 
-        <el-col   >
-          <div class="mutipleSelectBox">
-
-            <el-form ref="selectForm" :model="select" :inline="true">
-              <el-form-item prop="boatId" class="boat-id-class" >
-                <el-input v-model="select.boatId" placeholder="渔船编号"></el-input>
-              </el-form-item>
-
-              <el-form-item  prop="beginDate"  >
-                <el-date-picker class="input-date-class"
-                  v-model="select.beginDate"
-                  type="datetime"
-                  placeholder="航行开始时间"
-                  align="right"
-                  :picker-options="pickerOptions">
-                </el-date-picker>
-              </el-form-item>
-
-              <el-form-item  prop="endDate" >
-                <el-date-picker  class="input-date-class"
-                  v-model="select.endDate"
-                  type="datetime"
-                  placeholder="航行结束时间"
-                  align="right"
-                  :picker-options="pickerOptions" >
-                </el-date-picker>
-              </el-form-item>
-
-              <el-form-item  prop="algorithmMode" >
-                <el-select v-model="select.algorithmMode" placeholder="请选择算法库">
-                  <el-option
-                    v-for="item in algorithmOptions"
-                    :key="item.value"
-                    :label="item.label"
-                    :value="item.value">
-                  </el-option>
-                </el-select>
-              </el-form-item>
-
-              <el-form-item align="center">
-                <el-button type="primary" @click="loadTrackPath">航行轨迹回放</el-button>
-                <el-button  @click="resetForm('selectForm')">重置</el-button>
-              </el-form-item>
-
-            </el-form>
-
-          </div>
-
-        </el-col>
       </el-row>
 
+    <!--渔船位置信息选择弹出框-->
+    <el-dialog title="渔船位置信息选择" :visible.sync="shipLocationDialog" @close="resetForm('shipLocationForm')">
+      <el-form ref="shipLocationForm" :model="selectLocation" :label-width="formLabelWidth"  >
+        <el-form-item label="渔船编号:" prop="boatId" >
+          <el-input v-model="selectLocation.boatId" class="select-input-data"
+                    autocomplete="off" placeholder="请输入编号"></el-input>
+        </el-form-item>
+        <el-form-item label="渔场编号:" prop="fisheryId" >
+          <el-input v-model="selectLocation.fisheryId" class="select-input-data"
+                    autocomplete="off" placeholder="请输入编号"></el-input>
+        </el-form-item>
+
+        <el-form-item label="航行时间:" prop="sailingTime" >
+          <el-date-picker class="select-input-data"
+            v-model="selectLocation.sailingTime"
+            type="datetime"
+            placeholder="请输入时间"
+            align="right"
+            :picker-options="pickerOptions">
+          </el-date-picker>
+        </el-form-item>
+
+
+        <el-form-item  label="渔船作业类型:" prop="workType" >
+            <el-checkbox-group v-model="selectLocation.workType" class="select-input-data" >
+              <el-checkbox label="围网" name="workType"></el-checkbox>
+              <el-checkbox label="张网" name="workType"></el-checkbox>
+              <el-checkbox label="刺网" name="workType"></el-checkbox>
+              <el-checkbox label="拉网" name="workType"></el-checkbox>
+              <el-checkbox label="拖网" name="workType"></el-checkbox>
+              <el-checkbox label="钓网" name="workType"></el-checkbox>
+            </el-checkbox-group>
+        </el-form-item>
+        <el-form-item  label="渔船规模大小:" prop="boatSize" >
+          <el-select v-model="selectLocation.boatSize" placeholder="请选择规模"
+                     class="select-input-data" style="width: 30%">
+            <el-option
+              v-for="item in boatSizeOptions"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value">
+            </el-option>
+          </el-select>
+        </el-form-item>
+
+
+      </el-form>
+      <div slot="footer" class="select-footer-class" >
+        <el-button @click="shipLocationDialog = false">取 消</el-button>
+        <el-button type="primary" @click="locationConfirm"
+                   style="margin-left: 60px;margin-right: 60px">确定</el-button>
+        <el-button  @click="resetForm('shipLocationForm')">重置</el-button>
+      </div>
+    </el-dialog>
+
+    <!--轨迹回放选择弹出框-->
+    <el-dialog title="渔船航行信息选择" :visible.sync="shipTrackDialog"   @close="resetForm('shipTrackForm')">
+      <el-form ref="shipTrackForm" :model="select" :label-width="formLabelWidth">
+        <el-form-item label="渔船编号:" prop="boatId" >
+          <el-input class="select-input-data" v-model="select.boatId"
+                    autocomplete="off" placeholder="请输入编号"></el-input>
+        </el-form-item>
+        <el-form-item label="航行开始时间:" prop="beginDate">
+          <el-date-picker class="select-input-data"
+                          v-model="select.beginDate"
+                          type="datetime"
+                          placeholder="请输入时间"
+                          align="right"
+                          :picker-options="pickerOptions">
+          </el-date-picker>
+        </el-form-item>
+        <el-form-item label="航行结束时间:" prop="endDate">
+          <el-date-picker class="select-input-data"
+                          v-model="select.endDate"
+                          type="datetime"
+                          placeholder="请输入时间"
+                          align="right"
+                          :picker-options="pickerOptions">
+          </el-date-picker>
+        </el-form-item>
+        <el-form-item class="select-input-data" label="算法库:" prop="algorithmMode" >
+          <el-select v-model="select.algorithmMode" placeholder="请选择算法">
+            <el-option
+              v-for="item in algorithmOptions"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value">
+            </el-option>
+          </el-select>
+        </el-form-item>
+      </el-form>
+      <div slot="footer" style="text-align: center;margin-top: 40px" >
+        <el-button @click="shipTrackDialog = false">取 消</el-button>
+        <el-button type="primary" @click="loadTrackPath"
+                   style="margin-left: 60px;margin-right: 60px">航行轨迹显示</el-button>
+        <el-button  @click="resetForm('shipTrackForm')">重置</el-button>
+      </div>
+    </el-dialog>
 
     </div>
 
@@ -80,6 +199,20 @@ export default {
   data() {
       return{
           user: {},
+          shipLocationDialog: false,//渔船位置信息弹窗
+          shipTrackDialog:false,//航行轨迹弹窗
+          formLabelWidth: '200px',//弹窗宽度
+          boatSizeOptions: [{
+              value: '大型',
+              label: '大型'
+          }, {
+              value: '中型',
+              label: '中型'
+          }, {
+              value: '小型',
+              label: '小型'
+          }],
+
           algorithmOptions: [{
               value: '1',
               label: 'XGBOOT'
@@ -112,6 +245,14 @@ export default {
                       picker.$emit('pick', date);
                   }
               }]
+          },
+          selectLocation:{
+              boatId:'',
+              fisheryId:'',
+              sailingTime:'',
+              workType:[],
+              boatSize:'',
+
           },
           select:{
               boatId:'',
@@ -162,22 +303,33 @@ export default {
       reback() {
           this.$router.go(-1); //reback the last step
       },
+      /* 菜单选择 */
+      handleSelect(key, keyPath) {
+          console.log(key, keyPath);
 
-      /*重置表单*/
+          if(key === "1-2"){
+              this.shipLocationDialog=true;// 渔船位置弹窗
+          }else if(key === "3-1"){
+              this.shipTrackDialog=true;// 轨迹选择弹窗
+          }
+      },
+
+      /* 重置表单 */
       resetForm(formName) {
           //表单重置
           this.$refs[formName].resetFields();
-          //地图重置
-          let map = window.map;
-          map.clearOverlays();//删除覆盖物
-          var point = new BMap.Point(122.20, 30.00);
-          map.centerAndZoom(point, 12);
-
-          //重新添加标注
-          this.addShipMarker();
+          // //地图重置
+          // let map = window.map;
+          // map.clearOverlays();//删除覆盖物
+          // var point = new BMap.Point(122.20, 30.00);
+          // map.centerAndZoom(point, 12);
+          //
+          // //重新添加标注
+          // this.addShipMarker();
       },
 
-      /*大地图显示*/
+
+      /* 大地图显示 */
       mapReady() {
           //创建实例
           var map = new BMap.Map("allmap");
@@ -192,7 +344,7 @@ export default {
 
       },
 
-      /* 初始加载所有渔船标注位置*/
+      /* 初始加载所有渔船标注位置 */
       addShipMarker(){
           var point = new Array();//定义数组标注经纬信息
           var marker = new Array();//定义数组点对象信息
@@ -230,9 +382,25 @@ export default {
           }
       },
 
-      /*轨迹回放*/
+      /* 选择性显示渔船位置 */
+      locationConfirm(){
+          this.shipLocationDialog =false;
+
+          map.clearOverlays();//删除覆盖物
+          var point = new BMap.Point(122.20, 30.00);
+          //初始化实例，传入坐标点并设置地图级别
+          map.centerAndZoom(point, 12);
+          map.enableScrollWheelZoom(true);
+          window.map = map;
+          //渔船标注位置
+          this.addShipMarker();
+      },
+
+      /* 轨迹回放 */
       loadTrackPath() {
-          //先清除覆盖物
+          //弹框隐藏
+          this.shipTrackDialog=false;
+          //清除覆盖物
           map.clearOverlays();
           // 轨迹线设置
           var sy = new BMap.Symbol(BMap_Symbol_SHAPE_BACKWARD_OPEN_ARROW, {
@@ -299,7 +467,7 @@ export default {
           }
       },
 
-      /*点击渔船 悬浮渔船信息*/
+      /* 点击渔船 悬浮渔船信息 */
       addInfo(info,marker){
           marker.addEventListener("click", function(e){
               var p = e.target
@@ -334,28 +502,29 @@ table {
 /*the center title sytle*/
 .centTitle {
   position: absolute;
-  left: 35%;
-  width: 586px;
+  left: 0%;
+  width: 100%;
   height: 43px;
   font-family: FZDHTJW--GB1-0;
   font-size: 43px;
   font-weight: normal;
   font-stretch: normal;
   letter-spacing: 5px;
-  color: #58a0ee;
+  color: #000000;
   float: left;
+  opacity: 0.5;/*透明度 -*/
 }
-.centTitle a:hover span{
-  opacity: 0.3;/*透明度 -*/
+.centTitle a:hover {
+  opacity: 0.8;/*透明度 -*/
 }
 
 
 .rightleftIcon {
   position: absolute;
   left: 90%;
-  margin-top: 20px;
+  margin-top: 10px;
   float: left;
-  opacity: 0.6;/*透明度 -*/
+  opacity: 0.8;/*透明度 -*/
 }
 .mapContext {
 
@@ -382,9 +551,20 @@ table {
   font-size: 23px;
 }
 .input-date-class{
+  float: left;
   width: 300px;
   font-size: 23px;
 }
-
+.select-input-data{
+  text-align: left;
+  float: left;
+  width: 60%;
+  font-size: 23px;
+  margin-bottom: 10px;
+}
+.select-footer-class{
+  text-align: center;
+  margin-top: 5px;
+}
 
 </style>
