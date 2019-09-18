@@ -803,7 +803,8 @@ export default {
                   method:'post',
                   url:'/statisShipJob',
                   data:{
-                      dateTime:""
+                      dateTime:"",
+                      idtfyFlag:"",
                   }
               }).then(res => {
               rightTopEChart.hideLoading(); //加载出来隐藏加载动画
