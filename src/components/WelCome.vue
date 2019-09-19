@@ -22,7 +22,7 @@
           <!--换行后有利于布局，相互之间不影响-->
           <br>
           <li>
-            <table class="leftTopTable" border="1">
+            <table class="leftTopTable" border="10"  >
               <tr>
                 <td>
                   <span></span>
@@ -48,7 +48,7 @@
       <div class="leftmiddlebackground">
         <ul>
           <li>
-            <span class="leftbackgroundTitle">渔船作业</span>
+            <span class="leftbackgroundTitle">作业占比</span>
             <span class="leftmoreText">更多</span>
             <a href="#">
               <img class="leftmoreICO" src="../assets/moreICO.png">
@@ -57,16 +57,17 @@
           <!--换行后有利于布局，相互之间不影响-->
           <br>
           <li>
-            <table class="leftmiddletable" border="0">
-              <tr>
-                <td class="leftmiddleContent">正常作业 :</td>
-                <td class="leftmiddleContentNum" align="left">{{normalFishingNum}}</td>
-              </tr>
-              <tr>
-                <td class="leftmiddleContent">非法作业 :</td>
-                <td class="leftmiddleContentNum" align="left">{{illegelFishingNum}}</td>
-              </tr>
-            </table>
+<!--            <table class="leftmiddletable" border="0">-->
+<!--              <tr>-->
+<!--                <td class="leftmiddleContent">正常作业 :</td>-->
+<!--                <td class="leftmiddleContentNum" align="left">{{normalFishingNum}}</td>-->
+<!--              </tr>-->
+<!--              <tr>-->
+<!--                <td class="leftmiddleContent">非法作业 :</td>-->
+<!--                <td class="leftmiddleContentNum" align="left">{{illegelFishingNum}}</td>-->
+<!--              </tr>-->
+<!--            </table>-->
+            <div id="leftmiddleEchartId" class="leftmiddleEchart"></div>
           </li>
         </ul>
       </div>
@@ -74,7 +75,7 @@
       <div class="leftbottombackground">
         <ul>
           <li>
-            <span class="leftbottombackgroundTitle">非法作业占比</span>
+            <span class="leftbottombackgroundTitle">围网统计</span>
             <span class="leftbottommoreText">更多</span>
             <a href="#">
               <img class="leftmoreICO" src="../assets/moreICO.png">
@@ -83,7 +84,15 @@
           <!--换行后有利于布局，相互之间不影响 -->
           <br>
           <li>
-            <div id="leftbottomEchartId" class="leftbottomEchart"></div>
+<!--            <div id="leftbottomEchartId" class="leftbottomEchart"></div>-->
+            <el-row>
+              <el-col :span="24">
+                <rightBottomEcharts
+                  v-bind:echartId="'leftBottomEchartsId'"
+                  :OptionData="leftBottomOption"
+                ></rightBottomEcharts>
+              </el-col>
+            </el-row>
           </li>
         </ul>
       </div>
@@ -242,6 +251,7 @@
           <router-link to="/passPort" class="lastbottomtext">渔船出入港</router-link>&nbsp;&nbsp;
           <router-link to="/workModeSta" class="lastbottomtext">渔船作业方式统计及查询</router-link>&nbsp;&nbsp;
           <router-link to="#" class="lastbottomtext">船舶明细</router-link>&nbsp;&nbsp;
+          <router-link to="#" class="lastbottomtext">围网作业方式统计及分析</router-link>&nbsp;&nbsp;
           <router-link to="/trawlSA" class="lastbottomtext">拖网作业方式统计及分析</router-link>&nbsp;&nbsp;
           <router-link to="/gillNetStAnalysis" class="lastbottomtext">刺网作业方式统计及分析</router-link>&nbsp;&nbsp;
           <router-link to="/seineSA" class="lastbottomtext">张网作业方式统计及分析</router-link>&nbsp;&nbsp;
@@ -285,7 +295,7 @@ export default {
       normalFishingNum: "",
       illegelFishingNum: "",
       //define
-      leftBottomOption: {
+      leftMiddleOption: {
         tooltip: {
           trigger: "item",
           formatter: "{a} <br/>{b} : {c} ({d}%)"
@@ -320,6 +330,104 @@ export default {
         ],
         color: ["#5b9bff", "#ed7d31"]
       },
+      leftBottomOption: {
+            color: ["#f44"],
+            tooltip: {
+                trigger: "axis",
+                axisPointer: {
+                    type: "shadow"
+                }
+            },
+            xAxis: [
+                {
+                    type: "category",
+                    data: [
+                        "1月",
+                        "2月",
+                        "3月",
+                        "4月",
+                        "5月",
+                        "6月",
+                        "7月",
+                        "8月",
+                        "9月",
+                        "10月",
+                        "11月",
+                        "12月"
+                    ],
+                    axisTick: {
+                        alignWithLabel: true
+                    },
+                    axisLine: {
+                        lineStyle: {
+                            color: "#5bbdff"
+                        }
+                    }
+                }
+            ],
+            yAxis: [
+                {
+                    type: "value",
+                    axisLine: {
+                        lineStyle: {
+                            color: "#5bbdff"
+                        }
+                    },
+                    scale: true,
+                    axisLabel: {
+                        margin: 5
+                    }
+                }
+            ],
+            series: [
+                {
+                    name: "每月数量",
+                    type: "line",
+                    smooth: true,
+                    // data: [995, 566, 744, 348, 554, 736, 245, 446, 746, 425, 547, 356],
+                    data:[],
+                    lineStyle: {
+                        color: {
+                            type: "radial",
+                            x: 0.5,
+                            y: 0.5,
+                            r: 0.7,
+                            colorStops: [
+                                {
+                                    offset: 0,
+                                    color: "red" // 0% 处的颜色
+                                },
+                                {
+                                    offset: 1,
+                                    color: "blue" // 100% 处的颜色
+                                }
+                            ],
+                            global: false // 缺省为 false
+                        }
+                    },
+                    areaStyle: {
+                        color: {
+                            type: "linear",
+                            x: 0,
+                            y: 0,
+                            x2: 0,
+                            y2: 1,
+                            colorStops: [
+                                {
+                                    offset: 0,
+                                    color: "red" // 0% 处的颜色
+                                },
+                                {
+                                    offset: 1,
+                                    color: "blue" // 100% 处的颜色
+                                }
+                            ],
+                            global: false // 缺省为 false
+                        }
+                    }
+                }
+            ]
+        },
       middleBottomLOption: {
         color: ["#5b9bff", "#ed7d31"],
         tooltip: {
@@ -683,7 +791,7 @@ export default {
   },
   mounted() {
     //the draw left-bottom echarts function
-    this.drawLeftBottomCharts();
+    this.drawLeftMiddleCharts();
     /*var leftbottomChart = this.$echarts.init(
       document.getElementById("leftbottomEchartId")
     );
@@ -695,6 +803,7 @@ export default {
     /* 向后台请求数据 */
 
     this.initPortData()// 出港入港数量
+    this.initLeftBottomEchartsOption(); //围网
     this.initMiddleBottomLEchartsOption(); //拖网
     this.initMiddleBottomREchartsOption(); //张网
     this.initRightTopEchartsOption(); //作业方式统计
@@ -703,14 +812,15 @@ export default {
     this.baiduMap();
   },
   methods: {
+
     //the function of draw left-bottom echarts 左下角
-    drawLeftBottomCharts() {
-      var leftbottomChart = this.$echarts.init(
-        document.getElementById("leftbottomEchartId")
+    drawLeftMiddleCharts() {
+      var leftmiddleChart = this.$echarts.init(
+        document.getElementById("leftmiddleEchartId")
       );
-      leftbottomChart.setOption(this.leftBottomOption);
+        leftmiddleChart.setOption(this.leftMiddleOption);
         //数据没有加载出来显示加载动画,样式添加todo
-        leftbottomChart.showLoading();
+        leftmiddleChart.showLoading();
         //获取数据
         this.axios(
             {
@@ -723,8 +833,8 @@ export default {
             // setTimeout(()=>{  //未来让加载动画效果明显,这里加入了setTimeout,实现2s延时
             this.normalFishingNum = res.data.normal;
             this.illegelFishingNum = res.data.illegal;
-            leftbottomChart.hideLoading(); //加载出来隐藏加载动画
-            leftbottomChart.setOption({  //数据添加
+            leftmiddleChart.hideLoading(); //加载出来隐藏加载动画
+            leftmiddleChart.setOption({  //数据添加
                 series: [{
                     data: [
                         {value: res.data.normal, name: "正常作业"},
@@ -736,7 +846,7 @@ export default {
         })
 
       window.addEventListener("resize", function() {
-        leftbottomChart.resize();
+          leftmiddleChart.resize();
       });
     },
 
@@ -749,6 +859,38 @@ export default {
               this.NLoutNum = response.data.out[1];
           }).catch((response) => {
               console.log(response)
+          })
+      },
+
+      /*围网后台数据 */
+      initLeftBottomEchartsOption() {
+          var date = new Date();
+          var year = date.getFullYear();
+          console.log(year)
+          var leftBottomEChart = this.$echarts.init(
+              document.getElementById("leftBottomEchartsId")
+          );
+          leftBottomEChart.setOption(this.leftBottomOption);
+          //数据没有加载出来显示加载动画,样式添加todo
+          leftBottomEChart.showLoading();
+          this.axios({
+              method:'post',
+              url:'/getDataByMonthOrDay',
+              data:{
+                  jobType :"围网",
+                  startTime : year+"-01-01 00:00:00",
+                  endTime : year+"-9-30 00:00:00",
+                  byDay : 0,
+              }
+          }).then(res => {
+              console.log(res.data)
+              leftBottomEChart.hideLoading(); //加载出来隐藏加载动画
+              leftBottomEChart.setOption({  //数据添加
+                  series: [{
+                      data: res.data.total
+                  }]
+              })
+
           })
       },
 
@@ -830,7 +972,6 @@ export default {
           //数据没有加载出来显示加载动画,样式添加todo
           rightMiddleEChart.showLoading();
           this.axios.get('/getIllegalOperationStatistic').then(res => {
-              console.log(res.data)
               rightMiddleEChart.hideLoading(); //加载出来隐藏加载动画
               rightMiddleEChart.setOption({  //数据添加
                   series: [{
@@ -882,6 +1023,7 @@ export default {
           map.centerAndZoom(point, 12);
           map.enableScrollWheelZoom(true);
           window.map = map;//将map变量存储在全局
+          map.setMapStyle({style:'midnight'});
 
           /* 渔船标注位置*/
           this.addMarker();
@@ -1111,7 +1253,7 @@ table {
   margin-left: 170px;
   float: left;
 }
-.leftbottomEchart {
+.leftmiddleEchart {
   /*width: 350px;*/
   width: 80%;
   height: 240px;
