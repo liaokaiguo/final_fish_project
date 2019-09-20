@@ -293,19 +293,22 @@ export default {
               {name :"船1",terminalid: "草帽",workMode:"",speed : 58,locationdate:"2019-09-12 17:44:20",longitude : 122.3139631,latitude :30.07611}],
 
           /*网格相关*/
-          level:'',//地图级别
+          centerPoint:'', //地图中心点
+          centerLng: "122.20",//地图中心经纬度
+          centerLat: "30.00",
+          level:"12",//地图级别
           bounds:'',//当前地图的四个顶点
           span:'',//当前网格的跨度
           xgrids: [],//经线
           ygrids : [],//纬线
-          centerPoint:'', //地图中心点
           beSelectBounds : [],
+          existGrid : false,//是否存在网格
 
   }
 
   },
   mounted() {
-    this.mapReady();
+    this.mapReady(this.centerLng,this.centerLat,this.level);
   },
   methods: {
       reback() {
@@ -322,7 +325,25 @@ export default {
           } else if (key === "4-1") {
               this.initFisheryGrid();// 渔场显示
           } else if (key === "4-2") {
-              map.clearOverlays();//删除 渔场显示
+
+              //说明有网格覆盖层
+              if( this.existGrid === true){
+                  // 重新加载地图
+                  var newLng = map.getCenter().lng;
+                  var newLat = map.getCenter().lat;
+                  var newLevel = map.getZoom();
+                  this.mapReady(newLng, newLat, newLevel);
+
+                  this.existGrid =false;
+              }else{
+                  this.$message({
+                      type:"warning",
+                      message: '当前地图没有渔场网格覆盖!!!',
+                      showClose: 'true',
+                      duration:4000,
+                  })
+              }
+
           }
       },
 
@@ -342,13 +363,13 @@ export default {
 
 
       /* 大地图显示 */
-      mapReady() {
+      mapReady(lng,lat,level) {
           //创建实例
-          var map = new BMap.Map("allmap");
+          var map = new BMap.Map("allmap",{enableMapClick: false});
           //创建坐标点
-          this.centerPoint = new BMap.Point(122.20, 30.00);
+          this.centerPoint = new BMap.Point(lng, lat);
           //初始化实例，传入坐标点并设置地图级别
-          map.centerAndZoom(this.centerPoint, 12);
+          map.centerAndZoom(this.centerPoint, level);
           map.enableScrollWheelZoom(true);
           window.map = map;
           //渔船标注位置
@@ -398,14 +419,12 @@ export default {
       locationConfirm() {
           this.shipLocationDialog = false;
 
-          map.clearOverlays();//删除覆盖物
-          var point = new BMap.Point(122.20, 30.00);
-          //初始化实例，传入坐标点并设置地图级别
-          map.centerAndZoom(point, 12);
-          map.enableScrollWheelZoom(true);
-          window.map = map;
-          //渔船标注位置
-          this.addShipMarker();
+          this.mapReady(this.centerLng,this.centerLat,12);
+
+          /*原先有渔场网格，清完覆盖物依旧加上*/
+          if(this.existGrid === true){
+              this.initFisheryGrid();
+          }
       },
 
       /* 轨迹回放 */
@@ -489,24 +508,20 @@ export default {
           })
       },
 
-      /* 渔场网格*/
+      /* 菜单点击显示渔场网格，并添加事件*/
       initFisheryGrid() {
+          this.existGrid = true;
           this.initProperty();
           this.initGrid();
           var _this =this //外部变量 放到map里用
 
+
           //添加移动后的点击事件
-          map.addEventListener("dragend", function () {
-              _this.initProperty();
-              _this.initGrid();
-          });
+          map.addEventListener("dragend", _this.showFisheryGrid);
           //添加放大或缩小时的事件
-          map.addEventListener("zoomend", function () {
-              _this.initProperty();
-              _this.initGrid();
-          });
+          // map.addEventListener("zoomend",  _this.showFisheryGrid);
           //设置点击事件
-          map.addEventListener("click", function (e) {
+          map.addEventListener("click", function (e){
               var point = e.point;
               //获取当前点是在哪个区块内,获取正方形的四个顶点
               var points = _this.getGrid(_this,point);
@@ -525,22 +540,40 @@ export default {
               var lat_center = (points[0].lat + points[2].lat)/2  //点击网格的中心维度
               var point_center = new BMap.Point(lng_center, lat_center);
               var opts = {
-                  width : 300,     // 信息窗口宽度
-                  height: 100,     // 信息窗口高度
+                  width : 400,     // 信息窗口宽度
+                  height: 130,     // 信息窗口高度
                   title : "渔场信息" , // 信息窗口标题
               };
               // 窗口显示内容
-              var text= "<div style='width:600px;'>"
-                  + "<p>渔场名称：(" +  '舟山渔场' + lat_center + ')'+ "</p>"
+              var text= "<div style='width:300px;'>"
+                  + "<p>渔场名称：(" +  '舟山渔场' +_this.level +"纬" +lat_center + ')'+ "</p>"
                   + "<p>位置（经纬度）：(" + lng_center + ',' + lat_center + ')'+ "</p>"
 
                   + "</div>"
               var infoWindow = new BMap.InfoWindow(text, opts);  // 创建信息窗口对象
               this.openInfoWindow(infoWindow,point_center);
           });
+
+
       },
 
+      /*显示渔场网格*/
+      showFisheryGrid(){
+          this.initProperty();
+          this.initGrid();
+      },
 
+      /*初始化当前地图的状态*/
+      initProperty () {
+          this.level = map.getZoom();
+          this.bounds = {
+              x1: map.getBounds().getSouthWest().lng,
+              y1: map.getBounds().getSouthWest().lat,
+              x2: map.getBounds().getNorthEast().lng,
+              y2: map.getBounds().getNorthEast().lat
+          };
+          this.span = this.getSpan();//需要使用level属性
+      },
       /*初始化网格*/
       initGrid() {
           //将原来的网格线先去掉
@@ -560,17 +593,12 @@ export default {
           span.y = span.y*0.8;
           //初始化地图上的网格
           for (var i = this.bounds.x1 + (this.centerPoint.lng - this.bounds.x1) % span.x - span.x; i < this.bounds.x2 + span.x; i += span.x) {
-              if (i < 121.2 & this.bounds.y1 > 28.38) {
-                  var polyline = new BMap.Polyline([
-                      new BMap.Point(i.toFixed(6), this.bounds.y1),
-                      new BMap.Point(i.toFixed(6), this.bounds.y2)
-                  ], {strokeColor: "black", strokeWeight: 1, strokeOpacity: 0.01});
-              }else{
-                  var polyline = new BMap.Polyline([
-                      new BMap.Point(i.toFixed(6), this.bounds.y1),
-                      new BMap.Point(i.toFixed(6), this.bounds.y2)
-                  ], {strokeColor: "black", strokeWeight: 1, strokeOpacity: 0.5});
-              }
+
+              var polyline = new BMap.Polyline([
+                  new BMap.Point(i.toFixed(6), this.bounds.y1),
+                  new BMap.Point(i.toFixed(6), this.bounds.y2)
+              ], {strokeColor: "black", strokeWeight: 1, strokeOpacity: 0.5});
+
               this.xgrids.push(polyline);
               map.addOverlay(polyline);
           }
@@ -583,24 +611,16 @@ export default {
               map.addOverlay(polyline);
           }
       },
-      /*初始化当前地图的状态*/
-      initProperty () {
-          this.level = map.getZoom();
-          this.bounds = {
-              x1: map.getBounds().getSouthWest().lng,
-              y1: map.getBounds().getSouthWest().lat,
-              x2: map.getBounds().getNorthEast().lng,
-              y2: map.getBounds().getNorthEast().lat
-          };
-          this.span = this.getSpan();//需要使用level属性
-      },
+
       /*获取网格的跨度*/
       getSpan() {
           var scale = 0.75;
           var x = 0.0005;
-          for (var i = this.level; i < 19; i++) {
-              x *= 2;
-          }
+          /*网格大小随zoom变化*/
+          // for (var i = this.level; i < 19; i++) {
+          //     x *= 2;
+          // }
+          x *= 128 //固定死网格
           var y = parseFloat((scale * x).toFixed(5));
           return {x: x, y: y};
       },
@@ -633,6 +653,7 @@ export default {
           ];
 
       },
+
 
   }
 
