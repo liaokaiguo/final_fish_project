@@ -292,13 +292,13 @@ export default {
               {name :"船1",terminalid: "草帽",workMode:"拖网",speed : 84,locationdate:"2019-09-12 17:34:20",longitude : 122.39631,latitude :30.08911},
               {name :"船1",terminalid: "草帽",workMode:"",speed : 58,locationdate:"2019-09-12 17:44:20",longitude : 122.3139631,latitude :30.07611}],
 
-
-          level:'',
-          bounds:'',
-          span:'',
+          /*网格相关*/
+          level:'',//地图级别
+          bounds:'',//当前地图的四个顶点
+          span:'',//当前网格的跨度
           xgrids: [],//经线
           ygrids : [],//纬线
-          centerPoint:'',
+          centerPoint:'', //地图中心点
           beSelectBounds : [],
 
   }
@@ -321,6 +321,8 @@ export default {
               this.shipTrackDialog = true;// 轨迹选择弹窗
           } else if (key === "4-1") {
               this.initFisheryGrid();// 渔场显示
+          } else if (key === "4-2") {
+              map.clearOverlays();//删除 渔场显示
           }
       },
 
@@ -351,7 +353,6 @@ export default {
           window.map = map;
           //渔船标注位置
           this.addShipMarker();
-
 
       },
 
@@ -524,13 +525,16 @@ export default {
               var lat_center = (points[0].lat + points[2].lat)/2  //点击网格的中心维度
               var point_center = new BMap.Point(lng_center, lat_center);
               var opts = {
-                  width : 200,     // 信息窗口宽度
+                  width : 300,     // 信息窗口宽度
                   height: 100,     // 信息窗口高度
-                  title : "大家好，我是渔场区域," , // 信息窗口标题
-                  enableMessage:true,//设置允许信息窗发送短息
-                  message:"亲耐滴，晚上一起捕个鱼吧？再戳下会有惊喜喔~"
+                  title : "渔场信息" , // 信息窗口标题
               };
-              var text = '位置（经纬度）：(' + lng_center + ',' + lat_center + ')'    // 窗口显示内容
+              // 窗口显示内容
+              var text= "<div style='width:600px;'>"
+                  + "<p>渔场名称：(" +  '舟山渔场' + lat_center + ')'+ "</p>"
+                  + "<p>位置（经纬度）：(" + lng_center + ',' + lat_center + ')'+ "</p>"
+
+                  + "</div>"
               var infoWindow = new BMap.InfoWindow(text, opts);  // 创建信息窗口对象
               this.openInfoWindow(infoWindow,point_center);
           });
