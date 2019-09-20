@@ -70,8 +70,8 @@
                   <span>渔场图层覆盖</span>
                 </el-menu-item>
                 <el-menu-item index="4-2">
-                  <i class="el-icon-edit-outline"></i>
-                  <span>条件选择</span>
+                  <i class="el-icon-picture-outline"></i>
+                  <span>渔场图层取消</span>
                 </el-menu-item>
               </el-submenu>
 
@@ -293,6 +293,14 @@ export default {
               {name :"船1",terminalid: "草帽",workMode:"",speed : 58,locationdate:"2019-09-12 17:44:20",longitude : 122.3139631,latitude :30.07611}],
 
 
+          level:'',
+          bounds:'',
+          span:'',
+          xgrids: [],//经线
+          ygrids : [],//纬线
+          centerPoint:'',
+          beSelectBounds : [],
+
   }
 
   },
@@ -307,10 +315,12 @@ export default {
       handleSelect(key, keyPath) {
           console.log(key, keyPath);
 
-          if(key === "1-2"){
-              this.shipLocationDialog=true;// 渔船位置弹窗
-          }else if(key === "3-1"){
-              this.shipTrackDialog=true;// 轨迹选择弹窗
+          if (key === "1-2") {
+              this.shipLocationDialog = true;// 渔船位置弹窗
+          } else if (key === "3-1") {
+              this.shipTrackDialog = true;// 轨迹选择弹窗
+          } else if (key === "4-1") {
+              this.initFisheryGrid();// 渔场显示
           }
       },
 
@@ -334,18 +344,19 @@ export default {
           //创建实例
           var map = new BMap.Map("allmap");
           //创建坐标点
-          var point = new BMap.Point(122.20, 30.00);
+          this.centerPoint = new BMap.Point(122.20, 30.00);
           //初始化实例，传入坐标点并设置地图级别
-          map.centerAndZoom(point, 12);
+          map.centerAndZoom(this.centerPoint, 12);
           map.enableScrollWheelZoom(true);
           window.map = map;
           //渔船标注位置
           this.addShipMarker();
 
+
       },
 
       /* 初始加载所有渔船标注位置 */
-      addShipMarker(){
+      addShipMarker() {
           var point = new Array();//定义数组标注经纬信息
           var marker = new Array();//定义数组点对象信息
           var info = new Array();//定义悬浮提示信息
@@ -353,38 +364,38 @@ export default {
           var width = 32;
           var height = 32;
           var imgSrc = require("../../assets/ship32.png"); //引入icon图片 本地图要用require
-          var myIcon = new BMap.Icon(imgSrc, new BMap.Size(width,height));//配置icon
-          for(var i = 0; i < this.shipArr.length; i++){//遍历
-              point[i] = new window.BMap.Point(this.shipArr[i].longitude,this.shipArr[i].latitude);
-              marker[i] = new window.BMap.Marker(point[i],{icon:myIcon});//把icon和坐标添加到Marker中
+          var myIcon = new BMap.Icon(imgSrc, new BMap.Size(width, height));//配置icon
+          for (var i = 0; i < this.shipArr.length; i++) {//遍历
+              point[i] = new window.BMap.Point(this.shipArr[i].longitude, this.shipArr[i].latitude);
+              marker[i] = new window.BMap.Marker(point[i], {icon: myIcon});//把icon和坐标添加到Marker中
               map.addOverlay(marker[i]);
               var label = new window.BMap.Label(this.shipArr[i].name);
               label.setStyle({  //设置提示框的样式
-                  color : "#000",
-                  fontSize : "12px",
-                  backgroundColor :"#d5fdff",
-                  border :"1px solid #ccc",
-                  borderRadius:"2px",
-                  padding :"2px 6px"
+                  color: "#000",
+                  fontSize: "12px",
+                  backgroundColor: "#d5fdff",
+                  border: "1px solid #ccc",
+                  borderRadius: "2px",
+                  padding: "2px 6px"
               });
               // marker[i].setLabel(label);
               info[i] = new window.BMap.InfoWindow(
                   "<div style='width:300px;'>"
-                  +"<p>渔船编号："+this.shipArr[i].name+"</p>"
-                  +"<p>渔船名："+this.shipArr[i].terminalid+"</p>"
-                  +"<p>航行时速(m/s)："+this.shipArr[i].speed+"</p>"
-                  +"<p>定位时间："+this.shipArr[i].locationdate+"</p>"
-                  +"<p>地址经度："+this.shipArr[i].longitude+"</p>"
-                  +"<p>地址纬度："+this.shipArr[i].latitude+"</p>"
-                  +"</div>"
+                  + "<p>渔船编号：" + this.shipArr[i].name + "</p>"
+                  + "<p>渔船名：" + this.shipArr[i].terminalid + "</p>"
+                  + "<p>航行时速(m/s)：" + this.shipArr[i].speed + "</p>"
+                  + "<p>定位时间：" + this.shipArr[i].locationdate + "</p>"
+                  + "<p>地址经度：" + this.shipArr[i].longitude + "</p>"
+                  + "<p>地址纬度：" + this.shipArr[i].latitude + "</p>"
+                  + "</div>"
               );//悬浮提示信息
-              this.addInfo(info[i],marker[i])
+              this.addInfo(info[i], marker[i])
           }
       },
 
       /* 选择性显示渔船位置 */
-      locationConfirm(){
-          this.shipLocationDialog =false;
+      locationConfirm() {
+          this.shipLocationDialog = false;
 
           map.clearOverlays();//删除覆盖物
           var point = new BMap.Point(122.20, 30.00);
@@ -399,7 +410,7 @@ export default {
       /* 轨迹回放 */
       loadTrackPath() {
           //弹框隐藏
-          this.shipTrackDialog=false;
+          this.shipTrackDialog = false;
           //清除覆盖物
           map.clearOverlays();
           // 轨迹线设置
@@ -410,9 +421,9 @@ export default {
           });
           var icons = new BMap.IconSequence(sy, '10', '30');
 
-         // 创建polyline对象
-          var pois=[];
-          for(var i = 0; i < this.shipTrackArr.length; i++) {//遍历添加轨迹点
+          // 创建polyline对象
+          var pois = [];
+          for (var i = 0; i < this.shipTrackArr.length; i++) {//遍历添加轨迹点
               pois.push(new BMap.Point(this.shipTrackArr[i].longitude, this.shipTrackArr[i].latitude));
           }
           var polyline = new BMap.Polyline(pois, {
@@ -437,39 +448,39 @@ export default {
           var width = 32;
           var height = 32;
           var imgSrc = require("../../assets/shipTrack.png"); //引入icon图片 本地图片要用require
-          var myIcon = new BMap.Icon(imgSrc, new BMap.Size(width,height));//配置icon
-          for(var i = 0; i < this.shipTrackArr.length; i++){//遍历
-              point[i] = new window.BMap.Point(this.shipTrackArr[i].longitude,this.shipTrackArr[i].latitude);
-              marker[i] = new window.BMap.Marker(point[i],{icon:myIcon});//把icon和坐标添加到Marker中
+          var myIcon = new BMap.Icon(imgSrc, new BMap.Size(width, height));//配置icon
+          for (var i = 0; i < this.shipTrackArr.length; i++) {//遍历
+              point[i] = new window.BMap.Point(this.shipTrackArr[i].longitude, this.shipTrackArr[i].latitude);
+              marker[i] = new window.BMap.Marker(point[i], {icon: myIcon});//把icon和坐标添加到Marker中
               map.addOverlay(marker[i]);
               var label = new window.BMap.Label(this.shipTrackArr[i].name);
               label.setStyle({  //设置提示框的样式
-                  color : "#000",
-                  fontSize : "12px",
-                  backgroundColor :"#d5fdff",
-                  border :"1px solid #ccc",
-                  borderRadius:"2px",
-                  padding :"2px 6px"
+                  color: "#000",
+                  fontSize: "12px",
+                  backgroundColor: "#d5fdff",
+                  border: "1px solid #ccc",
+                  borderRadius: "2px",
+                  padding: "2px 6px"
               });
               // marker[i].setLabel(label);
               info[i] = new window.BMap.InfoWindow(
                   "<div style='width:300px;'>"
-                  +"<p>渔船编号："+this.shipTrackArr[i].name+"</p>"
-                  +"<p>渔船名："+this.shipTrackArr[i].terminalid+"</p>"
-                  +"<p>航行时速(m/s)："+this.shipTrackArr[i].speed+"</p>"
-                  +"<p>定位时间："+this.shipTrackArr[i].locationdate+"</p>"
-                  +"<p>地址经度："+this.shipTrackArr[i].longitude+"</p>"
-                  +"<p>地址纬度："+this.shipTrackArr[i].latitude+"</p>"
-                  +"<p>作业方式："+this.shipTrackArr[i].workMode+"</p>"
-                  +"</div>"
+                  + "<p>渔船编号：" + this.shipTrackArr[i].name + "</p>"
+                  + "<p>渔船名：" + this.shipTrackArr[i].terminalid + "</p>"
+                  + "<p>航行时速(m/s)：" + this.shipTrackArr[i].speed + "</p>"
+                  + "<p>定位时间：" + this.shipTrackArr[i].locationdate + "</p>"
+                  + "<p>地址经度：" + this.shipTrackArr[i].longitude + "</p>"
+                  + "<p>地址纬度：" + this.shipTrackArr[i].latitude + "</p>"
+                  + "<p>作业方式：" + this.shipTrackArr[i].workMode + "</p>"
+                  + "</div>"
               );//悬浮提示信息
-              this.addInfo(info[i],marker[i])
+              this.addInfo(info[i], marker[i])
           }
       },
 
       /* 点击渔船 悬浮渔船信息 */
-      addInfo(info,marker){
-          marker.addEventListener("click", function(e){
+      addInfo(info, marker) {
+          marker.addEventListener("click", function (e) {
               var p = e.target
               var point = new BMap.Point(p.getPosition().lng, p.getPosition().lat)
               map.centerAndZoom(point, 14);
@@ -477,8 +488,151 @@ export default {
           })
       },
 
+      /* 渔场网格*/
+      initFisheryGrid() {
+          this.initProperty();
+          this.initGrid();
+          var _this =this //外部变量 放到map里用
+
+          //添加移动后的点击事件
+          map.addEventListener("dragend", function () {
+              _this.initProperty();
+              _this.initGrid();
+          });
+          //添加放大或缩小时的事件
+          map.addEventListener("zoomend", function () {
+              _this.initProperty();
+              _this.initGrid();
+          });
+          //设置点击事件
+          map.addEventListener("click", function (e) {
+              var point = e.point;
+              //获取当前点是在哪个区块内,获取正方形的四个顶点
+              var points = _this.getGrid(_this,point);
+              //判断当前区域是否已经被选中过，如果被选中过则取消选中
+              var key = '' + points[0].lng + points[0].lat + points[2].lng + points[2].lat;//使用两个点的坐标作为key
+              if (_this.beSelectBounds[key]) {
+                  map.removeOverlay(_this.beSelectBounds[key]);
+                  delete _this.beSelectBounds[key];
+                  return;
+              }
+              var polygon = new BMap.Polygon(points, {strokeColor: "red", strokeWeight: 4, strokeOpacity: 0.5}); //正方形区域样式
+              map.addOverlay(polygon);
+              _this.beSelectBounds[key] = polygon;
+              // 文字信息框
+              var lng_center = (points[0].lng + points[2].lng)/2  //点击网格的中心经度
+              var lat_center = (points[0].lat + points[2].lat)/2  //点击网格的中心维度
+              var point_center = new BMap.Point(lng_center, lat_center);
+              var opts = {
+                  width : 200,     // 信息窗口宽度
+                  height: 100,     // 信息窗口高度
+                  title : "大家好，我是渔场区域," , // 信息窗口标题
+                  enableMessage:true,//设置允许信息窗发送短息
+                  message:"亲耐滴，晚上一起捕个鱼吧？再戳下会有惊喜喔~"
+              };
+              var text = '位置（经纬度）：(' + lng_center + ',' + lat_center + ')'    // 窗口显示内容
+              var infoWindow = new BMap.InfoWindow(text, opts);  // 创建信息窗口对象
+              this.openInfoWindow(infoWindow,point_center);
+          });
+      },
+
+
+      /*初始化网格*/
+      initGrid() {
+          //将原来的网格线先去掉
+          for (var i in this.xgrids) {
+              map.removeOverlay(this.xgrids[i]);
+          }
+          this.xgrids = [];
+          for (var i in this.ygrids) {
+              map.removeOverlay(this.ygrids[i]);
+          }
+          this.ygrids = [];
+
+          //获取当前网格跨度
+          var span = this.span;
+          // 控制网格的长和宽
+          span.x = span.x*0.8;
+          span.y = span.y*0.8;
+          //初始化地图上的网格
+          for (var i = this.bounds.x1 + (this.centerPoint.lng - this.bounds.x1) % span.x - span.x; i < this.bounds.x2 + span.x; i += span.x) {
+              if (i < 121.2 & this.bounds.y1 > 28.38) {
+                  var polyline = new BMap.Polyline([
+                      new BMap.Point(i.toFixed(6), this.bounds.y1),
+                      new BMap.Point(i.toFixed(6), this.bounds.y2)
+                  ], {strokeColor: "black", strokeWeight: 1, strokeOpacity: 0.01});
+              }else{
+                  var polyline = new BMap.Polyline([
+                      new BMap.Point(i.toFixed(6), this.bounds.y1),
+                      new BMap.Point(i.toFixed(6), this.bounds.y2)
+                  ], {strokeColor: "black", strokeWeight: 1, strokeOpacity: 0.5});
+              }
+              this.xgrids.push(polyline);
+              map.addOverlay(polyline);
+          }
+          for (var i = this.bounds.y1 + (this.centerPoint.lat - this.bounds.y1) % span.y - span.y; i < this.bounds.y2 + span.y; i += span.y) {
+              var polyline = new BMap.Polyline([
+                  new BMap.Point(this.bounds.x1, i.toFixed(6)),
+                  new BMap.Point(this.bounds.x2, i.toFixed(6))
+              ], {strokeColor: "black", strokeWeight: 1, strokeOpacity: 0.5});
+              this.ygrids.push(polyline);
+              map.addOverlay(polyline);
+          }
+      },
+      /*初始化当前地图的状态*/
+      initProperty () {
+          this.level = map.getZoom();
+          this.bounds = {
+              x1: map.getBounds().getSouthWest().lng,
+              y1: map.getBounds().getSouthWest().lat,
+              x2: map.getBounds().getNorthEast().lng,
+              y2: map.getBounds().getNorthEast().lat
+          };
+          this.span = this.getSpan();//需要使用level属性
+      },
+      /*获取网格的跨度*/
+      getSpan() {
+          var scale = 0.75;
+          var x = 0.0005;
+          for (var i = this.level; i < 19; i++) {
+              x *= 2;
+          }
+          var y = parseFloat((scale * x).toFixed(5));
+          return {x: x, y: y};
+      },
+
+      /*返回当前点在所在区块的四个顶点*/
+      getGrid(_this,point) {
+          //先找出两条纵线坐标
+          var xpoints = this.xgrids.map(function (polyline) {
+              return polyline.getPath()[0].lng;
+          }).filter(function (lng) {
+              return Math.abs(lng - point.lng) <= _this.span.x;
+          }).sort(function (a, b) {
+              return a - b;
+          }).slice(0, 2);
+
+          //再找出两条横线的坐标
+          var ypoints = this.ygrids.map(function (polyline) {
+              return polyline.getPath()[0].lat;
+          }).filter(function (lat) {
+              return Math.abs(lat - point.lat) <= _this.span.y;
+          }).sort(function (a, b) {
+              return a - b;
+          }).slice(0, 2);
+
+          return [
+              new BMap.Point(xpoints[0], ypoints[0]),
+              new BMap.Point(xpoints[0], ypoints[1]),
+              new BMap.Point(xpoints[1], ypoints[1]),
+              new BMap.Point(xpoints[1], ypoints[0])
+          ];
+
+      },
 
   }
+
+
 }
 </script>
 <style scoped>
