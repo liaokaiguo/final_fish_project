@@ -376,6 +376,7 @@
                         longitude: 122.286731,
                         latitude: 29.8937411
                     }],
+                shipMarkerOpenOrClose :true,//渔船标注点开关
 
                 // 单只渔船特定时间段航行轨迹点
                 shipTrackArr: [
@@ -487,6 +488,7 @@
                         longitude: 122.3139631,
                         latitude: 30.07611
                     }],
+                trackPathOpenOrClose:false, //轨迹路径开关
 
                 /*网格相关*/
                 centerPoint: '', //地图中心点
@@ -729,6 +731,8 @@
         mounted() {
             this.getShipLocationArr();
             this.mapReady(this.centerLng, this.centerLat, this.level);
+            //渔船标注位置
+            this.addShipMarker();
         },
         methods: {
             /*获取当前日期yyyy-MM-dd HH:mm:ss*/
@@ -811,8 +815,6 @@
                 map.centerAndZoom(this.centerPoint, level);
                 map.enableScrollWheelZoom(true);
                 window.map = map;
-                //渔船标注位置
-                this.addShipMarker();
 
             },
 
@@ -837,6 +839,18 @@
 
             /* 初始加载所有渔船标注位置 */
             addShipMarker() {
+                this.shipMarkerOpenOrClose =true;
+                //清除覆盖物，若有网格重新加载网格
+                if(this.existGrid === true){
+                    this.deleteGrid()
+                    map.clearOverlays();  //先关网格在清所有覆盖物 否则出错
+                    this.heatMapOpenOrClose = false;// 另外两栏开关关闭
+                    this.trackPathOpenOrClose =false;
+                    this.initFisheryGrid()
+                }else{
+                    map.clearOverlays();
+                }
+
                 var point = new Array();//定义数组标注经纬信息
                 var marker = new Array();//定义数组点对象信息
                 var info = new Array();//定义悬浮提示信息
@@ -877,20 +891,26 @@
             locationConfirm() {
                 this.shipLocationDialog = false;
 
-                this.mapReady(this.centerLng, this.centerLat, 12);
+                this.addShipMarker();
 
-                /*原先有渔场网格，清完覆盖物依旧加上*/
-                if (this.existGrid === true) {
-                    this.initFisheryGrid();
-                }
             },
 
-            /* 添加围网热力图覆盖物 */
+            /* 添加热力图覆盖物 */
             initHeatMap(points) {
                 this.heatMapOpenOrClose =true;
-                // 清除图层(每次重新调用需要清除上一个覆盖物图层)
-                if(this.heatMapOverlay != ""){
-                    map.removeOverlay(this.heatMapOverlay);
+                // // 清除图层(每次重新调用需要清除上一个覆盖物图层)
+                // if(this.heatMapOverlay != ""){
+                //     map.removeOverlay(this.heatMapOverlay);
+                // }
+                //清除覆盖物，若有网格重新加载网格
+                if(this.existGrid === true){
+                    this.deleteGrid()
+                    map.clearOverlays();  //先关网格在清所有覆盖物 否则出错
+                    this.shipMarkerOpenOrClose = false;// 另外两栏开关关闭
+                    this.trackPathOpenOrClose =false;
+                    this.initFisheryGrid()
+                }else{
+                    map.clearOverlays();
                 }
                 this.heatMapOverlay = new BMapLib.HeatmapOverlay({
                     // 热力图的每个点的半径大小
@@ -916,10 +936,20 @@
 
             /* 轨迹回放 */
             loadTrackPath() {
+                this.trackPathOpenOrClose =true;
                 //弹框隐藏
                 this.shipTrackDialog = false;
-                //清除覆盖物
-                map.clearOverlays();
+                //清除覆盖物，若有网格重新加载网格
+                if(this.existGrid === true){
+                    this.deleteGrid()
+                    map.clearOverlays();  //先关网格在清所有覆盖物 否则出错
+                    this.shipMarkerOpenOrClose =false;// 另外两栏开关关闭
+                    this.heatMapOpenOrClose = false;
+                    this.initFisheryGrid()
+                }else{
+                    map.clearOverlays();
+                }
+
                 // 轨迹线设置
                 var sy = new BMap.Symbol(BMap_Symbol_SHAPE_BACKWARD_OPEN_ARROW, {
                     scale: 0.5,//图标缩放大小
@@ -1046,6 +1076,31 @@
 
             /* 渔场网格取消，移除事件*/
             closeFisheryGrid(){
+                this.deleteGrid(); //先删除网格
+
+                // 获取当前地图新坐标和大小
+                var nowLng = map.getCenter().lng;
+                var nowLat = map.getCenter().lat;
+                var nowLevel = map.getZoom();
+
+                //若原有渔船标注点 则重新显示
+                if(this.shipMarkerOpenOrClose === true){
+                    this.addShipMarker();
+                }
+                //若有热力图 重新显示
+                if(this.heatMapOpenOrClose === true){
+                    this.initHeatMap(this.heatMapOverlay.data.data);
+                }
+                //若原有渔船轨迹路径 则重新显示
+                if(this.trackPathOpenOrClose === true){
+                    this.loadTrackPath(); //todo 表单信息
+                    //因loadTrackPath会改变位置,以下保持定位在原位置
+                    let newPoint = new BMap.Point(nowLng, nowLat);
+                    map.centerAndZoom(newPoint, nowLevel);
+                }
+            },
+            /*只是删除网格, 因其他地方也有调用 单独写出*/
+            deleteGrid(){
                 this.existGrid = false;
                 // 重新加载地图
                 var newLng = map.getCenter().lng;
@@ -1058,12 +1113,6 @@
                 map.removeEventListener("zoomend", _this.showFisheryGrid);
                 // 点击事件带参移除不了 ，直接重新加载
                 this.mapReady(newLng, newLat, newLevel);
-
-
-                //若有热力图 重新显示
-                if(this.heatMapOpenOrClose === true){
-                    this.initHeatMap(this.heatMapOverlay.data.data);
-                }
             },
 
             /*显示渔场网格*/
