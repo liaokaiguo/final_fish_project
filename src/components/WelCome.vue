@@ -879,7 +879,7 @@ export default {
               data:{
                   jobType :"围网",
                   startTime : year+"-01-01 00:00:00",
-                  endTime : year+"-9-30 00:00:00",
+                  endTime : year+"-12-31 23:59:59",
                   byDay : 0,
               }
           }).then(res => {
