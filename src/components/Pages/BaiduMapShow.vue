@@ -98,10 +98,6 @@
           <el-input v-model="selectLocation.boatId" class="select-input-data"
                     autocomplete="off" placeholder="请输入编号"></el-input>
         </el-form-item>
-        <el-form-item label="渔场编号:" prop="fisheryId">
-          <el-input v-model="selectLocation.fisheryId" class="select-input-data"
-                    autocomplete="off" placeholder="请输入编号"></el-input>
-        </el-form-item>
 
         <el-form-item label="航行时间:" prop="sailingTime">
           <el-date-picker class="select-input-data"
@@ -125,11 +121,11 @@
             <el-checkbox label="笼壶" name="workType"></el-checkbox>
           </el-checkbox-group>
         </el-form-item>
-        <el-form-item label="渔船规模大小:" prop="boatSize">
-          <el-select v-model="selectLocation.boatSize" placeholder="请选择规模"
+        <el-form-item label="渔船业务类型:" prop="businessType">
+          <el-select v-model="selectLocation.businessType" placeholder="请选择类型"
                      class="select-input-data" style="width: 30%">
             <el-option
-              v-for="item in boatSizeOptions"
+              v-for="item in businessTypeOptions"
               :key="item.value"
               :label="item.label"
               :value="item.value">
@@ -206,15 +202,24 @@
                 shipLocationDialog: false,//渔船位置信息弹窗
                 shipTrackDialog: false,//航行轨迹弹窗
                 formLabelWidth: '200px',//弹窗宽度
-                boatSizeOptions: [{
-                    value: '大型',
-                    label: '大型'
+                businessTypeOptions: [{
+                    value: '养殖船',
+                    label: '养殖船'
                 }, {
-                    value: '中型',
-                    label: '中型'
+                    value: '国内捕捞船',
+                    label: '国内捕捞船'
                 }, {
-                    value: '小型',
-                    label: '小型'
+                    value: '捕捞辅助船',
+                    label: '捕捞辅助船'
+                }, {
+                    value: '其他辅助船',
+                    label: '其他辅助船'
+                }, {
+                    value: '专业远洋渔船',
+                    label: '专业远洋渔船'
+                }, {
+                    value: '非专业远洋渔船',
+                    label: '非专业远洋渔船'
                 }],
 
                 algorithmOptions: [{
@@ -255,7 +260,7 @@
                     fisheryId: '',
                     sailingTime: '',
                     workType: [],
-                    boatSize: '',
+                    businessType: '',
 
                 },
                 select: {
@@ -722,12 +727,31 @@
 
         },
         mounted() {
+            this.getShipLocationArr();
             this.mapReady(this.centerLng, this.centerLat, this.level);
         },
         methods: {
+            /*获取当前日期yyyy-MM-dd HH:mm:ss*/
+            getNowTime() {
+                var date = new Date();
+                var month = date.getMonth() + 1;
+                var strDate = date.getDate();
+                if (month >= 1 && month <= 9) {
+                    month = "0" + month;
+                }
+                if (strDate >= 0 && strDate <= 9) {
+                    strDate = "0" + strDate;
+                }
+                var currentDate = date.getFullYear() + "-" + month + "-" + strDate
+                    + " " + date.getHours() + ":" + date.getMinutes() + ":" + date.getSeconds();
+                return currentDate;
+            },
+
+            /*返回*/
             reback() {
                 this.$router.go(-1); //reback the last step
             },
+
             /* 菜单选择 */
             handleSelect(key, keyPath) {
                 console.log(key, keyPath);
@@ -773,14 +797,7 @@
             resetForm(formName) {
                 //表单重置
                 this.$refs[formName].resetFields();
-                // //地图重置
-                // let map = window.map;
-                // map.clearOverlays();//删除覆盖物
-                // var point = new BMap.Point(122.20, 30.00);
-                // map.centerAndZoom(point, 12);
-                //
-                // //重新添加标注
-                // this.addShipMarker();
+
             },
 
 
@@ -797,7 +814,25 @@
                 //渔船标注位置
                 this.addShipMarker();
 
+            },
 
+            /* 从后端获取渔船位置数据 放入shipArr*/
+            getShipLocationArr(){
+                var time = this.getNowTime();
+                console.log(time)
+                this.axios({
+                    method:'post',
+                    url:'/queryTrail',
+                    data:{
+                        shipId :"",
+                        dateTime : "2018-09-01 00:08:04",
+
+                    }
+                }).then(res => {
+                    console.log(res)
+
+
+                })
             },
 
             /* 初始加载所有渔船标注位置 */
@@ -878,7 +913,6 @@
                 // this.heatMapOverlay.show();
 
             },
-
 
             /* 轨迹回放 */
             loadTrackPath() {
