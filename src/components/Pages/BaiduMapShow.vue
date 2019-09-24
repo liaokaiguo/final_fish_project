@@ -91,6 +91,17 @@
 
     </el-row>
 
+    <!--轨迹回放时 才显示 -->
+    <el-row  class="track-replay-content" >
+      <el-col :span="6" :offset="18" >
+        <div v-if="trackBoxShow">
+          <el-button type="primary" @click="trackReplayStart">开始</el-button><br><br>
+          <el-button type="danger" @click="trackReplayPause">暂停</el-button><br><br>
+          <el-button type="info" @click="trackReplayStop">停止</el-button>
+        </div>
+      </el-col>
+    </el-row>
+
     <!--渔船位置信息选择弹出框-->
     <el-dialog title="渔船位置信息选择" :visible.sync="shipLocationDialog" @close="resetForm('shipLocationForm')">
       <el-form ref="shipLocationForm" :model="selectLocation" :label-width="formLabelWidth">
@@ -489,6 +500,13 @@
                         latitude: 30.07611
                     }],
                 trackPathOpenOrClose:false, //轨迹路径开关
+                trackBoxShow :false, //回放轨迹时 开始暂停按钮显示标志位
+                luShu:"",
+                luShuFlag:false,// 路书是否开始过
+                trackPolyline:"", //路径线覆盖物
+                trackMarker:"", // 路径上标注点覆盖物
+                trackPoly:"",
+
 
                 /*网格相关*/
                 centerPoint: '', //地图中心点
@@ -846,9 +864,11 @@
                     map.clearOverlays();  //先关网格在清所有覆盖物 否则出错
                     this.heatMapOpenOrClose = false;// 另外两栏开关关闭
                     this.trackPathOpenOrClose =false;
+                    this.trackBoxShow = false;
                     this.initFisheryGrid()
                 }else{
                     map.clearOverlays();
+                    this.trackBoxShow = false;
                 }
 
                 var point = new Array();//定义数组标注经纬信息
@@ -908,9 +928,11 @@
                     map.clearOverlays();  //先关网格在清所有覆盖物 否则出错
                     this.shipMarkerOpenOrClose = false;// 另外两栏开关关闭
                     this.trackPathOpenOrClose =false;
+                    this.trackBoxShow = false;
                     this.initFisheryGrid()
                 }else{
                     map.clearOverlays();
+                    this.trackBoxShow = false;
                 }
                 this.heatMapOverlay = new BMapLib.HeatmapOverlay({
                     // 热力图的每个点的半径大小
@@ -936,12 +958,14 @@
 
             /* 轨迹回放 */
             loadTrackPath() {
+                var _this =this;
                 this.trackPathOpenOrClose =true;
+                this.trackBoxShow =true;
                 //弹框隐藏
                 this.shipTrackDialog = false;
                 //清除覆盖物，若有网格重新加载网格
                 if(this.existGrid === true){
-                    this.deleteGrid()
+                    this.deleteGrid();
                     map.clearOverlays();  //先关网格在清所有覆盖物 否则出错
                     this.shipMarkerOpenOrClose =false;// 另外两栏开关关闭
                     this.heatMapOpenOrClose = false;
@@ -957,13 +981,14 @@
                     strokeWeight: '2',//设置线宽
                 });
                 var icons = new BMap.IconSequence(sy, '10', '30');
+                // this.trackIcons = new BMap.IconSequence(sy, '10', '30');
 
                 // 创建polyline对象
                 var pois = [];
                 for (var i = 0; i < this.shipTrackArr.length; i++) {//遍历添加轨迹点
                     pois.push(new BMap.Point(this.shipTrackArr[i].longitude, this.shipTrackArr[i].latitude));
                 }
-                var polyline = new BMap.Polyline(pois, {
+                this.trackPolyline = new BMap.Polyline(pois, {
                     enableEditing: false,//是否启用线编辑，默认为false
                     enableClicking: true,//是否响应点击事件，默认为true
                     icons: [icons],
@@ -972,14 +997,17 @@
                     strokeColor: "#18a45b" //折线颜色
                 });
 
-                map.addOverlay(polyline);          //增加折线
+                map.addOverlay(this.trackPolyline);          //增加折线
 
-                var point = new BMap.Point(pois[0].lng, pois[0].lat)
-                map.centerAndZoom(point, 13);
+                //自动设置缩放级别和视图中心，将所有的point在视图范围内展示
+                var view = map.getViewport(eval(pois));
+                var mapZoom = view.zoom;
+                var centerPoint = view.center;
+                map.centerAndZoom(centerPoint,mapZoom);
 
                 /*轨迹点标注*/
                 var point = new Array();//定义数组标注经纬信息
-                var marker = new Array();//定义数组点对象信息
+                this.trackMarker = new Array();//定义数组点对象信息
                 var info = new Array();//定义悬浮提示信息
                 //设置icon信息
                 var width = 32;
@@ -988,8 +1016,8 @@
                 var myIcon = new BMap.Icon(imgSrc, new BMap.Size(width, height));//配置icon
                 for (var i = 0; i < this.shipTrackArr.length; i++) {//遍历
                     point[i] = new window.BMap.Point(this.shipTrackArr[i].longitude, this.shipTrackArr[i].latitude);
-                    marker[i] = new window.BMap.Marker(point[i], {icon: myIcon});//把icon和坐标添加到Marker中
-                    map.addOverlay(marker[i]);
+                    this.trackMarker[i] = new window.BMap.Marker(point[i], {icon: myIcon});//把icon和坐标添加到Marker中
+                    map.addOverlay(this.trackMarker[i]);
                     var label = new window.BMap.Label(this.shipTrackArr[i].name);
                     label.setStyle({  //设置提示框的样式
                         color: "#000",
@@ -1011,8 +1039,132 @@
                         + "<p>作业方式：" + this.shipTrackArr[i].workMode + "</p>"
                         + "</div>"
                     );//悬浮提示信息
-                    this.addInfo(info[i], marker[i])
+                    this.addInfo(info[i], this.trackMarker[i])
                 }
+
+                this.lushu = new BMapLib.LuShu(map,pois,{
+                    defaultContent:"",
+                    autoView:true,//是否开启自动视野调整，如果开启那么路书在运动过程中会根据视野自动调整
+                    icon  : new BMap.Icon(require('../../assets/shipTrack.png'), new BMap.Size(52,26),{anchor : new BMap.Size(27, 13)}),
+                    speed: 2000,
+                    enableRotation:true,//是否设置marker随着道路的走向进行旋转
+                    landmarkPois: [],
+                    });
+
+                BMapLib.LuShu.prototype._move = function(initPos, targetPos, effect) {
+                    // 轨迹线设置
+                    var sy = new BMap.Symbol(BMap_Symbol_SHAPE_BACKWARD_OPEN_ARROW, {
+                        scale: 0.5,//图标缩放大小
+                        strokeColor: '#fff',//设置矢量图标的线填充颜色
+                        strokeWeight: '2',//设置线宽
+                    });
+                    var icons = new BMap.IconSequence(sy, '10', '30');
+                    var pointsArr = [initPos, targetPos]; //点数组
+                    var me = this,
+                        //当前的帧数
+                        currentCount = 0,
+                        //步长，米/秒
+                        timer = 10,
+                        step = this._opts.speed / (1000 / timer),
+                        //初始坐标
+                        init_pos = this._projection.lngLatToPoint(initPos),
+                        //获取结束点的(x,y)坐标
+                        target_pos = this._projection.lngLatToPoint(targetPos),
+                        //总的步长
+                        count = Math.round(me._getDistance(init_pos, target_pos) / step);
+                    //显示折线 syj201607191107
+                    //如果想显示小车走过的痕迹，放开这段代码就行
+                    _this.trackPoly = new BMap.Polyline(pointsArr, {
+                        enableEditing: false,//是否启用线编辑，默认为false
+                        enableClicking: true,//是否响应点击事件，默认为true
+                        icons: [icons],
+                        strokeWeight: '5',//折线的宽度，以像素为单位
+                        strokeOpacity: 0.5,//折线的透明度，取值范围0 - 1
+                        strokeColor: "#18a45b" //折线颜色
+                    });
+                    this._map.addOverlay(_this.trackPoly
+                      // new BMap.Polyline(pointsArr, {
+                      //     enableEditing: false,//是否启用线编辑，默认为false
+                      //     enableClicking: true,//是否响应点击事件，默认为true
+                      //     icons: [icons],
+                      //     strokeWeight: '5',//折线的宽度，以像素为单位
+                      //     strokeOpacity: 0.5,//折线的透明度，取值范围0 - 1
+                      //     strokeColor: "#18a45b" //折线颜色
+                      // })
+                    ); // 画线
+                    //如果小于1直接移动到下一点
+                    if (count < 1) {
+                        me._moveNext(++me.i);
+                        return;
+                    }
+                    me._intervalFlag = setInterval(function() {
+                        //两点之间当前帧数大于总帧数的时候，则说明已经完成移动
+                        if (currentCount >= count) {
+                            clearInterval(me._intervalFlag);
+                            //移动的点已经超过总的长度
+                            if (me.i > me._path.length) {
+                                return;
+                            }
+                            //运行下一个点
+                            me._moveNext(++me.i);
+                        } else {
+                            currentCount++;
+                            var x = effect(init_pos.x, target_pos.x, currentCount, count),
+                                y = effect(init_pos.y, target_pos.y, currentCount, count),
+                                pos = me._projection.pointToLngLat(new BMap.Pixel(x, y));
+                            //设置marker
+                            if (currentCount == 1) {
+                                var proPos = null;
+                                if (me.i - 1 >= 0) {
+                                    proPos = me._path[me.i - 1];
+                                }
+                                if (me._opts.enableRotation == true) {
+                                    me.setRotation(proPos, initPos, targetPos);
+                                }
+                                if (me._opts.autoView) {
+                                    if (!me._map.getBounds().containsPoint(pos)) {
+                                        me._map.setCenter(pos);
+                                    }
+                                }
+                            }
+                            //正在移动
+                            me._marker.setPosition(pos);
+                            //设置自定义overlay的位置
+                            me._setInfoWin(pos);
+                        }
+                    }, timer);
+                };
+
+
+            },
+
+
+            /*渔船路书回放开始*/
+            trackReplayStart(){
+
+                //清空标注点和 折线
+                for (var i = 0; i < this.shipTrackArr.length; i++) {//遍历
+                    map.removeOverlay(this.trackMarker[i]);
+                }
+                map.removeOverlay(this.trackPolyline);
+
+                console.log(this.trackPoly)
+                 if(this.luShuFlag === false) {
+                     // map.removeOverlay(this.trackPoly);
+
+                 }
+
+                this.lushu.start();
+                this.luShuFlag =true;
+            },
+            /*渔船路书回放暂停*/
+            trackReplayPause(){
+                this.lushu.pause();
+            },
+            /*渔船路书回放停止*/
+            trackReplayStop(){
+                this.lushu.stop();
+                this.luShuFlag =false;
             },
 
             /* 点击渔船 悬浮渔船信息 */
@@ -1310,6 +1462,11 @@
   .select-footer-class {
     text-align: center;
     margin-top: 5px;
+  }
+  .track-replay-content{
+    top: 40%;
+    right: 4%;
+    float: right;
   }
 
 </style>
