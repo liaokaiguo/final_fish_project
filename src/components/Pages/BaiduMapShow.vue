@@ -1133,28 +1133,31 @@
                         count = Math.round(me._getDistance(init_pos, target_pos) / step);
                     //显示折线 syj201607191107
                     //显示小车走过的痕迹，
-                    // 先清除之气那走的痕迹
-                    this._map.removeOverlay(_this.trackPoly);
-                    _this.trackPointArr.pop();//先将之前的终点抛出,再作为起点加入
-                    _this.trackPointArr.push(initPos);
-                    _this.trackPointArr.push(targetPos);
-                    _this.trackPoly = new BMap.Polyline(_this.trackPointArr, {
+                    // 旧方法：先清除之前走的痕迹，再画上，新方法：每段都画上，每次start会全清
+                    /* this._map.removeOverlay(_this.trackPoly);
+                     _this.trackPointArr.pop();//先将之前的终点抛出,再作为起点加入
+                     _this.trackPointArr.push(initPos);
+                     _this.trackPointArr.push(targetPos); */
+                    _this.trackPoly = new BMap.Polyline(pointsArr, {
                         enableEditing: false,//是否启用线编辑，默认为false
                         enableClicking: true,//是否响应点击事件，默认为true
-                        // icons: [icons],
+                        icons: [icons],
                         strokeWeight: '5',//折线的宽度，以像素为单位
                         strokeOpacity: 0.5,//折线的透明度，取值范围0 - 1
                         strokeColor: "#18a45b" //折线颜色
                     });
                     this._map.addOverlay(_this.trackPoly);
-                    //画每个标注点,先清之前画的点,再加上
-                    for(var i =0;i<_this.trackMark.length;i++){
+                    //画每个标注点,旧方法：先清之前画的点,再加上，新方法，先都画上，每次Start会全清
+                    /*for(var i =0;i<_this.trackMark.length;i++){
                         this._map.removeOverlay(_this.trackMark[i]);
                     }
                     _this.trackMark.push( new window.BMap.Marker(initPos, {icon: myIcon}) );
                     for(var i =0;i<_this.trackMark.length;i++){
                         this._map.addOverlay(_this.trackMark[i]);
-                    }
+                    }*/
+                    var everyMark =new window.BMap.Marker(initPos, {icon: myIcon});
+                    _this.trackMark.push(everyMark);
+                    this._map.addOverlay(everyMark);
 
                     //如果小于1直接移动到下一点
                     if (count < 1) {
