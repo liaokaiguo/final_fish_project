@@ -782,41 +782,70 @@
             handleSelect(key, keyPath) {
                 console.log(key, keyPath);
 
-                if (key === "1-2") {
-                    this.shipLocationDialog = true;// 渔船位置弹窗
-                } else if (key === "2-1-1") { //围网热力图
-                    this.initHeatMap(this.heatMapPointsForWei);
-                } else if (key === "2-2") { //拖网热力图
-                    this.initHeatMap(this.heatMapPointsForTuo);
-                } else if (key === "2-3") { //张网热力图
-                    this.initHeatMap(this.heatMapPointsForZhang);
-                } else if (key === "2-4") { //刺网热力图
-                    this.initHeatMap(this.heatMapPointsForCi);
-                } else if (key === "2-5") { //钓具热力图
-                    this.initHeatMap(this.heatMapPointsForDiao);
-                } else if (key === "2-6") { //杂渔具热力图
-                    this.initHeatMap(this.heatMapPointsForZa);
-                } else if (key === "2-7") { //笼壶热力图
-                    this.initHeatMap(this.heatMapPointsForLong);
-                } else if (key === "3-1") {// 轨迹选择弹窗
-                    this.shipTrackDialog = true;
-                } else if (key === "4-1") {// 渔场显示
-                    this.initFisheryGrid();
-                } else if (key === "4-2") {// 渔场取消
+                if (this.luShuRunningFlag === true) {
+                    this.$message({
+                        type: "warning",
+                        message: '请将当前页面的轨迹回放停止!!!',
+                        showClose: 'true',
+                        duration: 5000,
+                    })
+                } else {
+                    switch (key) {
+                        case "1-1":
+                            alert("刷新中");
+                            break;
+                        case "1-2":
+                            this.shipLocationDialog = true;// 渔船位置弹窗
+                            break;
 
-                    //说明有网格覆盖层
-                    if (this.existGrid === true) {
-                        this.closeFisheryGrid();
-                    } else {
-                        this.$message({
-                            type: "warning",
-                            message: '当前地图没有渔场网格覆盖!!!',
-                            showClose: 'true',
-                            duration: 4000,
-                        })
+                        case "2-1-1":
+                            this.initHeatMap(this.heatMapPointsForWei);//围网热力图
+                            break;
+                        case "2-2":
+                            this.initHeatMap(this.heatMapPointsForTuo);//拖网热力图
+                            break;
+                        case "2-3":
+                            this.initHeatMap(this.heatMapPointsForZhang);//张网热力图
+                            break;
+                        case "2-4":
+                            this.initHeatMap(this.heatMapPointsForCi);//刺网热力图
+                            break;
+                        case "2-5":
+                            this.initHeatMap(this.heatMapPointsForDiao);//钓具热力图
+                            break;
+                        case "2-6":
+                            this.initHeatMap(this.heatMapPointsForZa);//杂渔具热力图
+                            break;
+                        case "2-7":
+                            this.initHeatMap(this.heatMapPointsForLong);//笼壶热力图
+                            break;
+
+                        case "3-1":
+                            this.shipTrackDialog = true;// 轨迹选择弹窗
+                            break;
+
+                        case "4-1":
+                            this.initFisheryGrid();// 渔场显示
+                            break;
+                        case "4-2": {
+                            //说明有网格覆盖层
+                            if (this.existGrid === true) {
+                                this.closeFisheryGrid();// 渔场取消
+                            } else {
+                                this.$message({
+                                    type: "warning",
+                                    message: '当前地图没有渔场网格覆盖!!!',
+                                    showClose: 'true',
+                                    duration: 4000,
+                                })
+                            }
+                            break;
+                        }
+
                     }
-
                 }
+
+
             },
 
             /* 重置表单 */
@@ -872,6 +901,8 @@
                     this.initFisheryGrid()
                 }else{
                     map.clearOverlays();
+                    this.heatMapOpenOrClose = false;// 另外两栏开关关闭
+                    this.trackPathOpenOrClose =false;
                     this.trackBoxShow = false;
                 }
 
@@ -936,6 +967,8 @@
                     this.initFisheryGrid()
                 }else{
                     map.clearOverlays();
+                    this.shipMarkerOpenOrClose = false;// 另外两栏开关关闭
+                    this.trackPathOpenOrClose =false;
                     this.trackBoxShow = false;
                 }
                 this.heatMapOverlay = new BMapLib.HeatmapOverlay({
@@ -976,6 +1009,8 @@
                     this.initFisheryGrid()
                 }else{
                     map.clearOverlays();
+                    this.shipMarkerOpenOrClose =false;// 另外两栏开关关闭
+                    this.heatMapOpenOrClose = false;
                 }
 
                 this.loadTrackPath();
