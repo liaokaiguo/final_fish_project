@@ -776,8 +776,8 @@
                         shipId :"",
                         startTime : before,
                         endTime : now,
-                        jobTypes : "",
-                        businessType : "",
+                        jobTypes : [],
+                        businessTypes : [],
 
                     }
                 }).then(res => {
