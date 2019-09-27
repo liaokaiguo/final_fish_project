@@ -114,6 +114,7 @@
           <el-date-picker class="select-input-data"
                           v-model="selectLocation.sailingTime"
                           value-format="yyyy-MM-dd HH:mm:ss"
+                          default-time="12:30:30"
                           type="datetime"
                           placeholder="请输入时间"
                           align="right"
@@ -647,6 +648,7 @@
                 if (strDate >= 0 && strDate <= 9) {
                     strDate = "0" + strDate;
                 }
+                // todo 只有去年数据
                 var currentDate = (date.getFullYear()-1) + "-" + month + "-" + strDate
                     + " " + date.getHours() + ":" + date.getMinutes() + ":" + date.getSeconds();
                 return currentDate;
@@ -877,6 +879,8 @@
                         var Content =  "<div style='width:300px;'>"
                             + "<p>渔船编号：" + _this.shipArr[i].ship.shipNo + "</p>"
                             + "<p>渔船名：" + _this.shipArr[i].ship.shipName + "</p>"
+                            + "<p>渔船作业类型：" + _this.shipArr[i].ship.jobType + "</p>"
+                            + "<p>渔船业务类型：" + _this.shipArr[i].ship.businessType + "</p>"
                             + "<p>航行时速(m/s)：" + _this.shipArr[i].speed + "</p>"
                             + "<p>定位时间：" + _this.shipArr[i].acqTime + "</p>"
                             + "<p>地址经度：" + _this.shipArr[i].longitude + "</p>"
@@ -908,10 +912,12 @@
                     date.setTime(date.getTime() - 120 * 1000 );// 2分钟前
                     twoMinAgo = this.getFormatTime(date)
                 } else {
+
                     sailingTime = this.selectLocation.sailingTime;
-                    var temp =new Date(sailingTime)
+                    var temp =new Date(sailingTime);
+                    temp.setFullYear(temp.getFullYear()+1)// todo 因为只有去年数据，这行之后不需要的
                     date.setTime(temp.getTime() - 120 * 1000 );// 2分钟前
-                    twoMinAgo = this.getFormatTime(date)
+                    twoMinAgo = this.getFormatTime(date);
                 }
 
                 console.log(sailingTime);
@@ -925,15 +931,14 @@
                         startTime : twoMinAgo,
                         endTime : sailingTime,
                         jobTypes : this.selectLocation.workType,
-                        businessType : this.selectLocation.businessType,
+                        businessTypes : this.selectLocation.businessType,
 
                     }
                 }).then(res => {
-                    console.log(res)
-                    // this.shipArr = res.data;
-                    // console.log(this.shipArr.length)
+                    this.shipArr = res.data;
+                    console.log("选择后的渔船数量"+this.shipArr.length)
                     // console.log(this.shipArr)
-                    // this.addShipMarker();
+                    this.addShipMarker();
 
                 }).catch((response) => {
                     console.log(response)
