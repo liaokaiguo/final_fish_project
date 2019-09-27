@@ -776,7 +776,7 @@
                         shipId :"",
                         startTime : before,
                         endTime : now,
-                        jobType : "",
+                        jobTypes : "",
                         businessType : "",
 
                     }
@@ -924,7 +924,7 @@
                         shipId :this.selectLocation.boatId,
                         startTime : twoMinAgo,
                         endTime : sailingTime,
-                        jobType : this.selectLocation.workType,
+                        jobTypes : this.selectLocation.workType,
                         businessType : this.selectLocation.businessType,
 
                     }
