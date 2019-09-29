@@ -10,6 +10,7 @@ import mapShow from "@/components/Pages/BaiduMapShow";
 import passPort from "@/components/Pages/EntryAndExitPort";
 import workModeSta from "@/components/Pages/WorkModeStatistics";
 import loginIndex from '@/components/LoginIndex'
+import purseSeineAnalysis from "@/components/Pages/purseSeineAnalysis"
 //import ElementUI from 'element-ui'
 //import '/element-ui/lib/theme-default/index.css'
 //Vue.use(ElementUI)
@@ -69,6 +70,11 @@ export default new Router({
       path: '/workModeSta',
       name: 'workModeSta',
       component: workModeSta
+    },
+    {
+      path: '/purseSeineAnalysis',
+      name: 'purseSAs',
+      component: purseSeineAnalysis
     }
 
   ],
