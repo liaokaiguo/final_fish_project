@@ -903,10 +903,8 @@
                 var date = new Date();
                 var sailingTime
                 var twoMinAgo
-                console.log(this.selectLocation.boatId);
-                console.log(this.selectLocation.sailingTime);
-                console.log(this.selectLocation.workType);
-                console.log(this.selectLocation.businessType);
+
+                //默认时间为2分钟前到现在
                 if(this.selectLocation.sailingTime === ''){
                     sailingTime = this.getFormatTime(date)
                     date.setTime(date.getTime() - 120 * 1000 );// 2分钟前
@@ -943,8 +941,6 @@
                 }).catch((response) => {
                     console.log(response)
                 })
-                this.addShipMarker();
-
             },
 
             /* 添加热力图覆盖物 */
