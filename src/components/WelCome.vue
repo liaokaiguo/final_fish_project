@@ -262,6 +262,7 @@
   import gillNetStAnalysis from "@/components/Pages/gillNetStatisticalAnalysis";
   import trawlSA from "@/components/Pages/trawlStatisticalAnalysis";
   import seineSA from "@/components/Pages/seineStatisticalAnalysis";
+  import stowSA from "@/components/Pages/stowStatisticalAnalysis";
   import mapShow from "@/components/Pages/BaiduMapShow";
   import passPort from "@/components/Pages/EntryAndExitPort";
   import workModeSta from "@/components/Pages/WorkModeStatistics";
