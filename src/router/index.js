@@ -51,6 +51,11 @@ export default new Router({
       component: seineSA
     },
     {
+      path: '/stowSA',
+      name: 'stowSA',
+      component: stowSA
+    },
+    {
       path: '/mapShow',
       name: 'mapShow',
       component: mapShow
