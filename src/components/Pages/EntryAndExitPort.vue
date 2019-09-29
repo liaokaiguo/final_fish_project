@@ -45,12 +45,12 @@
               <el-form-item  prop="passDate"  >
                 <el-date-picker style="width: 230px"
                                 v-model="select.passDate"
-                                type="datetime"
+                                type="date"
                                 placeholder="日期时间"
                                 align="right"
                                 default-time="12:00:00"
                                 :picker-options="pickerOptions"
-                                value-format="yyyy-MM-dd HH:mm:ss">
+                                value-format="yyyy-MM-dd">
                 </el-date-picker>
               </el-form-item>
 
@@ -74,6 +74,8 @@
           <div class="dataBox">
             <el-table
             :data="tableData.slice((currentPage-1)*pageSize,currentPage*pageSize)"
+            v-loading="tableDataLoading"
+            element-loading-text="数据量较大，玩命加载中"
             style="width: 100%"
             border
             :header-cell-style="{color:'#333',fontFamily:'MicrosoftYaHeiUI',fontSize:'14px',fontWeight:900}">
@@ -171,79 +173,9 @@ export default {
               portName:'',
           },
 
-          // tableData: [{
-          //     boatid: 'MESS3377373',
-          //     inorout: '出港',
-          //     passdate: '2019-08-08',
-          //     portname:'舟山南港'
-          // },
-          //     {
-          //     boatid: 'FXGG778688',
-          //     inorout: '入港',
-          //     passdate: '2018-12-02',
-          //     portname:'舟山东港'
-          // },
-          //     {
-          //     boatid: 'DRDRR3328688',
-          //     inorout: '入港',
-          //     passdate: '2019-02-21',
-          //     portname:'舟山东港'
-          // },
-          //     {
-          //     boatid: 'AAWW12121',
-          //     inorout: '出港',
-          //     passdate: '2019-07-13',
-          //     portname:'舟山港'
-          // },
-          //     {
-          //     boatid: 'GGTT342342',
-          //     inorout: '入港',
-          //     passdate: '2019-07-25',
-          //     portname:'舟山南港'
-          // },
-          //     {
-          //     boatid: 'UUYN887997',
-          //     inorout: '出港',
-          //     passdate: '2019-05-23',
-          //     portname:'舟山东港'
-          // },
-          //     {
-          //     boatid: 'AAWW12121',
-          //     inorout: '出港',
-          //     passdate: '2019-07-13',
-          //     portname:'舟山港'
-          // },
-          //     {
-          //     boatid: 'AAWW12121',
-          //     inorout: '出港',
-          //     passdate: '2019-07-13',
-          //     portname:'舟山港'
-          // },
-          //     {
-          //     boatid: 'KKLI734348',
-          //     inorout: '入港',
-          //     passdate: '2019-06-23',
-          //     portname:'舟山东港'
-          // },
-          //     {
-          //     boatid: 'TTYY7313123',
-          //     inorout: '入港',
-          //     passdate: '2019-06-10',
-          //     portname:'舟山东港'
-          // },
-          //     {
-          //     boatid: 'MMJJ731238',
-          //     inorout: '入港',
-          //     passdate: '2019-06-30',
-          //     portname:'宁波东港'
-          // },
-          //     {
-          //     boatid: 'OPPS761009',
-          //     inorout: '出港',
-          //     passdate: '2019-08-29',
-          //     portname:'上海港'
-          // }]
           tableData:[],
+          tableDataLoading: true,
+
       }
 
   },
@@ -254,6 +186,23 @@ export default {
 
   methods: {
 
+      /*获取日期yyyy-MM-dd*/
+      getFormatDate(date) {
+
+          var month = date.getMonth() + 1;
+          var strDate = date.getDate();
+          if (month >= 1 && month <= 9) {
+              month = "0" + month;
+          }
+          if (strDate >= 0 && strDate <= 9) {
+              strDate = "0" + strDate;
+          }
+
+          // todo 只有去年数据
+          var currentDate = (date.getFullYear()-1) + "-" + month + "-" + strDate;
+          return currentDate;
+      },
+
       ///重置表单
       resetForm(formName) {
           this.$refs[formName].resetFields();
@@ -261,18 +210,23 @@ export default {
       },
       /*页面初始加载获取后台数据*/
       initTableData(){
+          this.tableDataLoading =true; //先loading动画
+          var date = new Date();
+          var nowDay = this.getFormatDate(date);
+          console.log(nowDay);
+
           this.axios({
               method:"post",
               url:"/queryPortTraffic",
               data:{
                   shipNo :'',
-                  iof : '-1', //目前数据库iof均为-1，原因不明
-                  acqTime : '',
+                  iof : '', //目前数据库iof均为-1，原因不明
+                  acqTime :  nowDay, //默认当天
                   portName : '',
               }
           }).then((response)=>{
-              // console.log(response.data)
-
+              console.log("出入港数据量: "+ response.data.length)
+              this.tableDataLoading = false;// loading动画去掉
               this.tableData= response.data;
 
           }).catch((response)=>{
@@ -280,18 +234,30 @@ export default {
           })
 
       },
+
       /*搜索特定船只信息*/
       search(select){
+          this.tableDataLoading =true; //先loading动画
+
+          if(this.select.passDate === null){// null会引发后端请求错误
+              this.select.passDate ='';
+          }
+          // console.log(this.select.boatId);
+          // console.log(this.select.inOrOut);
+          // console.log(this.select.passDate);
+          // console.log(this.select.portName);
           this.axios({
               method:"post",
               url:"/queryPortTraffic",
               data:{
                   shipNo : this.select.boatId,
-                  iof : -1, //目前数据库iof均为-1，原因不明
+                  iof : this.select.inOrOut, //目前数据库iof均为-1，原因不明
                   acqTime :  this.select.passDate,
                   portName :  this.select.portName,
               }
           }).then((response)=>{
+              console.log("选择后出入港数据量: "+ response.data.length)
+              this.tableDataLoading = false;// loading动画去掉
               this.tableData= response.data;
 
           }).catch((response)=>{
