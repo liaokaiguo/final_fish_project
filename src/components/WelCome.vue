@@ -241,7 +241,7 @@
           <router-link to="/purseSeineAnalysis" class="lastbottomtext">围网作业方式统计及分析</router-link>&nbsp;&nbsp;
           <router-link to="/trawlSA" class="lastbottomtext">拖网作业方式统计及分析</router-link>&nbsp;&nbsp;
           <router-link to="/gillNetStAnalysis" class="lastbottomtext">刺网作业方式统计及分析</router-link>&nbsp;&nbsp;
-          <router-link to="/seineSA" class="lastbottomtext">张网作业方式统计及分析</router-link>&nbsp;&nbsp;
+          <router-link to="/stowSA" class="lastbottomtext">张网作业方式统计及分析</router-link>&nbsp;&nbsp;
         </li>
       </ul>
     </div>
@@ -1091,6 +1091,7 @@
               //enableMessage: false,// 设置允许信息窗发送短息
             }
             var Content = "<div style='width:300px;'>" +
+              "<p>渔船id：" + _this.shipLocationArr[i].shipId + "</p>" +
               "<p>渔船编号：" + _this.shipLocationArr[i].ship.shipNo + "</p>" +
               "<p>渔船名：" + _this.shipLocationArr[i].ship.shipName + "</p>" +
               "<p>渔船作业类型：" + _this.shipLocationArr[i].ship.jobType + "</p>" +
