@@ -1091,6 +1091,7 @@
               //enableMessage: false,// 设置允许信息窗发送短息
             }
             var Content = "<div style='width:300px;'>" +
+              "<p>渔船id：" + _this.shipLocationArr[i].shipId + "</p>" +
               "<p>渔船编号：" + _this.shipLocationArr[i].ship.shipNo + "</p>" +
               "<p>渔船名：" + _this.shipLocationArr[i].ship.shipName + "</p>" +
               "<p>渔船作业类型：" + _this.shipLocationArr[i].ship.jobType + "</p>" +
