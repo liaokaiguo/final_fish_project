@@ -5,10 +5,12 @@ import wel from '@/components/testpage'
 import gillNetStAnalysis from '@/components/Pages/gillNetStatisticalAnalysis'
 import trawlSA from '@/components/Pages/trawlStatisticalAnalysis'
 import seineSA from '@/components/Pages/seineStatisticalAnalysis'
+import stowSA from '@/components/Pages/stowStatisticalAnalysis'
 import mapShow from "@/components/Pages/BaiduMapShow";
 import passPort from "@/components/Pages/EntryAndExitPort";
 import workModeSta from "@/components/Pages/WorkModeStatistics";
 import loginIndex from '@/components/LoginIndex'
+import purseSeineAnalysis from "@/components/Pages/purseSeineAnalysis"
 //import ElementUI from 'element-ui'
 //import '/element-ui/lib/theme-default/index.css'
 //Vue.use(ElementUI)
@@ -50,6 +52,11 @@ export default new Router({
       component: seineSA
     },
     {
+      path: '/stowSA',
+      name: 'stowSA',
+      component: stowSA
+    },
+    {
       path: '/mapShow',
       name: 'mapShow',
       component: mapShow
@@ -63,6 +70,11 @@ export default new Router({
       path: '/workModeSta',
       name: 'workModeSta',
       component: workModeSta
+    },
+    {
+      path: '/purseSeineAnalysis',
+      name: 'purseSeineAnalysis',
+      component: purseSeineAnalysis
     }
 
   ],
