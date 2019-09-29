@@ -116,7 +116,7 @@
                           value-format="yyyy-MM-dd HH:mm:ss"
                           default-time="12:30:30"
                           type="datetime"
-                          placeholder="请输入时间"
+                          placeholder="默认为当前时间"
                           align="right"
                           :picker-options="pickerOptions">
           </el-date-picker>
@@ -148,7 +148,7 @@
       </el-form>
       <div slot="footer" class="select-footer-class">
         <el-button @click="shipLocationDialog = false">取 消</el-button>
-        <el-button type="primary" @click="locationConfirm"
+        <el-button type="primary" @click="locationConfirm('shipLocationForm')"
                    style="margin-left: 60px;margin-right: 60px">确定
         </el-button>
         <el-button @click="resetForm('shipLocationForm')">重置</el-button>
@@ -157,31 +157,33 @@
 
     <!--轨迹回放选择弹出框-->
     <el-dialog title="渔船航行信息选择" :visible.sync="shipTrackDialog" @close="resetForm('shipTrackForm')">
-      <el-form ref="shipTrackForm" :model="select" :label-width="formLabelWidth">
+      <el-form ref="shipTrackForm" :model="selectTrack" :label-width="formLabelWidth" :rules="shipTrackFormRules">
         <el-form-item label="渔船编号:" prop="boatId">
-          <el-input class="select-input-data" v-model="select.boatId"
+          <el-input class="select-input-data" v-model="selectTrack.boatId"
                     autocomplete="off" placeholder="请输入编号"></el-input>
         </el-form-item>
         <el-form-item label="航行开始时间:" prop="beginDate">
           <el-date-picker class="select-input-data"
-                          v-model="select.beginDate"
+                          v-model="selectTrack.beginDate"
                           type="datetime"
                           placeholder="请输入时间"
+                          value-format="yyyy-MM-dd HH:mm:ss"
                           align="right"
-                          :picker-options="pickerOptions">
+                          :picker-options="pickerOptionsStart">
           </el-date-picker>
         </el-form-item>
         <el-form-item label="航行结束时间:" prop="endDate">
           <el-date-picker class="select-input-data"
-                          v-model="select.endDate"
+                          v-model="selectTrack.endDate"
                           type="datetime"
                           placeholder="请输入时间"
+                          value-format="yyyy-MM-dd HH:mm:ss"
                           align="right"
-                          :picker-options="pickerOptions">
+                          :picker-options="pickerOptionsEnd">
           </el-date-picker>
         </el-form-item>
         <el-form-item class="select-input-data" label="算法库:" prop="algorithmMode">
-          <el-select v-model="select.algorithmMode" placeholder="请选择算法">
+          <el-select v-model="selectTrack.algorithmMode" placeholder="请选择算法">
             <el-option
               v-for="item in algorithmOptions"
               :key="item.value"
@@ -193,7 +195,7 @@
       </el-form>
       <div slot="footer" style="text-align: center;margin-top: 40px">
         <el-button @click="shipTrackDialog = false">取 消</el-button>
-        <el-button type="primary" @click="trackReplay"
+        <el-button type="primary" @click="trackReplay('shipTrackForm')"
                    style="margin-left: 60px;margin-right: 60px">航行轨迹显示
         </el-button>
         <el-button @click="resetForm('shipTrackForm')">重置</el-button>
@@ -250,6 +252,30 @@
                         return time.getTime() > Date.now();//如果没有后面的-8.64e6就是不可以选择今天的
                     }
                 },
+                pickerOptionsStart: {
+                    disabledDate: time => {
+                        if (this.selectTrack.endDate) {
+                            return (
+                                time.getTime() > new Date(this.selectTrack.endDate).getTime()
+                            );
+                        } else {
+                            return time.getTime() > Date.now();
+                        }
+                    }
+                },
+                pickerOptionsEnd: {
+                    disabledDate: time => {
+                        if (this.selectTrack.beginDate) {
+                            return (
+                                time.getTime() > Date.now() ||
+                                time.getTime() < new Date(this.selectTrack.beginDate).getTime()
+                            );
+                        } else {
+                            return time.getTime() > Date.now();
+                        }
+                    }
+
+                },
 
                 selectLocation: {
                     boatId: '',
@@ -258,11 +284,26 @@
                     businessType: [],
 
                 },
-                select: {
+                selectTrack: {
                     boatId: '',
                     beginDate: '',
                     endDate: '',
                     algorithmMode: '',
+                },
+
+                shipTrackFormRules: {
+                    boatId: [
+                        {required: true, message: '请输入渔船编号', trigger: 'blur'},
+                    ],
+                    beginDate: [
+                        {required: true, message: '请输入航行开始时间', trigger: 'blur'},
+                    ],
+                    endDate: [
+                        {required: true, message: '请输入航行结束时间', trigger: 'blur'},
+                    ],
+                    algorithmMode: [
+                        {required: true, message: '请选择预测算法', trigger: 'blur'},
+                    ]
                 },
 
                 /*渔船信息相关*/
@@ -270,115 +311,116 @@
                 shipMarkerOpenOrClose :true,//渔船标注点开关
 
                 /* 单只渔船特定时间段航行轨迹点 相关*/
-                shipTrackArr: [
-                    {
-                        name: "船1",
-                        terminalid: "草帽",
-                        workMode: "",
-                        speed: 100,
-                        locationdate: "2019-09-12 14:44:20",
-                        longitude: 122.012123,
-                        latitude: 30.0111
-                    },
-                    {
-                        name: "船1",
-                        terminalid: "草帽",
-                        workMode: "拖网",
-                        speed: 98,
-                        locationdate: "2019-09-12 14:48:20",
-                        longitude: 122.011331,
-                        latitude: 29.97451
-                    },
-                    {
-                        name: "船1",
-                        terminalid: "草帽",
-                        workMode: "拖网",
-                        speed: 94,
-                        locationdate: "2019-09-12 14:54:20",
-                        longitude: 122.081131,
-                        latitude: 29.91721
-                    },
-                    {
-                        name: "船1",
-                        terminalid: "草帽",
-                        workMode: "拖网",
-                        speed: 97,
-                        locationdate: "2019-09-12 15:14:20",
-                        longitude: 122.095131,
-                        latitude: 29.90411
-                    },
-                    {
-                        name: "船1",
-                        terminalid: "草帽",
-                        workMode: "拖网",
-                        speed: 92,
-                        locationdate: "2019-09-12 15:34:20",
-                        longitude: 122.180131,
-                        latitude: 29.94411
-                    },
-                    {
-                        name: "船1",
-                        terminalid: "草帽",
-                        workMode: "拖网",
-                        speed: 95,
-                        locationdate: "2019-09-12 15:44:20",
-                        longitude: 122.181131,
-                        latitude: 29.90411
-                    },
-                    {
-                        name: "船1",
-                        terminalid: "草帽",
-                        workMode: "拖网",
-                        speed: 88,
-                        locationdate: "2019-09-12 15:54:20",
-                        longitude: 122.21,
-                        latitude: 29.8991
-                    },
-                    {
-                        name: "船1",
-                        terminalid: "草帽",
-                        workMode: "拖网",
-                        speed: 82,
-                        locationdate: "2019-09-12 16:04:20",
-                        longitude: 122.282116,
-                        latitude: 29.88481
-                    },
-                    {
-                        name: "船1",
-                        terminalid: "草帽",
-                        workMode: "拖网",
-                        speed: 81,
-                        locationdate: "2019-09-12 17:14:20",
-                        longitude: 122.42631,
-                        latitude: 30.02311
-                    },
-                    {
-                        name: "船1",
-                        terminalid: "草帽",
-                        workMode: "拖网",
-                        speed: 83,
-                        locationdate: "2019-09-12 17:24:20",
-                        longitude: 122.43531,
-                        latitude: 30.04511
-                    },
-                    {
-                        name: "船1",
-                        terminalid: "草帽",
-                        workMode: "拖网",
-                        speed: 84,
-                        locationdate: "2019-09-12 17:34:20",
-                        longitude: 122.39631,
-                        latitude: 30.08911
-                    },
-                    {
-                        name: "船1",
-                        terminalid: "草帽",
-                        workMode: "",
-                        speed: 58,
-                        locationdate: "2019-09-12 17:44:20",
-                        longitude: 122.3139631,
-                        latitude: 30.07611
-                    }],
+                shipTrackArr:[],
+                // shipTrackArr: [
+                //     {
+                //         name: "船1",
+                //         terminalid: "草帽",
+                //         workMode: "",
+                //         speed: 100,
+                //         locationdate: "2019-09-12 14:44:20",
+                //         longitude: 122.012123,
+                //         latitude: 30.0111
+                //     },
+                //     {
+                //         name: "船1",
+                //         terminalid: "草帽",
+                //         workMode: "拖网",
+                //         speed: 98,
+                //         locationdate: "2019-09-12 14:48:20",
+                //         longitude: 122.011331,
+                //         latitude: 29.97451
+                //     },
+                //     {
+                //         name: "船1",
+                //         terminalid: "草帽",
+                //         workMode: "拖网",
+                //         speed: 94,
+                //         locationdate: "2019-09-12 14:54:20",
+                //         longitude: 122.081131,
+                //         latitude: 29.91721
+                //     },
+                //     {
+                //         name: "船1",
+                //         terminalid: "草帽",
+                //         workMode: "拖网",
+                //         speed: 97,
+                //         locationdate: "2019-09-12 15:14:20",
+                //         longitude: 122.095131,
+                //         latitude: 29.90411
+                //     },
+                //     {
+                //         name: "船1",
+                //         terminalid: "草帽",
+                //         workMode: "拖网",
+                //         speed: 92,
+                //         locationdate: "2019-09-12 15:34:20",
+                //         longitude: 122.180131,
+                //         latitude: 29.94411
+                //     },
+                //     {
+                //         name: "船1",
+                //         terminalid: "草帽",
+                //         workMode: "拖网",
+                //         speed: 95,
+                //         locationdate: "2019-09-12 15:44:20",
+                //         longitude: 122.181131,
+                //         latitude: 29.90411
+                //     },
+                //     {
+                //         name: "船1",
+                //         terminalid: "草帽",
+                //         workMode: "拖网",
+                //         speed: 88,
+                //         locationdate: "2019-09-12 15:54:20",
+                //         longitude: 122.21,
+                //         latitude: 29.8991
+                //     },
+                //     {
+                //         name: "船1",
+                //         terminalid: "草帽",
+                //         workMode: "拖网",
+                //         speed: 82,
+                //         locationdate: "2019-09-12 16:04:20",
+                //         longitude: 122.282116,
+                //         latitude: 29.88481
+                //     },
+                //     {
+                //         name: "船1",
+                //         terminalid: "草帽",
+                //         workMode: "拖网",
+                //         speed: 81,
+                //         locationdate: "2019-09-12 17:14:20",
+                //         longitude: 122.42631,
+                //         latitude: 30.02311
+                //     },
+                //     {
+                //         name: "船1",
+                //         terminalid: "草帽",
+                //         workMode: "拖网",
+                //         speed: 83,
+                //         locationdate: "2019-09-12 17:24:20",
+                //         longitude: 122.43531,
+                //         latitude: 30.04511
+                //     },
+                //     {
+                //         name: "船1",
+                //         terminalid: "草帽",
+                //         workMode: "拖网",
+                //         speed: 84,
+                //         locationdate: "2019-09-12 17:34:20",
+                //         longitude: 122.39631,
+                //         latitude: 30.08911
+                //     },
+                //     {
+                //         name: "船1",
+                //         terminalid: "草帽",
+                //         workMode: "",
+                //         speed: 58,
+                //         locationdate: "2019-09-12 17:44:20",
+                //         longitude: 122.3139631,
+                //         latitude: 30.07611
+                //     }],
                 trackPathOpenOrClose:false, //轨迹路径开关
                 trackBoxShow :false, //回放轨迹时 开始暂停按钮显示标志位
                 luShu:"",
@@ -405,6 +447,7 @@
                 heatMapOverlay: [],// 热力图覆盖物
                 heatMapOpenOrClose: false,// 热力图开关
                 // 热力图的点数据
+                heatMapPoints:[],
                 heatMapPointsForWei: [
                     {"lng": 122.218261, "lat": 29.921984, "count": 50},
                     {"lng": 122.223332, "lat": 29.916532, "count": 51},
@@ -786,7 +829,7 @@
 
                     this.shipArr = res.data;
                     // console.log(this.shipArr.length)
-                    // console.log(this.shipArr)
+                    //  console.log(this.shipArr)
                     this.addShipMarker();
 
                 }).catch((response) => {
@@ -877,6 +920,7 @@
                             //enableMessage: false,// 设置允许信息窗发送短息
                         }
                         var Content =  "<div style='width:300px;'>"
+                            + "<p>渔船id：" + _this.shipArr[i].shipId + "</p>"
                             + "<p>渔船编号：" + _this.shipArr[i].ship.shipNo + "</p>"
                             + "<p>渔船名：" + _this.shipArr[i].ship.shipName + "</p>"
                             + "<p>渔船作业类型：" + _this.shipArr[i].ship.jobType + "</p>"
@@ -896,45 +940,81 @@
 
             },
 
-            /* 选择性显示渔船位置 */
-            locationConfirm() {
-                this.shipLocationDialog = false;
+            /* 表单--选择性显示渔船位置 */
+            locationConfirm(formName) {
+                this.$refs[formName].validate((valid) => {
+                    if (valid) {
+                        console.log('shipLocationForm submit!');
+                        /*表单成功提交，处理逻辑*/
+                        this.shipLocationDialog = false; //弹窗关闭
 
-                var date = new Date();
-                var sailingTime
-                var twoMinAgo
+                        var date = new Date();
+                        var sailingTime
+                        var twoMinAgo
 
-                //默认时间为2分钟前到现在
-                if(this.selectLocation.sailingTime === ''){
-                    sailingTime = this.getFormatTime(date)
-                    date.setTime(date.getTime() - 120 * 1000 );// 2分钟前
-                    twoMinAgo = this.getFormatTime(date)
-                } else {
+                        //默认时间为2分钟前到现在
+                        if(this.selectLocation.sailingTime === ''){
+                            sailingTime = this.getFormatTime(date)
+                            date.setTime(date.getTime() - 120 * 1000 );// 2分钟前
+                            twoMinAgo = this.getFormatTime(date)
+                        } else {
 
-                    sailingTime = this.selectLocation.sailingTime;
-                    var temp =new Date(sailingTime);
-                    temp.setFullYear(temp.getFullYear()+1)// todo 因为只有去年数据，这行之后不需要的
-                    date.setTime(temp.getTime() - 120 * 1000 );// 2分钟前
-                    twoMinAgo = this.getFormatTime(date);
-                }
+                            sailingTime = this.selectLocation.sailingTime;
+                            var temp =new Date(sailingTime);
+                            temp.setFullYear(temp.getFullYear()+1)// todo 因为只有去年数据，这行之后不需要的
+                            date.setTime(temp.getTime() - 120 * 1000 );// 2分钟前
+                            twoMinAgo = this.getFormatTime(date);
+                        }
 
-                console.log(sailingTime);
-                console.log(twoMinAgo);
-                //请求后台数据
+                        console.log(sailingTime);
+                        console.log(twoMinAgo);
+                        //请求后台数据
+                        this.axios({
+                            method:'post',
+                            url:'/queryTrail',
+                            data:{
+                                shipId :this.selectLocation.boatId,
+                                startTime : twoMinAgo,
+                                endTime : sailingTime,
+                                jobTypes : this.selectLocation.workType,
+                                businessTypes : this.selectLocation.businessType,
+
+                            }
+                        }).then(res => {
+                            this.shipArr = res.data;
+                            console.log("选择后的渔船数量"+this.shipArr.length)
+                            // console.log(this.shipArr)
+                            this.addShipMarker();
+
+                        }).catch((response) => {
+                            console.log(response)
+                        })
+
+                    } else {
+                        console.log('error submit!!');
+                        return false;
+                    }
+                });
+            },
+
+            /* 从后端获取违规作业方式的热力图数据 放入heatMapPoints*/
+            getHeatMapPoints(){
+
                 this.axios({
                     method:'post',
                     url:'/queryTrail',
                     data:{
-                        shipId :this.selectLocation.boatId,
-                        startTime : twoMinAgo,
-                        endTime : sailingTime,
-                        jobTypes : this.selectLocation.workType,
-                        businessTypes : this.selectLocation.businessType,
+                        shipId :"",
+                        startTime : before,
+                        endTime : now,
+                        jobTypes : [],
+                        businessTypes : [],
 
                     }
                 }).then(res => {
+
                     this.shipArr = res.data;
-                    console.log("选择后的渔船数量"+this.shipArr.length)
+                    // console.log(this.shipArr.length)
                     // console.log(this.shipArr)
                     this.addShipMarker();
 
@@ -986,31 +1066,77 @@
 
             },
 
-            /* 轨迹回放按钮*/
-            trackReplay(){
-                // 开关开启
-                this.trackPathOpenOrClose =true;
-                this.trackBoxShow =true;
-                //弹框隐藏
-                this.shipTrackDialog = false;
-                //清除覆盖物，若有网格重新加载网格
-                if(this.existGrid === true){
-                    this.deleteGrid();
-                    map.clearOverlays();  //先关网格在清所有覆盖物 否则出错
-                    this.shipMarkerOpenOrClose =false;// 另外两栏开关关闭
-                    this.heatMapOpenOrClose = false;
-                    this.initFisheryGrid()
-                }else{
-                    map.clearOverlays();
-                    this.shipMarkerOpenOrClose =false;// 另外两栏开关关闭
-                    this.heatMapOpenOrClose = false;
-                }
+            /* 表单 --轨迹回放按钮*/
+            trackReplay(formName){
+                this.$refs[formName].validate((valid) => {
+                    if (valid) {
+                        console.log('shipTrackForm submit!');
+                        // 开关开启
+                        this.trackPathOpenOrClose =true;
+                        this.trackBoxShow =true;
+                        //弹框隐藏
+                        this.shipTrackDialog = false;
+                        //清除覆盖物，若有网格重新加载网格
+                        if(this.existGrid === true){
+                            this.deleteGrid();
+                            map.clearOverlays();  //先关网格在清所有覆盖物 否则出错
+                            this.shipMarkerOpenOrClose =false;// 另外两栏开关关闭
+                            this.heatMapOpenOrClose = false;
+                            this.initFisheryGrid()
+                        }else{
+                            map.clearOverlays();
+                            this.shipMarkerOpenOrClose =false;// 另外两栏开关关闭
+                            this.heatMapOpenOrClose = false;
+                        }
 
-                this.loadTrackPath();
+                        this.getShipTrackPointsArr();//后台获取位置数据
 
-                this.luShuRunningFlag =false;
-                this.loadLuShu();
+                        // this.loadTrackPath();// 画轨迹线
+                        //
+                        // this.luShuRunningFlag =false;
+                        // this.loadLuShu(); //加载路书
+                    } else {
+                        console.log('error submit!!');
+                        return false;
+                    }
+                });
+
+
             },
+
+            /* 根据条件，从后端获取渔船轨迹点数据 shipTrackArr*/
+            getShipTrackPointsArr(){
+                console.log(this.selectTrack.boatId);
+                console.log(this.selectTrack.beginDate);
+                console.log(this.selectTrack.endDate);
+
+                this.axios({
+                    method:'post',
+                    url:'/queryTrail',
+                    data:{
+                        shipId :this.selectTrack.boatId,
+                        startTime : this.selectTrack.beginDate,
+                        endTime : this.selectTrack.endDate,
+                        jobTypes : [],
+                        businessTypes : [],
+
+                    }
+                }).then(res => {
+                     this.shipTrackArr = res.data;
+                    console.log(this.shipTrackArr.length)
+                    console.log(this.shipTrackArr)
+
+                    this.loadTrackPath();// 画轨迹线
+
+                    this.luShuRunningFlag =false;
+                    this.loadLuShu(); //加载路书
+
+                }).catch((response) => {
+                    console.log(response)
+                })
+
+            },
+
             /* 轨迹折现显示 */
             loadTrackPath() {
                 // 轨迹线设置
@@ -1069,12 +1195,15 @@
                     // marker[i].setLabel(label);
                     info[i] = new window.BMap.InfoWindow(
                         "<div style='width:300px;'>"
-                        + "<p>渔船编号：" + this.shipTrackArr[i].name + "</p>"
-                        + "<p>渔船名：" + this.shipTrackArr[i].terminalid + "</p>"
-                        + "<p>航行时速(m/s)：" + this.shipTrackArr[i].speed + "</p>"
-                        + "<p>定位时间：" + this.shipTrackArr[i].locationdate + "</p>"
-                        + "<p>地址经度：" + this.shipTrackArr[i].longitude + "</p>"
-                        + "<p>地址纬度：" + this.shipTrackArr[i].latitude + "</p>"
+                        + "<p>渔船id：" + _this.shipTrackArr[i].shipId + "</p>"
+                        + "<p>渔船编号：" + _this.shipTrackArr[i].ship.shipNo + "</p>"
+                        + "<p>渔船名：" + _this.shipTrackArr[i].ship.shipName + "</p>"
+                        + "<p>渔船作业类型：" + _this.shipTrackArr[i].ship.jobType + "</p>"
+                        + "<p>渔船业务类型：" + _this.shipTrackArr[i].ship.businessType + "</p>"
+                        + "<p>航行时速(m/s)：" + _this.shipTrackArr[i].speed + "</p>"
+                        + "<p>定位时间：" + _this.shipTrackArr[i].acqTime + "</p>"
+                        + "<p>地址经度：" + _this.shipTrackArr[i].longitude + "</p>"
+                        + "<p>地址纬度：" + _this.shipTrackArr[i].latitude + "</p>"
                         + "<p>作业方式：" + this.shipTrackArr[i].workMode + "</p>"
                         + "</div>"
                     );//悬浮提示信息
