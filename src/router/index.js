@@ -73,7 +73,7 @@ export default new Router({
     },
     {
       path: '/purseSeineAnalysis',
-      name: 'purseSAs',
+      name: 'purseSeineAnalysis',
       component: purseSeineAnalysis
     }
 

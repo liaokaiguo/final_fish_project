@@ -77,7 +77,7 @@
           <li>
             <span class="leftbottombackgroundTitle">围网统计</span>
             <span class="leftbottommoreText">更多</span>
-            <a href="#">
+            <a href="/purseSeineAnalysis">
               <img class="leftmoreICO" src="../assets/moreICO.png">
             </a>
           </li>
@@ -734,7 +734,8 @@
       seineSA,
       mapShow,
       passPort,
-      workModeSta
+      workModeSta,
+      purseSeineAnalysis,
     },
 
     computed: {
