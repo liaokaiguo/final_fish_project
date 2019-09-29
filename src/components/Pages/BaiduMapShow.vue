@@ -1091,10 +1091,13 @@
 
                         this.getShipTrackPointsArr();//后台获取位置数据
 
-                        // this.loadTrackPath();// 画轨迹线
-                        //
-                        // this.luShuRunningFlag =false;
-                        // this.loadLuShu(); //加载路书
+                        if(this.shipTrackArr.length != 0){
+                            this.loadTrackPath();// 画轨迹线
+
+                            this.luShuRunningFlag =false;
+                            this.loadLuShu(); //加载路书
+                        }
+
                     } else {
                         console.log('error submit!!');
                         return false;
@@ -1122,14 +1125,14 @@
 
                     }
                 }).then(res => {
-                     this.shipTrackArr = res.data;
+                    this.shipTrackArr = res.data;
                     console.log(this.shipTrackArr.length)
                     console.log(this.shipTrackArr)
 
-                    this.loadTrackPath();// 画轨迹线
-
-                    this.luShuRunningFlag =false;
-                    this.loadLuShu(); //加载路书
+                    // this.loadTrackPath();// 画轨迹线
+                    //
+                    // this.luShuRunningFlag = false;
+                    // this.loadLuShu(); //加载路书
 
                 }).catch((response) => {
                     console.log(response)
