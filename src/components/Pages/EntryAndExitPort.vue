@@ -80,7 +80,7 @@
             border
             :header-cell-style="{color:'#333',fontFamily:'MicrosoftYaHeiUI',fontSize:'14px',fontWeight:900}">
               <el-table-column
-                prop="ship.shipNo"
+                prop="shipId"
                 label="渔船编号"
                 width="260">
               </el-table-column>
@@ -217,9 +217,9 @@ export default {
 
           this.axios({
               method:"post",
-              url:"/queryPortTraffic",
+              url:"/queryPortTrafficWithoutJoin",
               data:{
-                  shipNo :'',
+                  shipId :'',
                   iof : '', //目前数据库iof均为-1，原因不明
                   acqTime :  nowDay, //默认当天
                   portName : '',
@@ -248,9 +248,9 @@ export default {
           // console.log(this.select.portName);
           this.axios({
               method:"post",
-              url:"/queryPortTraffic",
+              url:"/queryPortTrafficWithoutJoin",
               data:{
-                  shipNo : this.select.boatId,
+                  shipId : this.select.boatId,
                   iof : this.select.inOrOut, //目前数据库iof均为-1，原因不明
                   acqTime :  this.select.passDate,
                   portName :  this.select.portName,
