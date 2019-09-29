@@ -443,7 +443,7 @@
                 }
                 else if(this.fishMode=='长江口渔场'){
                     map.clearOverlays();//清除渔场区域范围
-                    var infoWindow = new BMap.InfoWindow("左经度:122.0 下纬度:31" +'<br />'+
+                    var infoWindow = new BMap.InfoWindow("左经度:122 下纬度:31" +'<br />'+
                         "右经度:125 上纬度:32",{title:"长江口渔场",width:290,height:100});
                     var changeCenterPoint = new BMap.Point(123.5, 31.5);//创建点坐标
                     /*map.setCenter(changeCenterPoint);//设置地图中心点

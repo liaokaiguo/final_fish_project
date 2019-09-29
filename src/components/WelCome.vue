@@ -241,7 +241,7 @@
           <router-link to="/purseSeineAnalysis" class="lastbottomtext">围网作业方式统计及分析</router-link>&nbsp;&nbsp;
           <router-link to="/trawlSA" class="lastbottomtext">拖网作业方式统计及分析</router-link>&nbsp;&nbsp;
           <router-link to="/gillNetStAnalysis" class="lastbottomtext">刺网作业方式统计及分析</router-link>&nbsp;&nbsp;
-          <router-link to="/seineSA" class="lastbottomtext">张网作业方式统计及分析</router-link>&nbsp;&nbsp;
+          <router-link to="/stowSA" class="lastbottomtext">张网作业方式统计及分析</router-link>&nbsp;&nbsp;
         </li>
       </ul>
     </div>
@@ -262,6 +262,7 @@
   import gillNetStAnalysis from "@/components/Pages/gillNetStatisticalAnalysis";
   import trawlSA from "@/components/Pages/trawlStatisticalAnalysis";
   import seineSA from "@/components/Pages/seineStatisticalAnalysis";
+  import stowSA from "@/components/Pages/stowStatisticalAnalysis";
   import mapShow from "@/components/Pages/BaiduMapShow";
   import passPort from "@/components/Pages/EntryAndExitPort";
   import workModeSta from "@/components/Pages/WorkModeStatistics";
