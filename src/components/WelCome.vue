@@ -241,7 +241,7 @@
           <router-link to="/purseSeineAnalysis" class="lastbottomtext">围网作业方式统计及分析</router-link>&nbsp;&nbsp;
           <router-link to="/trawlSA" class="lastbottomtext">拖网作业方式统计及分析</router-link>&nbsp;&nbsp;
           <router-link to="/gillNetStAnalysis" class="lastbottomtext">刺网作业方式统计及分析</router-link>&nbsp;&nbsp;
-          <router-link to="/seineSA" class="lastbottomtext">张网作业方式统计及分析</router-link>&nbsp;&nbsp;
+          <router-link to="/stowSA" class="lastbottomtext">张网作业方式统计及分析</router-link>&nbsp;&nbsp;
         </li>
       </ul>
     </div>
