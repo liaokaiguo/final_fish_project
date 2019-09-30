@@ -1,255 +1,843 @@
 <template>
-  <div class="background">
-    <div>
-      <el-row>
-        <el-col :span="24">
-          <div class="centTitle">拖网作业方式统计分析</div>
-          <div class="rightleftIcon">
-            <span v-on:click="$router.back(-1)">
-              <img src="../../assets/rebackLastIcon.png" style="cursor:pointer" alt="返回">
-            </span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-            <router-link to="/welcome">
-              <img src="../../assets/rebackMainIcon.png">
-            </router-link>
-          </div>
-        </el-col>
-      </el-row>
+	<!-- 张网作业方式统计分析 stow net statistic and analysis -->
+	<div>
+		<!-- 背景 -->
+		<div id="main-bkground">
+		    <img class="img" src="../../assets/bg.png" />
+		</div>
+		<!-- 主要内容 -->
+		<div id="main-content">
+      <!-- 主标题 -->
+			<div class="centTitle">
+				<p class="myp1" @click="refreshPage" v-bind:title="thisPageTips">张网作业方式统计分析</p>
+			</div>
 
-      <el-row>
-        <!-- <el-col :span="24">
-          <div class="mainEchartsStyle" id="gillEcharts">nihao</div>
-        </el-col>-->
-        <div class="mainEchartsStyle" id="trawlEchartsId"></div>
-      </el-row>
-    </div>
-  </div>
+			<!-- 导航按钮 -->
+			<div class="navigaIcon" id="navigaIcon">
+				<img class="goBack" src="../../assets/rebackLastIcon.png" alt="后退" v-on:click="goBack" v-bind:title="backTips">
+				<img class="goHome" src="../../assets/rebackMainIcon.png" alt="主页" v-on:click="goHome" v-bind:title="homeTips">
+			</div>
+
+			<!-- 菜单栏 -->
+			<div class="setMenu">
+				<!-- 选择渔场菜单 -->
+				<div class="selectFG">
+					<form method="post" v-bind:title="selectFGTips">
+						<label>渔场：</label>
+						<select v-model="fishGround">
+							<option v-for="FGoption in FGoptions" v-bind:value="FGoption.value">
+								{{FGoption.value}}
+							</option>
+						</select>
+					</form>
+				</div>
+				<!-- 选择时间菜单 -->
+				<div class="selectDT">
+					<form method="post">
+						<label for="date">日期：</label>
+						<input type="date" v-model="startDate" v-bind:title="startDateTips" />
+						&nbsp;到&nbsp;
+						<input type="date" v-model="endDate" v-bind:title="endDateTips" />
+					</form>
+				</div>
+				<!-- 菜单按钮 -->
+				<div class="menuButtons">
+					<div class="button">
+						<button @click="search" v-bind:title="checkTips">查询</button>
+						<button @click="save" v-bind:title="saveTips">保存</button>
+						<button @click="reset" v-bind:title="resetTips">重置</button>
+					</div>
+				</div>
+			</div>
+
+			<div class="showResult">
+				<!-- 地图容器 -->
+				<div class="showMap">
+					<div class="baiduMapImage" id="fishGroundMainMap"></div>
+				</div>
+
+				<!-- 统计结果容器 -->
+				<div class="showStatistics">
+					<div class="topEcharts">
+						<div class="illLineTitle">非法作业统计折线图</div>
+						<div class="lineEcharts" id="lineEchartsId"></div>
+					</div>
+					<div class="bottomEcharts">
+						<div class="illPieTitle">非法作业统计占比图</div>
+						<div class="pieEcharts" id="pieEchartsId"></div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
 </template>
+
+
+
 <script>
-//trawl拖网 fishing vessel statistic and analysis
-export default {
-  data() {
-    return {
-      trawlOption: {
-        color: ["#f44"],
-        tooltip: {
-          trigger: "axis",
-          axisPointer: {
-            type: "shadow"
-          }
-        },
-        xAxis: [
-          {
-            type: "category",
-            data: [
-              "1月",
-              "2月",
-              "3月",
-              "4月",
-              "5月",
-              "6月",
-              "7月",
-              "8月",
-              "9月",
-              "10月",
-              "11月",
-              "12月"
-            ],
-            axisTick: {
-              alignWithLabel: true
-            },
-            axisLine: {
-              lineStyle: {
-                color: "#5bbdff"
-              }
-            },
-            axisLabel: {
-              fontSize: 25,
-              color: "#5b9bd5"
-            }
-          }
-        ],
-        yAxis: [
-          {
-            type: "value",
-            axisLine: {
-              lineStyle: {
-                color: "#5bbdff"
-              }
-            },
-            scale: true,
-            axisLabel: {
-              margin: 5,
-              fontSize: 25,
-              color: "#5b9bd5"
-            }
-          }
-        ],
-        series: [
-          {
-            name: "每月数量",
-            type: "line",
-            smooth: true,
-            // data: [995, 566, 744, 348, 554, 736, 245, 446, 746, 425, 547, 356],
-            data: [],
-            lineStyle: {
-              color: {
-                type: "radial",
-                x: 0.5,
-                y: 0.5,
-                r: 0.7,
-                colorStops: [
-                  {
-                    offset: 0,
-                    color: "red" // 0% 处的颜色
-                  },
-                  {
-                    offset: 1,
-                    color: "blue" // 100% 处的颜色
-                  }
-                ],
-                global: false // 缺省为 false
-              }
-            },
-            areaStyle: {
-              color: {
-                type: "linear",
-                x: 0,
-                y: 0,
-                x2: 0,
-                y2: 1,
-                colorStops: [
-                  {
-                    offset: 0,
-                    color: "red" // 0% 处的颜色
-                  },
-                  {
-                    offset: 1,
-                    color: "blue" // 100% 处的颜色
-                  }
-                ],
-                global: false // 缺省为 false
-              }
-            }
-          }
-        ]
-      }
-    };
-  },
-  mounted() {
-    this.drawTrawlCharts();
-  },
-  methods: {
-    reback() {
-      this.$router.go(-1); //reback the last step
-    },
-    drawTrawlCharts() {
-      var trawlEChart = this.$echarts.init(
-        document.getElementById("trawlEchartsId")
-      );
-        trawlEChart.setOption(this.trawlOption);
-        //数据没有加载出来显示加载动画,样式添加todo
-        trawlEChart.showLoading();
-        //获取数据
-        this.axios.get('/getTuowangStatistic').then(res => {
-            trawlEChart.hideLoading(); //加载出来隐藏加载动画
-            trawlEChart.setOption({  //数据添加
-                series: [{
-                    data: res.data.tuowang
-                }]
-            })
+	//张网 stow net statistic and analysis
+	export default {
+		data() {
+			return {
+				// Tips提示
+				thisPageTips: '张网作业方式统计分析',
+				backTips: '后退',
+				homeTips: '主页',
+				selectFGTips: '请选择渔场',
+				startDateTips: '请选择起始日期',
+				endDateTips: '请选择终止日期',
+				checkTips: '查询结果',
+				resetTips: '重置条件',
+				saveTips: '保存结果',
 
-        })
-        window.addEventListener("resize", function() {
-        trawlEChart.resize();
-      });
-    }
-  }
-};
+				// 默认渔场设置
+				fishGround: '所有渔场',
+				// 渔场列表
+				FGoptions: [{
+						value: '所有渔场'
+					},
+					{
+						value: '舟山渔场'
+					},
+					{
+						value: '舟外渔场'
+					},
+					{
+						value: '长江口渔场'
+					},
+					{
+						value: '江外渔场'
+					},
+					{
+						value: '吕泗渔场'
+					},
+					{
+						value: '大沙渔场'
+					},
+					{
+						value: '鱼山渔场'
+					},
+					{
+						value: '鱼外渔场'
+					},
+					{
+						value: '温台渔场'
+					},
+					{
+						value: '温外渔场'
+					},
+					{
+						value: '闽东渔场'
+					},
+					{
+						value: '闽外渔场'
+					}
+				],
+				// 默认时间设置
+				startDate: '2019-07-15',
+				endDate: '2019-08-31',
+
+				//非法作业折线图选项
+				LineOption: {
+					color: "#f44",
+					tooltip: {
+						trigger: "axis",
+						axisPointer: {
+							type: "line",
+							lineStyle: {
+								type: "dashed",
+							},
+						},
+					},
+					grid: {
+						left: "10%",
+						top: "10%",
+						width: "80%",
+						height: "70%",
+					},
+					xAxis: {
+						// name: "日期",
+						// nameLocation: "middle",
+						// nameTextStyle: {
+						// 	color: "#58a0ee",
+						// 	fontWeight: "normal",
+						// 	fontSize: 12,
+						// },
+						// nameGap: 20,
+						type: "category",
+						// data 为横坐标
+						axisTick: {
+							show: true,
+							inside: true,
+							alignWithLabel: true,
+
+						},
+						axisLine: {
+							lineStyle: {
+								color: "#58a0ee",
+								width: 2,
+							}
+						},
+						axisLabel: {
+							fontSize: 14,
+							color: "#58a0ee",
+							rotate: 0,
+						},
+						splitLine: {
+							show: false,
+						},
+					},
+					yAxis: {
+						// name: "次数",
+						// nameLocation: "middle",
+						// nameTextStyle: {
+						// 	color: "#58a0ee",
+						// 	fontWeight: "normal",
+						// 	fontSize: 12,
+						// },
+						// nameGap: 16,
+						minInterval: 1,
+						type: "value",
+						axisTick: {
+							show: true,
+							inside: true,
+							alignWithLabel: true,
+						},
+						axisLine: {
+							lineStyle: {
+								color: "#58a0ee",
+								width: 2,
+							}
+						},
+						scale: false,
+						axisLabel: {
+							fontSize: 14,
+							color: "#58a0ee",
+							rotate: 0,
+						},
+						splitLine: {
+							show: true,
+							lineStyle: {
+								color: "#ccc",
+								width: 1,
+								type: "dashed",
+							},
+						},
+					},
+					series: [{
+						name: "非法作业次数",
+						type: "line",
+						symbolSize: 2,
+						showSymbol: false,
+						cursor: 'pointer',
+						step: false,
+						smooth: false,
+						lineStyle: {
+							color: "#ed7d31",
+							width: 2,
+						},
+					}],
+
+				},
+				//非法作业占比图选项
+				PieOption: {
+					tooltip: {
+						trigger: "item",
+						formatter: "{a} <br/>{b} : {c} ({d}%)"
+					},
+					grid: {
+						left: "10%",
+						top: "0%",
+						width: "80%",
+						height: "100%",
+					},
+					legend: {
+						orient: "vertical",
+						left: "4%",
+						top: "middle",
+						data: ["正常作业", "非法作业"],
+						textStyle: {
+							color: "default",
+							fontSize: 12,
+						}
+					},
+					series: [{
+						name: "占比情况",
+						type: "pie",
+						radius: "75%",
+						center: ["50%", "50%"],
+						label: {
+							show: false,
+							fontSize: 25,
+						},
+						data: [],
+						itemStyle: {
+							emphasis: {
+								shadowBlur: 10,
+								shadowOffsetX: 0,
+								shadowColor: "rgba(0, 0, 0, 0.5)"
+							}
+						}
+					}],
+					color: ["#5b9bff", "#ed7d31"]
+				},
+				// 存储数据长度
+				dataLength: 0,
+				//存储正常作业与非法作业次数
+				pieData: {
+					normal: {
+						value: 0,
+						name: '正常作业',
+					},
+					illegal: {
+						value: 0,
+						name: '非法作业',
+					},
+				},
+				//存储非法作业数据
+				illDataByDate: [],
+				//存储日期序列
+				dateArray: [],
+			};
+		},
+
+
+		mounted() {
+			this.init();
+			this.baiduMap();
+		},
+
+		methods: {
+			refreshPage() {
+				this.$router.go(0);
+			},
+
+			goBack() {
+				this.$router.back(-1);
+			},
+
+			goHome() {
+				this.$router.push('/welcome')
+			},
+
+			//初始化图表
+			init() {
+				var myDate = new Date();
+				console.log("----------" + myDate.toLocaleString() + "----------");
+				console.log("正在执行init()...");
+				this.dataAskDeal();
+			},
+
+			//数据请求及返回数据处理
+			dataAskDeal() {
+				console.log("正在执行dataAskDeal()...");
+				console.log("startDate:" + this.startDate);
+				console.log("endDate:" + this.endDate);
+
+				this.dateArray = [];
+				var i = 0;
+				var startTime = this.getDate(this.startDate);
+				var endTime = this.getDate(this.endDate);
+				while ((endTime.getTime() - startTime.getTime()) >= 0) {
+					var year = startTime.getFullYear();
+					var x = startTime.getMonth() + 1;
+					var month = x.toString().length == 1 ? "0" + x.toString() : x;
+					var day = startTime.getDate().toString().length == 1 ? "0" + startTime.getDate() : startTime.getDate();
+					//保存时间序列
+					this.dateArray[i] = year + '-' + month + '-' + day;
+					i += 1;
+					startTime.setDate(startTime.getDate() + 1);
+				}
+				this.axios({
+					method: "post",
+					url: "/getDataByMonthOrDay",
+					data: {
+						jobType: '张网',
+						startTime: this.startDate + ' 00:00:00',
+						endTime: this.endDate + ' 23:59:59',
+						byDay: 1
+					},
+				}).then((response) => {
+					console.log("响应正常...");
+					var sum_nor = 0;
+					var sum_ill = 0;
+					var length = response.data.total.length;
+					this.dataLength = length;
+					console.log("数据总长度：" + length);
+					for (var i = 0; i < response.data.normal.length; i++) {
+						sum_nor += response.data.normal[i];
+					};
+					for (var i = 0; i < response.data.illegal.length; i++) {
+						sum_ill += response.data.illegal[i];
+					};
+					console.log("正常总数:" + sum_nor);
+					console.log("非法总数:" + sum_ill);
+					this.pieData.normal.value = sum_nor;
+					this.pieData.illegal.value = sum_ill;
+					this.illDataByDate = response.data.illegal;
+					this.drawStowCharts(length);
+				}).catch((response) => {
+					console.log("响应错误...");
+					console.log("错误是：" + response);
+				})
+			},
+
+			//String to Date 时间调整函数 月份-1，适配Date类型
+			getDate(datestr) {
+				var temp = datestr.split("-");
+				var date = new Date(temp[0], temp[1] - 1, temp[2]);
+				return date;
+			},
+
+			drawStowCharts(len) {
+				var lineEchart = this.$echarts.init(
+					document.getElementById("lineEchartsId")
+				);
+				var pieEchart = this.$echarts.init(
+					document.getElementById("pieEchartsId")
+				);
+
+				console.log("echarts实例创建完成");
+				lineEchart.setOption(this.LineOption);
+				lineEchart.setOption({
+					xAxis: {
+						data: this.dateArray,
+						axisLabel: {
+							interval: function(idx, val) {
+								if (idx == 0 || idx == Math.floor((len - 1) / 3) || idx == Math.floor((len - 1) / 3 * 2) || idx == len - 1) {
+									return true;
+								}
+							},
+						},
+					},
+					series: {
+						data: this.illDataByDate,
+					},
+				});
+
+
+				pieEchart.setOption(this.PieOption);
+				pieEchart.setOption({
+					series: {
+
+						data: [this.pieData.normal, this.pieData.illegal],
+					}
+				});
+
+				// pieEchart.showLoading();
+				window.addEventListener("resize", function() {
+					lineEchart.resize();
+				});
+				window.addEventListener("resize", function() {
+					pieEchart.resize();
+				});
+			},
+
+			// 查询方法
+			search() {
+				var startTime = this.getDate(this.startDate);
+				var endTime = this.getDate(this.endDate);
+				if (endTime.getTime() - startTime.getTime() < 0) {
+					alert("终止时间不得早于起始时间！");
+				} else {
+					this.dataAskDeal();
+				}
+			},
+			//保存报告
+			save() {
+				console.log("我要保存报告到本地！");
+				// 先查询，后保存
+				var nowTime = new Date();
+				this.exportData("张网统计报告 " + nowTime.toLocaleString() + ".txt", this.dealDataToExport());
+			},
+			//重置方法 恢复到默认渔场、默认时间
+			reset() {
+				this.fishGround = '所有渔场';
+				this.startDate = '2019-07-15';
+				this.endDate = '2019-08-31';
+				this.dataAskDeal();
+			},
+
+			fake_click(obj) {
+				var ev = document.createEvent("MouseEvents");
+				ev.initMouseEvent(
+					"click", true, false, window, 0, 0, 0, 0, 0, false, false, false, false, 0, null
+				);
+				obj.dispatchEvent(ev);
+			},
+
+			exportData(name, data) {
+				var urlObject = window.URL || window.webkitURL || window;
+				var downloadData = new Blob([data]);
+				var save_link = document.createElementNS("http://www.w3.org/1999/xhtml", "a");
+				save_link.href = urlObject.createObjectURL(downloadData);
+				save_link.download = name;
+				this.fake_click(save_link);
+			},
+
+			dealDataToExport(){
+				var datatoexport="";
+				var allsum = this.pieData.normal.value + this.pieData.illegal.value;
+				var normalPer = (this.pieData.normal.value/allsum*100).toFixed(2);
+				var illegalPer = (this.pieData.illegal.value/allsum*100).toFixed(2);
+				datatoexport += "作业方式：张网\n"
+				datatoexport += "渔场范围：" + this.fishGround + "\n";
+				datatoexport += "时间范围：" + this.startDate + "\t到\t" + this.endDate + "\n\n";
+				datatoexport += "总作业次数：" + allsum
+				+ "\t正常作业次数：" + this.pieData.normal.value + "\t非法作业次数：" + this.pieData.illegal.value + "\n";
+				datatoexport += "正常作业占比：" + normalPer + "%";
+				datatoexport += "\t非法作业占比：" + illegalPer + "%" + "\n\n";
+				var i;
+				datatoexport += "时间" + "\t\t\t" + "违法作业次数\n"
+				for (i=0;i<this.dataLength;i++){
+					datatoexport += this.dateArray[i] + "\t\t" + this.illDataByDate[i] + "\n";
+				}
+
+				return datatoexport;
+			},
+
+			/*百度地图*/
+			baiduMap() {
+				//创建实例
+				var map = new BMap.Map("fishGroundMainMap");
+				//创建坐标点
+				var point = new BMap.Point(122.20, 30.00);
+				map.addControl(new BMap.MapTypeControl({
+					mapTypes: [
+						BMAP_NORMAL_MAP,
+						BMAP_SATELLITE_MAP,
+						BMAP_HYBRID_MAP
+					]
+				}));
+				// map.addControl(new BMap.NavigationControl()); 缩放比例尺
+
+				//初始化实例，传入坐标点并设置地图级别
+				map.centerAndZoom(point, 12);
+				map.enableScrollWheelZoom(true);
+				window.map = map; //将map变量存储在全局
+
+				/* 渔船标注位置*/
+				// this.addMarker();
+
+			},
+		},
+
+	};
 </script>
+
+
+
 <style scoped>
-h1,
-h2,
-h3,
-h4,
-h5,
-h6,
-ul,
-ol,
-li,
-a,
-input,
-button,
-select,
-span,
-td,
-table {
-  margin: 0;
-  font-weight: normal;
-  padding: 0;
-  list-style: none;
-}
+	/* 底层背景样式，窗口自适应 */
+	/* 底层背景 */
+	#main-bkground {
+		position: absolute;
+		width: 100%;
+		height: 100%;
+		overflow: hidden;
+		/* 底层背景层 */
+		z-index: 1;
+	}
 
-/*the whole web background style*/
-.background {
-  background-image: url("../../assets/bg.png");
-  background-size: 100% 100%;
-  height: 1080px;
-  position: absolute;
-  width: 1920px;
-  background-repeat: no-repeat;
-}
-/*the center title sytle*/
-.centTitle {
-  width: 536px;
-  height: 43px;
-  font-family: FZDHTJW--GB1-0;
-  font-size: 45px;
-  font-weight: normal;
-  font-stretch: normal;
-  letter-spacing: 5px;
-  color: #58a0ee;
-  margin-top: 25px;
-  margin-left: 690px;
-  float: left;
-}
-.rightleftIcon {
-  margin-left: 520px;
-  margin-top: 51px;
-  float: left;
-}
-.mainEchartsStyle {
-  margin-top: 141px;
-  margin-left: 345px;
-  height: 585px;
-  width: 65%;
-  float: left;
-  /*background-color: #e5e9f2;*/
-}
-.el-row {
-  margin-bottom: 20px;
-  &:last-child {
-    margin-bottom: 0;
-  }
-}
+	/* 底层背景图片 */
+	#main-bkground .img {
+		width: 100%;
+		height: 100%;
+		/* 底层背景图片层 */
+		z-index: 2;
+	}
 
-.el-col {
-  border-radius: 4px;
-}
-.bg-purple-dark {
-  background: #99a9bf;
-}
-.bg-purple {
-  background: #d3dce6;
-}
-.bg-purple-light {
-  background: #e5e9f2;
-}
-.grid-content {
-  border-radius: 4px;
-  min-height: 36px;
-}
-.row-bg {
-  padding: 10px 0;
-  background-color: #0732f1;
-}
+	/* 主要内容样式，窗口自适应 */
+	/* 主要内容 */
+	#main-content {
+		position: absolute;
+		width: 100%;
+		height: 100%;
+		overflow: hidden;
+		/* 内容层 */
+		z-index: 90;
+	}
+
+	/* 中心标题样式 */
+	#main-content .centTitle {
+		position: absolute;
+		left: 30vw;
+		width: 40vw;
+		top: 1.2vh;
+		height: 5.5vh;
+		/* background-color 测试用 */
+		/* background-color: #FFFFFF; */
+	}
+
+	#main-content .centTitle .myp1 {
+		font-family: FZDHTJW--GB1-0;
+		color: #58a0ee;
+		cursor: pointer;
+		position: absolute;
+		letter-spacing: 0.2vw;
+		left: 20%;
+		width: 60%;
+		height: 80%;
+		top: -5%;
+		font-size: 4.5vh;
+	}
+
+	#main-content .navigaIcon {
+		position: absolute;
+		right: 2vw;
+		width: 15vw;
+		height: 5.5vh;
+		margin-top: 5vh;
+		margin-bottom: 0.1vh;
+		/* background-color 测试用 */
+		/* background-color: #FFFFFF; */
+	}
+
+	#main-content .navigaIcon .goBack {
+		cursor: pointer;
+		position: absolute;
+		right: 50%;
+		height: 80%;
+	}
+
+	#main-content .navigaIcon .goHome {
+		cursor: pointer;
+		position: absolute;
+		right: 25%;
+		height: 80%;
+	}
+
+	/* 菜单栏 */
+	#main-content .setMenu {
+		position: absolute;
+		width: 80vw;
+		height: 6vh;
+		left: 10vw;
+		top: 12vh;
+		margin-top: 1vh;
+		margin-bottom: 1vh;
+		color: #58a0ee;
+		/* background-color 测试用 */
+		/* background-color: #FFFFFF; */
+	}
+
+	/*选择渔场菜单*/
+	#main-content .setMenu .selectFG {
+		position: absolute;
+		width: 18%;
+		height: 100%;
+		color: #58a0ee;
+		font-size: 2.8vh;
+		/* background-color 测试用 */
+		/* background-color: #0e0270; */
+	}
+
+	#main-content .setMenu .selectFG form select {
+		width: 60%;
+		height: 5vh;
+		background-color: #0e0270;
+		color: #58a0ee;
+		border-color: #58a0ee;
+		border-width: 1px;
+	}
+
+
+	/* 选择日期时间菜单 */
+	#main-content .setMenu .selectDT {
+		position: absolute;
+		left: 20%;
+		width: 50%;
+		height: 100%;
+		font-size: 2.8vh;
+		/* background-color 测试用 */
+		/* background-color: #0e0270; */
+	}
+
+	#main-content .setMenu .selectDT form input {
+		width: 35%;
+		height: 5vh;
+		background-color: #0e0270;
+		color: #58a0ee;
+		border-color: #58a0ee;
+	}
+
+	/*  修改日历控件类型 */
+	/*控制编辑区域的*/
+	input[type="date"]::-webkit-datetime-edit {}
+
+	/*控制年月日这个区域的*/
+	input[type="date"]::-webkit-datetime-edit-fields-wrapper {}
+
+	/*这是控制年月日之间的斜线或短横线的*/
+	input[type="date"]::-webkit-datetime-edit-text {
+		color: #58a0ee;
+		padding: 0.5em;
+	}
+
+	/*控制年文字, 如2019四个字母占据的那片地方*/
+	input[type="date"]::-webkit-datetime-edit-year-field {
+		color: #58a0ee;
+		background-color: #0e0270;
+	}
+
+	/*控制月文字*/
+	input[type="date"]::-webkit-datetime-edit-month-field {
+		color: #58a0ee;
+		background-color: #0e0270;
+	}
+
+	/*控制日文字*/
+	input[type="date"]::-webkit-datetime-edit-day-field {
+		color: #58a0ee;
+		background-color: #0e0270;
+	}
+
+	/*这是控制上下小箭头的*/
+	input[type="date"]::-webkit-inner-spin-button {
+		/* 直接隐藏 */
+		visibility: hidden;
+	}
+
+	/*这是控制下拉小箭头的*/
+	input[type="date"]::-webkit-calendar-picker-indicator {
+		position: relative;
+		right: 2%;
+		border: 0.1em solid #58a0ee;
+		border-radius: 0.2em;
+		color: #0e0270;
+		background-image: -webkit-linear-gradient(top, #58a0ee, #acc8e6);
+	}
+
+	/*控制清除按钮*/
+	input[type="date"]::-webkit-clear-button {
+		/* 直接隐藏 */
+		visibility: hidden;
+	}
+
+	#main-content .setMenu .menuButtons {
+		position: absolute;
+		left: 75%;
+		width: 25%;
+		height: 100%;
+		font-size: 2.8vh;
+		/* background-color 测试用 */
+		/* background-color: #0e0270; */
+	}
+
+	#main-content .setMenu .menuButtons button {
+		width: 24%;
+		height: 5vh;
+		background-color: #0e0270;
+		color: #58a0ee;
+		border-color: #58a0ee;
+		cursor: pointer;
+	}
+
+	/* 显示结果区域 */
+	#main-content .showResult {
+		position: absolute;
+		width: 90vw;
+		height: 74vh;
+		left: 5vw;
+		top: 18vh;
+		margin-top: 0vh;
+		margin-bottom: 0vh;
+		/* background-color 测试用 */
+		/* background-color: #FFFFFF; */
+
+	}
+
+	#main-content .showMap {
+		position: absolute;
+		width: 60%;
+		height: 95%;
+		left: 2%;
+		top: 5%;
+		/* background-color 测试用 */
+		/* background-color: #EFAB00; */
+	}
+
+	#main-content .showMap .baiduMapImage {
+		position: absolute;
+		width: 100%;
+		height: 100%;
+		margin: 0px;
+	}
+
+	#main-content .showStatistics {
+		position: absolute;
+		width: 33%;
+		height: 95%;
+		right: 2%;
+		top: 5%;
+		/* background-color 测试用 */
+		/* background-color: #FFFFFF; */
+	}
+
+
+	#main-content .showStatistics .topEcharts {
+		position: absolute;
+		top: 0%;
+		left: 0%;
+		height: 50%;
+		width: 100%;
+		/* background-color 测试用 */
+		/* background-color: greenyellow; */
+	}
+
+	#main-content .showStatistics .topEcharts .illLineTitle {
+		position: absolute;
+		top: -5%;
+		left: 20%;
+		height: 5%;
+		width: 60%;
+		font-size: 2.8vh;
+		letter-spacing: 0.1vw;
+		color: #58a0ee;
+		/* background-color 测试用 */
+		/* background-color: #0000FF; */
+	}
+
+	#main-content .showStatistics .topEcharts .lineEcharts {
+		position: absolute;
+		top: 6%;
+		height: 94%;
+		left: 0%;
+		width: 100%;
+		/* background-color 测试用 */
+		/* background-color: #FFFFFF; */
+	}
+
+	#main-content .showStatistics .bottomEcharts {
+		position: absolute;
+		top: 50%;
+		left: 0%;
+		height: 50%;
+		width: 100%;
+		/* background-color 测试用 */
+		/* background-color: darkred; */
+	}
+
+	#main-content .showStatistics .bottomEcharts .illPieTitle {
+		position: absolute;
+		top: -5%;
+		left: 20%;
+		height: 5%;
+		width: 60%;
+		font-size: 2.8vh;
+		letter-spacing: 0.1vw;
+		color: #58a0ee;
+		/* background-color 测试用 */
+		/* background-color: #FFFFFF; */
+	}
+
+	#main-content .showStatistics .bottomEcharts .pieEcharts {
+		position: absolute;
+		top: 6%;
+		height: 94%;
+		left: 0%;
+		width: 100%;
+		/* background-color 测试用 */
+		/* background-color: #FFFFFF; */
+	}
 </style>
