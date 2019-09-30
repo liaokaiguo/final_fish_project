@@ -169,7 +169,7 @@
                           placeholder="请输入时间"
                           value-format="yyyy-MM-dd HH:mm:ss"
                           align="right"
-                          :picker-options="pickerOptionsStart">
+                          :picker-options="pickerOptions">
           </el-date-picker>
         </el-form-item>
         <el-form-item label="航行结束时间:" prop="endDate">
@@ -179,7 +179,7 @@
                           placeholder="请输入时间"
                           value-format="yyyy-MM-dd HH:mm:ss"
                           align="right"
-                          :picker-options="pickerOptionsEnd">
+                          :picker-options="pickerOptions">
           </el-date-picker>
         </el-form-item>
         <el-form-item class="select-input-data" label="算法库:" prop="algorithmMode">
@@ -251,30 +251,6 @@
                     disabledDate(time) {
                         return time.getTime() > Date.now();//如果没有后面的-8.64e6就是不可以选择今天的
                     }
-                },
-                pickerOptionsStart: {
-                    disabledDate: time => {
-                        if (this.selectTrack.endDate) {
-                            return (
-                                time.getTime() > new Date(this.selectTrack.endDate).getTime()
-                            );
-                        } else {
-                            return time.getTime() > Date.now();
-                        }
-                    }
-                },
-                pickerOptionsEnd: {
-                    disabledDate: time => {
-                        if (this.selectTrack.beginDate) {
-                            return (
-                                time.getTime() > Date.now() ||
-                                time.getTime() < new Date(this.selectTrack.beginDate).getTime()
-                            );
-                        } else {
-                            return time.getTime() > Date.now();
-                        }
-                    }
-
                 },
 
                 selectLocation: {
@@ -744,25 +720,32 @@
                             break;
 
                         case "2-1-1":
-                            this.initHeatMap(this.heatMapPointsForWei);//围网热力图
+                            // this.initHeatMap(this.heatMapPointsForWei);//围网热力图
+                            this.getHeatMapPointsAndShow("围网");
                             break;
                         case "2-2":
-                            this.initHeatMap(this.heatMapPointsForTuo);//拖网热力图
+                            // this.initHeatMap(this.heatMapPointsForTuo);//拖网热力图
+                            this.getHeatMapPointsAndShow("拖网");
                             break;
                         case "2-3":
-                            this.initHeatMap(this.heatMapPointsForZhang);//张网热力图
+                            // this.initHeatMap(this.heatMapPointsForZhang);//张网热力图
+                            this.getHeatMapPointsAndShow("张网");
                             break;
                         case "2-4":
-                            this.initHeatMap(this.heatMapPointsForCi);//刺网热力图
+                            // this.initHeatMap(this.heatMapPointsForCi);//刺网热力图
+                            this.getHeatMapPointsAndShow("刺网");
                             break;
                         case "2-5":
-                            this.initHeatMap(this.heatMapPointsForDiao);//钓具热力图
+                            // this.initHeatMap(this.heatMapPointsForDiao);//钓具热力图
+                            this.getHeatMapPointsAndShow("钓具");
                             break;
                         case "2-6":
-                            this.initHeatMap(this.heatMapPointsForZa);//杂渔具热力图
+                            // this.initHeatMap(this.heatMapPointsForZa);//杂渔具热力图
+                            this.getHeatMapPointsAndShow("杂渔具");
                             break;
                         case "2-7":
-                            this.initHeatMap(this.heatMapPointsForLong);//笼壶热力图
+                            // this.initHeatMap(this.heatMapPointsForLong);//笼壶热力图
+                            this.getHeatMapPointsAndShow("笼壶");
                             break;
 
                         case "3-1":
@@ -998,25 +981,28 @@
             },
 
             /* 从后端获取违规作业方式的热力图数据 放入heatMapPoints*/
-            getHeatMapPoints(){
-
+            getHeatMapPointsAndShow(jobType){
+                var date =new Date();
+                var now = this.getFormatTime(date);
+                date.setTime(date.getTime() - 1000 * 60 * 60 * 5);// 5小时前
+                var before = this.getFormatTime(date);
+                console.log(now)
+                console.log(before)
                 this.axios({
                     method:'post',
-                    url:'/queryTrail',
+                    url:'/queryHeatmap',
                     data:{
-                        shipId :"",
                         startTime : before,
                         endTime : now,
-                        jobTypes : [],
-                        businessTypes : [],
+                        jobType : jobType,
+                        idtfyFlag : '',
 
                     }
                 }).then(res => {
 
-                    this.shipArr = res.data;
-                    // console.log(this.shipArr.length)
-                    // console.log(this.shipArr)
-                    this.addShipMarker();
+                    console.log("热力图点数量"+ res.data.length)
+                    this.heatMapPoints = res.data
+                    this.initHeatMap(this.heatMapPoints);
 
                 }).catch((response) => {
                     console.log(response)
@@ -1091,12 +1077,7 @@
 
                         this.getShipTrackPointsArr();//后台获取位置数据
 
-                        if(this.shipTrackArr.length != 0){
-                            this.loadTrackPath();// 画轨迹线
 
-                            this.luShuRunningFlag =false;
-                            this.loadLuShu(); //加载路书
-                        }
 
                     } else {
                         console.log('error submit!!');
@@ -1127,12 +1108,11 @@
                 }).then(res => {
                     this.shipTrackArr = res.data;
                     console.log(this.shipTrackArr.length)
-                    console.log(this.shipTrackArr)
 
-                    // this.loadTrackPath();// 画轨迹线
+                    this.loadTrackPath();// 画轨迹线
                     //
-                    // this.luShuRunningFlag = false;
-                    // this.loadLuShu(); //加载路书
+                    this.luShuRunningFlag = false;
+                    this.loadLuShu(); //加载路书
 
                 }).catch((response) => {
                     console.log(response)
@@ -1198,15 +1178,15 @@
                     // marker[i].setLabel(label);
                     info[i] = new window.BMap.InfoWindow(
                         "<div style='width:300px;'>"
-                        + "<p>渔船id：" + _this.shipTrackArr[i].shipId + "</p>"
-                        + "<p>渔船编号：" + _this.shipTrackArr[i].ship.shipNo + "</p>"
-                        + "<p>渔船名：" + _this.shipTrackArr[i].ship.shipName + "</p>"
-                        + "<p>渔船作业类型：" + _this.shipTrackArr[i].ship.jobType + "</p>"
-                        + "<p>渔船业务类型：" + _this.shipTrackArr[i].ship.businessType + "</p>"
-                        + "<p>航行时速(m/s)：" + _this.shipTrackArr[i].speed + "</p>"
-                        + "<p>定位时间：" + _this.shipTrackArr[i].acqTime + "</p>"
-                        + "<p>地址经度：" + _this.shipTrackArr[i].longitude + "</p>"
-                        + "<p>地址纬度：" + _this.shipTrackArr[i].latitude + "</p>"
+                        + "<p>渔船id：" + this.shipTrackArr[i].shipId + "</p>"
+                        + "<p>渔船编号：" + this.shipTrackArr[i].ship.shipNo + "</p>"
+                        + "<p>渔船名：" + this.shipTrackArr[i].ship.shipName + "</p>"
+                        + "<p>渔船作业类型：" + this.shipTrackArr[i].ship.jobType + "</p>"
+                        + "<p>渔船业务类型：" + this.shipTrackArr[i].ship.businessType + "</p>"
+                        + "<p>航行时速(m/s)：" + this.shipTrackArr[i].speed + "</p>"
+                        + "<p>定位时间：" + this.shipTrackArr[i].acqTime + "</p>"
+                        + "<p>地址经度：" + this.shipTrackArr[i].longitude + "</p>"
+                        + "<p>地址纬度：" + this.shipTrackArr[i].latitude + "</p>"
                         + "<p>作业方式：" + this.shipTrackArr[i].workMode + "</p>"
                         + "</div>"
                     );//悬浮提示信息
@@ -1230,7 +1210,7 @@
                     defaultContent:"",
                     autoView:true,//是否开启自动视野调整，如果开启那么路书在运动过程中会根据视野自动调整
                     icon  : new BMap.Icon(require('../../assets/shipTrack.png'), new BMap.Size(52,26),{anchor : new BMap.Size(27, 13)}),
-                    speed: 6000,
+                    speed: 3000,
                     enableRotation:true,//是否设置marker随着道路的走向进行旋转
                     landmarkPois: [],
                 });
@@ -1303,7 +1283,11 @@
                                 } else {
                                     map.clearOverlays();
                                 }
-                            _this.trackReplay();
+
+                                //重新画轨迹加载路书
+                                _this.loadTrackPath();// 画轨迹线
+                                _this.luShuRunningFlag = false;
+                                _this.loadLuShu(); //加载路书
                             }
                             //移动的点已经超过总的长度
                             if (me.i > me._path.length) {
@@ -1370,6 +1354,7 @@
                     this.trackMark =[];
                 }
 
+                map.setZoom(17);
                 this.lushu.start();
                 this.luShuRunningFlag =true;
 
@@ -1463,7 +1448,7 @@
                 }
                 //若原有渔船轨迹路径 则重新显示
                 if(this.trackPathOpenOrClose === true){
-                    this.trackReplay(); //todo 表单信息
+                    this.trackReplay('shipTrackForm'); //todo 表单信息
                     //因loadTrackPath会改变位置,以下保持定位在原位置
                     let newPoint = new BMap.Point(nowLng, nowLat);
                     map.centerAndZoom(newPoint, nowLevel);
