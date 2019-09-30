@@ -272,26 +272,26 @@
 						formatter: "{a} <br/>{b} : {c} ({d}%)"
 					},
 					grid: {
-						left: "10%",
+						left: "30%",
 						top: "0%",
 						width: "80%",
-						height: "100%",
+						height: "80%",
 					},
 					legend: {
 						orient: "vertical",
-						left: "4%",
+						left: "10%",
 						top: "middle",
 						data: ["正常作业", "非法作业"],
 						textStyle: {
 							color: "default",
-							fontSize: 12,
+							fontSize: 14,
 						}
 					},
 					series: [{
 						name: "占比情况",
 						type: "pie",
-						radius: "75%",
-						center: ["50%", "50%"],
+						radius: "80%",
+						center: ["66.15%", "50%"],
 						label: {
 							show: false,
 							fontSize: 25,
@@ -1121,7 +1121,7 @@
 
 	#main-content .showStatistics .topEcharts {
 		position: absolute;
-		top: 0%;
+		top: 2%;
 		left: 0%;
 		height: 50%;
 		width: 100%;
@@ -1154,7 +1154,7 @@
 
 	#main-content .showStatistics .bottomEcharts {
 		position: absolute;
-		top: 50%;
+		top: 55%;
 		left: 0%;
 		height: 50%;
 		width: 100%;
