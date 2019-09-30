@@ -15,6 +15,7 @@ import VueAxios from 'vue-axios'
 
 Vue.use(VueAxios,axios);
 axios.defaults.baseURL = "http://192.168.0.221:8080";
+// axios.defaults.baseURL = "http://192.168.43.40:8080";
 
 Vue.prototype.$echarts = echarts
 

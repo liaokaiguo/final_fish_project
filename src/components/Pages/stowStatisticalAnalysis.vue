@@ -284,7 +284,7 @@
 						data: ["正常作业", "非法作业"],
 						textStyle: {
 							color: "default",
-							fontSize: 14,
+							fontSize: 16,
 						}
 					},
 					series: [{
