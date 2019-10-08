@@ -205,16 +205,16 @@
                 shipTrackDialog: false,//航行轨迹弹窗
                 formLabelWidth: '200px',//弹窗宽度
                 algorithmOptions: [
-                {
-                    value: '1',
-                    label: 'XGBOOT'
-                }, {
-                    value: '2',
-                    label: '卷积神经网络'
-                }, {
-                    value: '3',
-                    label: '小波神经网络'
-                }],//算法库
+                    {
+                        value: '1',
+                        label: 'XGBOOT'
+                    }, {
+                        value: '2',
+                        label: '卷积神经网络'
+                    }, {
+                        value: '3',
+                        label: '小波神经网络'
+                    }],//算法库
                 pickerOptions: {
                     shortcuts: [{
                         text: '今天',
@@ -423,6 +423,13 @@
 
             /* 从后端获取渔船位置数据 放入shipArr，默认最近2分钟数据*/
             getShipLocationArr() {
+                //先设置加载动画
+                const shipLocationLoading = this.$loading({
+                    lock: true,
+                    text: 'Loading',
+                    spinner: 'el-icon-loading',
+                    background: 'rgba(0, 0, 0, 0.2)'
+                });
                 var date = new Date();
                 var now = this.getFormatTime(date);
                 date.setTime(date.getTime() - 1000 * 60 * 2);// 2分钟前
@@ -440,6 +447,7 @@
                         businessTypes: [],
                     }
                 }).then(res => {
+                    shipLocationLoading.close();
                     this.shipArr = res.data;
                     this.addShipMarker();
                 }).catch((response) => {
@@ -574,6 +582,13 @@
 
                         console.log(sailingTime);
                         console.log(twoMinAgo);
+                        //先设置加载动画
+                        const selectShipLocationLoading = this.$loading({
+                            lock: true,
+                            text: 'Loading',
+                            spinner: 'el-icon-loading',
+                            background: 'rgba(0, 0, 0, 0.2)'
+                        });
                         //请求后台数据
                         this.axios({
                             method: 'post',
@@ -587,6 +602,7 @@
 
                             }
                         }).then(res => {
+                            selectShipLocationLoading.close();
                             this.shipArr = res.data;
                             console.log("选择后的渔船数量" + this.shipArr.length)
                             if (this.shipArr.length === 0) {
@@ -613,6 +629,13 @@
 
             /* 从后端获取违规作业方式的热力图数据 放入heatMapPoints 默认最近5小时的数据*/
             getHeatMapPointsAndShow(jobType) {
+                //先设置加载动画
+                const HeatMapLoading = this.$loading({
+                    lock: true,
+                    text: 'Loading',
+                    spinner: 'el-icon-loading',
+                    background: 'rgba(0, 0, 0, 0.2)'
+                });
                 var date = new Date();
                 var now = this.getFormatTime(date);
                 date.setTime(date.getTime() - 1000 * 60 * 60 * 5);// 5小时前
@@ -630,7 +653,7 @@
 
                     }
                 }).then(res => {
-
+                    HeatMapLoading.close();
                     console.log("热力图点数量" + res.data.length)
                     this.heatMapPoints = res.data
                     this.initHeatMap(this.heatMapPoints);
@@ -706,6 +729,13 @@
 
             /* 根据条件，从后端获取渔船轨迹点数据 shipTrackArr*/
             getShipTrackPointsArr() {
+                //先设置加载动画
+                const shipTrackLoading = this.$loading({
+                    lock: true,
+                    text: 'Loading',
+                    spinner: 'el-icon-loading',
+                    background: 'rgba(0, 0, 0, 0.2)'
+                });
                 this.axios({
                     method: 'post',
                     url: '/queryTrail',
@@ -718,6 +748,7 @@
 
                     }
                 }).then(res => {
+                    shipTrackLoading.close();
                     this.shipTrackArr = res.data;
                     console.log(this.shipTrackArr.length)
                     if (this.shipTrackArr.length === 0) {
