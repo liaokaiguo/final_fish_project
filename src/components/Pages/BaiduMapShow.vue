@@ -91,17 +91,6 @@
 
     </el-row>
 
-    <!--轨迹回放时 才显示 -->
-    <el-row  class="track-replay-content" >
-      <el-col :span="6" :offset="18" >
-        <div v-if="trackBoxShow">
-          <el-button type="primary" @click="trackReplayStart">开始</el-button><br><br>
-          <el-button type="danger" @click="trackReplayPause">暂停</el-button><br><br>
-          <el-button type="info" @click="trackReplayStop">停止</el-button>
-        </div>
-      </el-col>
-    </el-row>
-
     <!--渔船位置信息选择弹出框-->
     <el-dialog title="渔船位置信息选择" :visible.sync="shipLocationDialog" @close="resetForm('shipLocationForm')">
       <el-form ref="shipLocationForm" :model="selectLocation" :label-width="formLabelWidth">
@@ -207,7 +196,6 @@
 
 </template>
 <script>
-    //seine（围网）fishing vessel statistic and analysis
     export default {
         data() {
             return {
@@ -216,7 +204,8 @@
                 shipLocationDialog: false,//渔船位置信息弹窗
                 shipTrackDialog: false,//航行轨迹弹窗
                 formLabelWidth: '200px',//弹窗宽度
-                algorithmOptions: [{
+                algorithmOptions: [
+                {
                     value: '1',
                     label: 'XGBOOT'
                 }, {
@@ -225,8 +214,7 @@
                 }, {
                     value: '3',
                     label: '小波神经网络'
-                },],
-
+                }],//算法库
                 pickerOptions: {
                     shortcuts: [{
                         text: '今天',
@@ -251,22 +239,20 @@
                     disabledDate(time) {
                         return time.getTime() > Date.now();//如果没有后面的-8.64e6就是不可以选择今天的
                     }
-                },
-
+                }, //时间选择项
                 selectLocation: {
                     boatId: '',
                     sailingTime: '',
                     workType: [],
                     businessType: [],
 
-                },
+                },//位置筛选条件名称
                 selectTrack: {
                     boatId: '',
                     beginDate: '',
                     endDate: '',
                     algorithmMode: '',
-                },
-
+                },//轨迹筛选条件名称
                 shipTrackFormRules: {
                     boatId: [
                         {required: true, message: '请输入渔船编号', trigger: 'blur'},
@@ -280,133 +266,22 @@
                     algorithmMode: [
                         {required: true, message: '请选择预测算法', trigger: 'blur'},
                     ]
-                },
+                }, //轨迹筛选表单规则
 
-                /*渔船信息相关*/
+                /*渔船信息 相关*/
                 shipArr: [],
-                shipMarkerOpenOrClose :true,//渔船标注点开关
+                shipMarkerOpenOrClose: true,//渔船标注点开关
 
                 /* 单只渔船特定时间段航行轨迹点 相关*/
-                shipTrackArr:[],
-                // shipTrackArr: [
-                //     {
-                //         name: "船1",
-                //         terminalid: "草帽",
-                //         workMode: "",
-                //         speed: 100,
-                //         locationdate: "2019-09-12 14:44:20",
-                //         longitude: 122.012123,
-                //         latitude: 30.0111
-                //     },
-                //     {
-                //         name: "船1",
-                //         terminalid: "草帽",
-                //         workMode: "拖网",
-                //         speed: 98,
-                //         locationdate: "2019-09-12 14:48:20",
-                //         longitude: 122.011331,
-                //         latitude: 29.97451
-                //     },
-                //     {
-                //         name: "船1",
-                //         terminalid: "草帽",
-                //         workMode: "拖网",
-                //         speed: 94,
-                //         locationdate: "2019-09-12 14:54:20",
-                //         longitude: 122.081131,
-                //         latitude: 29.91721
-                //     },
-                //     {
-                //         name: "船1",
-                //         terminalid: "草帽",
-                //         workMode: "拖网",
-                //         speed: 97,
-                //         locationdate: "2019-09-12 15:14:20",
-                //         longitude: 122.095131,
-                //         latitude: 29.90411
-                //     },
-                //     {
-                //         name: "船1",
-                //         terminalid: "草帽",
-                //         workMode: "拖网",
-                //         speed: 92,
-                //         locationdate: "2019-09-12 15:34:20",
-                //         longitude: 122.180131,
-                //         latitude: 29.94411
-                //     },
-                //     {
-                //         name: "船1",
-                //         terminalid: "草帽",
-                //         workMode: "拖网",
-                //         speed: 95,
-                //         locationdate: "2019-09-12 15:44:20",
-                //         longitude: 122.181131,
-                //         latitude: 29.90411
-                //     },
-                //     {
-                //         name: "船1",
-                //         terminalid: "草帽",
-                //         workMode: "拖网",
-                //         speed: 88,
-                //         locationdate: "2019-09-12 15:54:20",
-                //         longitude: 122.21,
-                //         latitude: 29.8991
-                //     },
-                //     {
-                //         name: "船1",
-                //         terminalid: "草帽",
-                //         workMode: "拖网",
-                //         speed: 82,
-                //         locationdate: "2019-09-12 16:04:20",
-                //         longitude: 122.282116,
-                //         latitude: 29.88481
-                //     },
-                //     {
-                //         name: "船1",
-                //         terminalid: "草帽",
-                //         workMode: "拖网",
-                //         speed: 81,
-                //         locationdate: "2019-09-12 17:14:20",
-                //         longitude: 122.42631,
-                //         latitude: 30.02311
-                //     },
-                //     {
-                //         name: "船1",
-                //         terminalid: "草帽",
-                //         workMode: "拖网",
-                //         speed: 83,
-                //         locationdate: "2019-09-12 17:24:20",
-                //         longitude: 122.43531,
-                //         latitude: 30.04511
-                //     },
-                //     {
-                //         name: "船1",
-                //         terminalid: "草帽",
-                //         workMode: "拖网",
-                //         speed: 84,
-                //         locationdate: "2019-09-12 17:34:20",
-                //         longitude: 122.39631,
-                //         latitude: 30.08911
-                //     },
-                //     {
-                //         name: "船1",
-                //         terminalid: "草帽",
-                //         workMode: "",
-                //         speed: 58,
-                //         locationdate: "2019-09-12 17:44:20",
-                //         longitude: 122.3139631,
-                //         latitude: 30.07611
-                //     }],
-                trackPathOpenOrClose:false, //轨迹路径开关
-                trackBoxShow :false, //回放轨迹时 开始暂停按钮显示标志位
-                luShu:"",
-                luShuRunningFlag:false,// 路书运行标志
-                trackPolyline:"", //路径线覆盖物
-                trackMarker:"", // 路径上标注点覆盖物
+                shipTrackArr: [],
+                trackPathOpenOrClose: false, //轨迹路径开关
+                trackPolyline: "", //路径线覆盖物
+                trackMarker: "", // 路径上标注点覆盖物
 
-                trackPointArr:[],//路书运行时画的轨迹
-                trackPoly:"",
-                trackMark:[], //路书运行时画的点
+                /*热力图 相关*/
+                heatMapOverlay: [],// 热力图覆盖物
+                heatMapOpenOrClose: false,// 热力图开关
+                heatMapPoints: [],// 热力图的点数据
 
                 /*网格相关*/
                 centerPoint: '', //地图中心点
@@ -420,243 +295,19 @@
                 beSelectBounds: [],
                 existGrid: false,//是否存在网格
 
-                heatMapOverlay: [],// 热力图覆盖物
-                heatMapOpenOrClose: false,// 热力图开关
-                // 热力图的点数据
-                heatMapPoints:[],
-                heatMapPointsForWei: [
-                    {"lng": 122.218261, "lat": 29.921984, "count": 50},
-                    {"lng": 122.223332, "lat": 29.916532, "count": 51},
-                    {"lng": 122.219787, "lat": 29.930658, "count": 15},
-                    {"lng": 122.218455, "lat": 29.920921, "count": 40},
-                    {"lng": 122.218843, "lat": 29.915516, "count": 100},
-                    {"lng": 122.22546, "lat": 29.918503, "count": 6},
-                    {"lng": 122.223289, "lat": 29.919989, "count": 18},
-                    {"lng": 122.218162, "lat": 29.915051, "count": 80},
-                    {"lng": 122.222039, "lat": 29.91782, "count": 11},
-                    {"lng": 122.21387, "lat": 29.917253, "count": 7},
-                    {"lng": 122.21773, "lat": 29.919426, "count": 42},
-                    {"lng": 122.221107, "lat": 29.916445, "count": 4},
-                    {"lng": 122.217521, "lat": 29.917943, "count": 27},
-                    {"lng": 122.219812, "lat": 29.920836, "count": 23},
-                    {"lng": 122.220682, "lat": 29.91463, "count": 60},
-                    {"lng": 122.215424, "lat": 29.924675, "count": 8},
-                    {"lng": 122.419242, "lat": 29.914509, "count": 15},
-                    {"lng": 122.422766, "lat": 29.921408, "count": 25},
-                    {"lng": 122.421674, "lat": 29.824396, "count": 21},
-                    {"lng": 122.427268, "lat": 29.82267, "count": 1},
-                    {"lng": 122.417721, "lat": 29.820034, "count": 51},
-                    {"lng": 122.412456, "lat": 29.82667, "count": 7},
-                    {"lng": 122.420432, "lat": 29.819114, "count": 11},
-                    {"lng": 122.425013, "lat": 29.821611, "count": 35},
-                    {"lng": 122.418733, "lat": 29.831037, "count": 22},
-                    {"lng": 122.419336, "lat": 29.831134, "count": 4},
-                    {"lng": 122.413557, "lat": 29.823254, "count": 5},
-                    {"lng": 122.418367, "lat": 29.82943, "count": 3},
-                    {"lng": 122.424312, "lat": 29.819621, "count": 100},
-                    {"lng": 122.123874, "lat": 29.919447, "count": 87},
-                    {"lng": 122.124225, "lat": 29.923091, "count": 32},
-                    {"lng": 122.117801, "lat": 29.921854, "count": 44},
-                    {"lng": 122.117129, "lat": 29.928227, "count": 21},
-                    {"lng": 122.126426, "lat": 29.922286, "count": 80},
-                    {"lng": 122.121597, "lat": 29.91948, "count": 32},
-                    {"lng": 122.123895, "lat": 29.920787, "count": 26},
-                    {"lng": 122.123563, "lat": 29.921197, "count": 17},
-                    {"lng": 122.117982, "lat": 29.922547, "count": 17},
-                    {"lng": 122.126126, "lat": 29.921938, "count": 25},
-                    {"lng": 122.12326, "lat": 29.915782, "count": 100},
-                    {"lng": 122.119239, "lat": 29.916759, "count": 39},
-                    {"lng": 122.117185, "lat": 29.929123, "count": 11},
-                    {"lng": 122.217237, "lat": 29.927518, "count": 9},
-                    {"lng": 122.117784, "lat": 29.915754, "count": 47},
-                    {"lng": 122.120193, "lat": 29.917061, "count": 52},
-                    {"lng": 122.422735, "lat": 29.815619, "count": 100},
-                    {"lng": 122.418495, "lat": 29.815958, "count": 46},
-                    {"lng": 122.416292, "lat": 29.831166, "count": 9},
-                    {"lng": 122.419916, "lat": 29.824055, "count": 8},
-                    {"lng": 122.42189, "lat": 29.821308, "count": 11},
-                    {"lng": 122.413765, "lat": 29.729376, "count": 3},
-                    {"lng": 122.418232, "lat": 29.720348, "count": 50},
-                    {"lng": 122.417554, "lat": 29.730511, "count": 15},
-                    {"lng": 122.418568, "lat": 29.7818161, "count": 23},
-                    {"lng": 122.413461, "lat": 29.96306, "count": 3},
-                    {"lng": 122.42232, "lat": 29.782161, "count": 13},
-                    {"lng": 122.4174, "lat": 29.828616, "count": 6},
-                    {"lng": 122.424679, "lat": 29.815499, "count": 21},
-                    {"lng": 122.42171, "lat": 29.815738, "count": 29},
-                    {"lng": 122.417836, "lat": 29.816998, "count": 99},
-                    {"lng": 122.420755, "lat": 29.828001, "count": 10},
-                    {"lng": 122.414077, "lat": 29.830655, "count": 14},
-                    {"lng": 122.426092, "lat": 29.822995, "count": 16},
-                    {"lng": 122.41535, "lat": 29.831054, "count": 15},
-                    {"lng": 122.413022, "lat": 29.721895, "count": 13},
-                    {"lng": 122.415551, "lat": 29.813373, "count": 17},
-                    {"lng": 122.421191, "lat": 29.826572, "count": 1},
-                    {"lng": 122.419612, "lat": 29.817119, "count": 9},
-                    {"lng": 122.418237, "lat": 29.821337, "count": 54},
-                    {"lng": 122.323776, "lat": 29.921919, "count": 26},
-                    {"lng": 122.317694, "lat": 29.92536, "count": 17},
-                    {"lng": 122.315377, "lat": 29.914137, "count": 19},
-                    {"lng": 122.317434, "lat": 29.914394, "count": 43},
-                    {"lng": 122.32588, "lat": 29.922622, "count": 27},
-                    {"lng": 122.318345, "lat": 29.919467, "count": 8},
-                    {"lng": 122.326883, "lat": 29.917171, "count": 3},
-                    {"lng": 122.323877, "lat": 29.916659, "count": 34},
-                    {"lng": 122.315712, "lat": 29.915613, "count": 14},
-                    {"lng": 122.219869, "lat": 29.931416, "count": 12},
-                    {"lng": 122.216956, "lat": 29.925377, "count": 11},
-                    {"lng": 122.32066, "lat": 29.925017, "count": 38},
-                    {"lng": 122.316244, "lat": 29.920215, "count": 91},
-                    {"lng": 122.21929, "lat": 29.915908, "count": 54},
-                    {"lng": 122.322116, "lat": 29.919658, "count": 21},
-                    {"lng": 122.4183, "lat": 29.925015, "count": 15},
-                    {"lng": 122.321969, "lat": 29.913527, "count": 3},
-                    {"lng": 122.322936, "lat": 29.921854, "count": 24},
-                    {"lng": 122.31905, "lat": 29.929217, "count": 12},
-                    {"lng": 122.324579, "lat": 29.914987, "count": 57},
-                    {"lng": 122.32076, "lat": 29.915251, "count": 70},
-                    {"lng": 122.325867, "lat": 29.918989, "count": 8}
-                ],
-                heatMapPointsForTuo: [
-                    {"lng": 122.118261, "lat": 29.83984, "count": 50},
-                    {"lng": 122.123332, "lat": 29.836532, "count": 51},
-                    {"lng": 122.119787, "lat": 29.830658, "count": 15},
-                    {"lng": 122.218455, "lat": 29.830921, "count": 40},
-                    {"lng": 122.118843, "lat": 29.835516, "count": 100},
-                    {"lng": 122.12546, "lat": 29.838503, "count": 6},
-                    {"lng": 122.123289, "lat": 29.839989, "count": 18},
-                    {"lng": 122.118162, "lat": 29.835051, "count": 80},
-                    {"lng": 122.122039, "lat": 29.83782, "count": 11},
-                    {"lng": 122.11387, "lat": 29.837253, "count": 7},
-                    {"lng": 122.11773, "lat": 29.839426, "count": 42},
-                    {"lng": 122.121107, "lat": 29.836445, "count": 4},
-                    {"lng": 122.117521, "lat": 29.837943, "count": 27},
-                    {"lng": 122.119812, "lat": 29.830836, "count": 23},
-                    {"lng": 122.120682, "lat": 29.83463, "count": 60},
-                    {"lng": 122.115424, "lat": 29.834675, "count": 8},
-                ],
-                heatMapPointsForZhang: [
-                    {"lng": 122.449242, "lat": 29.914509, "count": 15},
-                    {"lng": 122.442766, "lat": 29.921408, "count": 25},
-                    {"lng": 122.441674, "lat": 29.824396, "count": 21},
-                    {"lng": 122.447268, "lat": 29.82267, "count": 1},
-                    {"lng": 122.447721, "lat": 29.820034, "count": 51},
-                    {"lng": 122.442456, "lat": 29.82667, "count": 7},
-                    {"lng": 122.440432, "lat": 29.819114, "count": 11},
-                    {"lng": 122.445013, "lat": 29.821611, "count": 35},
-                    {"lng": 122.448733, "lat": 29.831037, "count": 22},
-                    {"lng": 122.449336, "lat": 29.831134, "count": 4},
-                    {"lng": 122.443557, "lat": 29.823254, "count": 5},
-                    {"lng": 122.448367, "lat": 29.82943, "count": 3},
-                    {"lng": 122.444312, "lat": 29.819621, "count": 100},
-                ],
-                heatMapPointsForCi: [
-                    {"lng": 122.023874, "lat": 29.949447, "count": 87},
-                    {"lng": 122.024225, "lat": 29.943091, "count": 32},
-                    {"lng": 122.017801, "lat": 29.941854, "count": 44},
-                    {"lng": 122.017129, "lat": 29.948227, "count": 21},
-                    {"lng": 122.026426, "lat": 29.942286, "count": 80},
-                    {"lng": 122.021597, "lat": 29.94948, "count": 32},
-                    {"lng": 122.023895, "lat": 29.940787, "count": 26},
-                    {"lng": 122.023563, "lat": 29.941197, "count": 17},
-                    {"lng": 122.017982, "lat": 29.942547, "count": 17},
-                    {"lng": 122.026126, "lat": 29.941938, "count": 25},
-                    {"lng": 122.02326, "lat": 29.945782, "count": 100},
-                    {"lng": 122.019239, "lat": 29.946759, "count": 39},
-                    {"lng": 122.017185, "lat": 29.949123, "count": 11},
-                    {"lng": 122.017237, "lat": 29.947518, "count": 9},
-                    {"lng": 122.017784, "lat": 29.945754, "count": 47},
-                    {"lng": 122.030193, "lat": 29.947061, "count": 52},
-                    {"lng": 122.072735, "lat": 29.815619, "count": 100},
-                    {"lng": 122.078495, "lat": 29.815958, "count": 46},
-                    {"lng": 122.076292, "lat": 29.831166, "count": 9},
-                    {"lng": 122.079916, "lat": 29.824055, "count": 8},
-                    {"lng": 122.074077, "lat": 29.830655, "count": 14},
-                    {"lng": 122.076092, "lat": 29.822995, "count": 16},
-                    {"lng": 122.070929, "lat": 29.915908, "count": 54},
-                    {"lng": 122.072116, "lat": 29.919658, "count": 21},
-                    {"lng": 122.03083, "lat": 29.925015, "count": 15},
-                    {"lng": 122.031969, "lat": 29.913527, "count": 3},
-                    {"lng": 122.032936, "lat": 29.921854, "count": 24},
-                    {"lng": 122.030905, "lat": 29.929217, "count": 12},
-                    {"lng": 122.034579, "lat": 29.914987, "count": 57},
-                    {"lng": 122.030076, "lat": 29.915251, "count": 70},
-                    {"lng": 122.035867, "lat": 29.918989, "count": 8}
-                ],
-                heatMapPointsForDiao: [
-                    {"lng": 122.520193, "lat": 30.0917061, "count": 52},
-                    {"lng": 122.422735, "lat": 30.0815619, "count": 100},
-                    {"lng": 122.418495, "lat": 30.0815958, "count": 46},
-                    {"lng": 122.416292, "lat": 30.0831166, "count": 9},
-                    {"lng": 122.419916, "lat": 30.0824055, "count": 8},
-                    {"lng": 122.42189, "lat": 30.0821308, "count": 11},
-                    {"lng": 122.413765, "lat": 30.0729376, "count": 3},
-                    {"lng": 122.418232, "lat": 30.0720348, "count": 50},
-                    {"lng": 122.417554, "lat": 30.0730511, "count": 15},
-                    {"lng": 122.418568, "lat": 30.07818161, "count": 23},
-                    {"lng": 122.413461, "lat": 30.096306, "count": 3},
-                    {"lng": 122.42232, "lat": 30.07082161, "count": 13},
-                    {"lng": 122.4174, "lat": 30.0828616, "count": 6},
-                    {"lng": 122.424679, "lat": 30.0815499, "count": 21},
-                    {"lng": 122.42171, "lat": 30.0815738, "count": 29},
-                    {"lng": 122.417836, "lat": 30.0816998, "count": 99},
-                    {"lng": 122.420755, "lat": 30.0828001, "count": 10},
-                    {"lng": 122.414077, "lat": 30.0830655, "count": 14},
-                    {"lng": 122.426092, "lat": 30.0822995, "count": 16},
-                    {"lng": 122.51929, "lat": 30.0915908, "count": 54},
-                    {"lng": 122.522116, "lat": 30.0919658, "count": 21},
-                    {"lng": 122.5183, "lat": 30.0925015, "count": 15},
-                    {"lng": 122.521969, "lat": 30.0913527, "count": 3},
-                    {"lng": 122.3922936, "lat": 30.0921854, "count": 24},
-                    {"lng": 122.391905, "lat": 30.0929217, "count": 12},
-                    {"lng": 122.3924579, "lat": 30.0914987, "count": 57},
-                    {"lng": 122.392076, "lat": 30.0915251, "count": 70},
-                    {"lng": 122.3925867, "lat": 30.0918989, "count": 8}
-                ],
-                heatMapPointsForZa: [
-                    {"lng": 122.417836, "lat": 29.816998, "count": 99},
-                    {"lng": 122.420755, "lat": 29.828001, "count": 10},
-                    {"lng": 122.414077, "lat": 29.830655, "count": 14},
-                    {"lng": 122.426092, "lat": 29.822995, "count": 16},
-                    {"lng": 122.21929, "lat": 29.915908, "count": 54},
-                    {"lng": 122.322116, "lat": 29.919658, "count": 21},
-                    {"lng": 122.4183, "lat": 29.925015, "count": 15},
-                    {"lng": 122.321969, "lat": 29.913527, "count": 3},
-                    {"lng": 122.322936, "lat": 29.921854, "count": 24},
-                    {"lng": 122.31905, "lat": 29.929217, "count": 12},
-                    {"lng": 122.324579, "lat": 29.914987, "count": 57},
-                    {"lng": 122.32076, "lat": 29.915251, "count": 70},
-                    {"lng": 122.325867, "lat": 29.918989, "count": 8}
-                ],
-                heatMapPointsForLong: [
-                    {"lng": 122.1417836, "lat": 29.856998, "count": 99},
-                    {"lng": 122.1320755, "lat": 29.8628001, "count": 10},
-                    {"lng": 122.1514077, "lat": 29.8650655, "count": 14},
-                    {"lng": 122.1526092, "lat": 29.8652995, "count": 16},
-                    {"lng": 122.121929, "lat": 29.915908, "count": 54},
-                    {"lng": 122.1322116, "lat": 29.919658, "count": 21},
-                    {"lng": 122.14183, "lat": 29.925015, "count": 15},
-                    {"lng": 122.1321969, "lat": 29.913527, "count": 3},
-                    {"lng": 122.1322936, "lat": 29.921854, "count": 24},
-                    {"lng": 122.131905, "lat": 29.929217, "count": 12},
-                    {"lng": 122.1324579, "lat": 29.914987, "count": 57},
-                    {"lng": 122.132076, "lat": 29.915251, "count": 70},
-                    {"lng": 122.1325867, "lat": 29.918989, "count": 8}
-                ],
-
             }
 
         },
 
         mounted() {
 
-            this.mapReady(this.centerLng, this.centerLat,this.level);
-            //获取后台渔船信息
+            this.mapReady(this.centerLng, this.centerLat, this.level);
+            //获取后台渔船信息并标注
             this.getShipLocationArr();
 
         },
         methods: {
-            /*获取当前日期yyyy-MM-dd HH:mm:ss*/
+            /*获取日期格式yyyy-MM-dd HH:mm:ss*/
             getFormatTime(date) {
                 // var date = new Date();
                 var month = date.getMonth() + 1;
@@ -668,7 +319,7 @@
                     strDate = "0" + strDate;
                 }
                 // todo 只有去年数据
-                var currentDate = (date.getFullYear()-1) + "-" + month + "-" + strDate
+                var currentDate = (date.getFullYear() - 1) + "-" + month + "-" + strDate
                     + " " + date.getHours() + ":" + date.getMinutes() + ":" + date.getSeconds();
                 return currentDate;
             },
@@ -695,85 +346,66 @@
             handleSelect(key, keyPath) {
                 console.log(key, keyPath);
                 // 选择其他菜单确保 定时器销毁
-                if(key != "1-1"){
+                if (key != "1-1") {
                     this.timerDestroy();
                 }
 
-                // 选择其他菜单确保 路书停止
-                if (this.luShuRunningFlag === true) {
-                    this.$message({
-                        type: "warning",
-                        message: '请将当前页面的轨迹回放停止!!!',
-                        showClose: 'true',
-                        duration: 5000,
-                    })
-                } else {
-                    switch (key) {
+                switch (key) {
 
-                        case "1-1": //间隔半分钟刷新渔船位置
-                            this.timer = setInterval(() => {
-                                this.getShipLocationArr();
-                            }, 30000);
-                            break;
-                        case "1-2":
-                            this.shipLocationDialog = true;// 渔船位置弹窗
-                            break;
+                    case "1-1": //间隔半分钟刷新渔船位置
+                        this.timer = setInterval(() => {
+                            this.getShipLocationArr();
+                        }, 30000);
+                        break;
+                    case "1-2":
+                        this.shipLocationDialog = true;// 渔船位置弹窗
+                        break;
 
-                        case "2-1-1":
-                            // this.initHeatMap(this.heatMapPointsForWei);//围网热力图
-                            this.getHeatMapPointsAndShow("围网");
-                            break;
-                        case "2-2":
-                            // this.initHeatMap(this.heatMapPointsForTuo);//拖网热力图
-                            this.getHeatMapPointsAndShow("拖网");
-                            break;
-                        case "2-3":
-                            // this.initHeatMap(this.heatMapPointsForZhang);//张网热力图
-                            this.getHeatMapPointsAndShow("张网");
-                            break;
-                        case "2-4":
-                            // this.initHeatMap(this.heatMapPointsForCi);//刺网热力图
-                            this.getHeatMapPointsAndShow("刺网");
-                            break;
-                        case "2-5":
-                            // this.initHeatMap(this.heatMapPointsForDiao);//钓具热力图
-                            this.getHeatMapPointsAndShow("钓具");
-                            break;
-                        case "2-6":
-                            // this.initHeatMap(this.heatMapPointsForZa);//杂渔具热力图
-                            this.getHeatMapPointsAndShow("杂渔具");
-                            break;
-                        case "2-7":
-                            // this.initHeatMap(this.heatMapPointsForLong);//笼壶热力图
-                            this.getHeatMapPointsAndShow("笼壶");
-                            break;
+                    case "2-1-1":
+                        this.getHeatMapPointsAndShow("围网");//围网热力图
+                        break;
+                    case "2-2":
+                        this.getHeatMapPointsAndShow("拖网");//拖网热力图
+                        break;
+                    case "2-3":
+                        this.getHeatMapPointsAndShow("张网");//张网热力图
+                        break;
+                    case "2-4":
+                        this.getHeatMapPointsAndShow("刺网");//刺网热力图
+                        break;
+                    case "2-5":
+                        this.getHeatMapPointsAndShow("钓具");//钓具热力图
+                        break;
+                    case "2-6":
+                        this.getHeatMapPointsAndShow("杂渔具");//杂渔具热力图
+                        break;
+                    case "2-7":
+                        this.getHeatMapPointsAndShow("笼壶");//笼壶热力图
+                        break;
 
-                        case "3-1":
-                            this.shipTrackDialog = true;// 轨迹选择弹窗
-                            break;
+                    case "3-1":
+                        this.shipTrackDialog = true;// 轨迹选择弹窗
+                        break;
 
-                        case "4-1":
-                            this.initFisheryGrid();// 渔场显示
-                            break;
-                        case "4-2": {
-                            //说明有网格覆盖层
-                            if (this.existGrid === true) {
-                                this.closeFisheryGrid();// 渔场取消
-                            } else {
-                                this.$message({
-                                    type: "warning",
-                                    message: '当前地图没有渔场网格覆盖!!!',
-                                    showClose: 'true',
-                                    duration: 4000,
-                                })
-                            }
-                            break;
+                    case "4-1":
+                        this.initFisheryGrid();// 渔场网格显示
+                        break;
+                    case "4-2": {
+                        //说明有网格覆盖层
+                        if (this.existGrid === true) {
+                            this.closeFisheryGrid();// 渔场网格取消
+                        } else {
+                            this.$message({
+                                type: "warning",
+                                message: '当前地图没有渔场网格覆盖!!!',
+                                showClose: 'true',
+                                duration: 4000,
+                            })
                         }
-
+                        break;
                     }
+
                 }
-
-
             },
 
             /* 大地图显示 */
@@ -789,32 +421,27 @@
 
             },
 
-            /* 从后端获取渔船位置数据 放入shipArr*/
-            getShipLocationArr(){
-                var date =new Date();
+            /* 从后端获取渔船位置数据 放入shipArr，默认最近2分钟数据*/
+            getShipLocationArr() {
+                var date = new Date();
                 var now = this.getFormatTime(date);
-                date.setTime(date.getTime() - 1000 * 60 * 2 );// 2分钟前
+                date.setTime(date.getTime() - 1000 * 60 * 2);// 2分钟前
                 var before = this.getFormatTime(date);
                 console.log(now)
                 console.log(before)
                 this.axios({
-                    method:'post',
-                    url:'/queryTrail',
-                    data:{
-                        shipId :"",
-                        startTime : before,
-                        endTime : now,
-                        jobTypes : [],
-                        businessTypes : [],
-
+                    method: 'post',
+                    url: '/queryTrail',
+                    data: {
+                        shipId: "",
+                        startTime: before,
+                        endTime: now,
+                        jobTypes: [],
+                        businessTypes: [],
                     }
                 }).then(res => {
-
                     this.shipArr = res.data;
-                    // console.log(this.shipArr.length)
-                    //  console.log(this.shipArr)
                     this.addShipMarker();
-
                 }).catch((response) => {
                     console.log(response)
                 })
@@ -822,21 +449,18 @@
 
             /* 初始加载所有渔船标注位置 */
             addShipMarker() {
-
-                this.shipMarkerOpenOrClose =true;
+                this.shipMarkerOpenOrClose = true;
                 //清除覆盖物，若有网格重新加载网格
-                if(this.existGrid === true){
+                if (this.existGrid === true) {
                     this.deleteGrid()
                     map.clearOverlays();  //先关网格在清所有覆盖物 否则出错
                     this.heatMapOpenOrClose = false;// 另外两栏开关关闭
-                    this.trackPathOpenOrClose =false;
-                    this.trackBoxShow = false;
+                    this.trackPathOpenOrClose = false;
                     this.initFisheryGrid()
-                }else{
+                } else {
                     map.clearOverlays();
                     this.heatMapOpenOrClose = false;// 另外两栏开关关闭
-                    this.trackPathOpenOrClose =false;
-                    this.trackBoxShow = false;
+                    this.trackPathOpenOrClose = false;
                 }
 
                 var point = new Array();//定义数组标注经纬信息
@@ -880,7 +504,7 @@
 
                 /*新方法:使用海量点*/
                 if (document.createElement('canvas').getContext) {  // 判断当前浏览器是否支持绘制海量点
-                    var _this =this;
+                    var _this = this;
                     var options = {
                         size: BMAP_POINT_SIZE_NORMAL,
                         // shape: BMAP_POINT_SHAPE_STAR,
@@ -890,7 +514,7 @@
                     pointCollection.addEventListener('click', function (e) {
                         // 循环查出值
                         for (var i = 0; i < _this.shipArr.length; i++) {
-                            if(_this.shipArr[i].longitude==e.point.lng&&_this.shipArr[i].latitude==e.point.lat){// 经度==点击的,维度
+                            if (_this.shipArr[i].longitude == e.point.lng && _this.shipArr[i].latitude == e.point.lat) {// 经度==点击的,维度
                                 break;
                             }
                         }
@@ -899,25 +523,24 @@
                         var opts = {
                             width: 300, // 信息窗口宽度
                             height: 70, // 信息窗口高度
-                            title:"渔船信息", // 信息窗口标题
-                            //enableMessage: false,// 设置允许信息窗发送短息
+                            title: "渔船信息", // 信息窗口标题
                         }
-                        var Content =  "<div style='width:300px;'>"
+                        var Content = "<div style='width:300px;'>"
                             + "<p>渔船id：" + _this.shipArr[i].shipId + "</p>"
                             + "<p>渔船编号：" + _this.shipArr[i].ship.shipNo + "</p>"
                             + "<p>渔船名：" + _this.shipArr[i].ship.shipName + "</p>"
                             + "<p>渔船作业类型：" + _this.shipArr[i].ship.jobType + "</p>"
                             + "<p>渔船业务类型：" + _this.shipArr[i].ship.businessType + "</p>"
-                            + "<p>航行时速(m/s)：" + _this.shipArr[i].speed + "</p>"
+                            + "<p>航行时速(节)：" + _this.shipArr[i].speed + "</p>"
                             + "<p>定位时间：" + _this.shipArr[i].acqTime + "</p>"
                             + "<p>地址经度：" + _this.shipArr[i].longitude + "</p>"
                             + "<p>地址纬度：" + _this.shipArr[i].latitude + "</p>"
                             + "</div>";
                         var infoWindow = new BMap.InfoWindow(Content);  // 创建信息窗口对象
-                        map.openInfoWindow(infoWindow,targetPoint); //开启信息窗口
+                        map.openInfoWindow(infoWindow, targetPoint); //开启信息窗口
                     });
                     map.addOverlay(pointCollection);  // 添加Overlay
-                } else{
+                } else {
                     alert('请在chrome、safari、IE8+以上浏览器查看本示例');
                 }
 
@@ -928,24 +551,24 @@
                 this.$refs[formName].validate((valid) => {
                     if (valid) {
                         console.log('shipLocationForm submit!');
-                        /*表单成功提交，处理逻辑*/
+                        /*表单成功提交，则再处理逻辑*/
                         this.shipLocationDialog = false; //弹窗关闭
 
                         var date = new Date();
                         var sailingTime
                         var twoMinAgo
 
-                        //默认时间为2分钟前到现在
-                        if(this.selectLocation.sailingTime === ''){
+                        //时间不填，则默认时间为2分钟前到现在
+                        if (this.selectLocation.sailingTime === '') {
                             sailingTime = this.getFormatTime(date)
-                            date.setTime(date.getTime() - 120 * 1000 );// 2分钟前
+                            date.setTime(date.getTime() - 120 * 1000);// 2分钟前
                             twoMinAgo = this.getFormatTime(date)
                         } else {
 
                             sailingTime = this.selectLocation.sailingTime;
-                            var temp =new Date(sailingTime);
-                            temp.setFullYear(temp.getFullYear()+1)// todo 因为只有去年数据，这行之后不需要的
-                            date.setTime(temp.getTime() - 120 * 1000 );// 2分钟前
+                            var temp = new Date(sailingTime);
+                            temp.setFullYear(temp.getFullYear() + 1)// todo 因为只有去年数据，这行之后不需要的
+                            date.setTime(temp.getTime() - 120 * 1000);// 2分钟前
                             twoMinAgo = this.getFormatTime(date);
                         }
 
@@ -953,21 +576,29 @@
                         console.log(twoMinAgo);
                         //请求后台数据
                         this.axios({
-                            method:'post',
-                            url:'/queryTrail',
-                            data:{
-                                shipId :this.selectLocation.boatId,
-                                startTime : twoMinAgo,
-                                endTime : sailingTime,
-                                jobTypes : this.selectLocation.workType,
-                                businessTypes : this.selectLocation.businessType,
+                            method: 'post',
+                            url: '/queryTrail',
+                            data: {
+                                shipId: this.selectLocation.boatId,
+                                startTime: twoMinAgo,
+                                endTime: sailingTime,
+                                jobTypes: this.selectLocation.workType,
+                                businessTypes: this.selectLocation.businessType,
 
                             }
                         }).then(res => {
                             this.shipArr = res.data;
-                            console.log("选择后的渔船数量"+this.shipArr.length)
-                            // console.log(this.shipArr)
-                            this.addShipMarker();
+                            console.log("选择后的渔船数量" + this.shipArr.length)
+                            if (this.shipArr.length === 0) {
+                                this.$message({
+                                    type: "warning",
+                                    message: '当前筛选条件下没有任何渔船位置信息!!!',
+                                    showClose: 'true',
+                                    duration: 4000,
+                                })
+                            } else {
+                                this.addShipMarker();
+                            }
 
                         }).catch((response) => {
                             console.log(response)
@@ -980,27 +611,27 @@
                 });
             },
 
-            /* 从后端获取违规作业方式的热力图数据 放入heatMapPoints*/
-            getHeatMapPointsAndShow(jobType){
-                var date =new Date();
+            /* 从后端获取违规作业方式的热力图数据 放入heatMapPoints 默认最近5小时的数据*/
+            getHeatMapPointsAndShow(jobType) {
+                var date = new Date();
                 var now = this.getFormatTime(date);
                 date.setTime(date.getTime() - 1000 * 60 * 60 * 5);// 5小时前
                 var before = this.getFormatTime(date);
                 console.log(now)
                 console.log(before)
                 this.axios({
-                    method:'post',
-                    url:'/queryHeatmap',
-                    data:{
-                        startTime : before,
-                        endTime : now,
-                        jobType : jobType,
-                        idtfyFlag : '',
+                    method: 'post',
+                    url: '/queryHeatmap',
+                    data: {
+                        startTime: before,
+                        endTime: now,
+                        jobType: jobType,
+                        idtfyFlag: '',
 
                     }
                 }).then(res => {
 
-                    console.log("热力图点数量"+ res.data.length)
+                    console.log("热力图点数量" + res.data.length)
                     this.heatMapPoints = res.data
                     this.initHeatMap(this.heatMapPoints);
 
@@ -1011,32 +642,25 @@
 
             /* 添加热力图覆盖物 */
             initHeatMap(points) {
-                this.heatMapOpenOrClose =true;
-                // // 清除图层(每次重新调用需要清除上一个覆盖物图层)
-                // if(this.heatMapOverlay != ""){
-                //     map.removeOverlay(this.heatMapOverlay);
-                // }
+                this.heatMapOpenOrClose = true;
+
                 //清除覆盖物，若有网格重新加载网格
-                if(this.existGrid === true){
+                if (this.existGrid === true) {
                     this.deleteGrid()
                     map.clearOverlays();  //先关网格在清所有覆盖物 否则出错
                     this.shipMarkerOpenOrClose = false;// 另外两栏开关关闭
-                    this.trackPathOpenOrClose =false;
-                    this.trackBoxShow = false;
+                    this.trackPathOpenOrClose = false;
                     this.initFisheryGrid()
-                }else{
+                } else {
                     map.clearOverlays();
                     this.shipMarkerOpenOrClose = false;// 另外两栏开关关闭
-                    this.trackPathOpenOrClose =false;
-                    this.trackBoxShow = false;
+                    this.trackPathOpenOrClose = false;
                 }
                 this.heatMapOverlay = new BMapLib.HeatmapOverlay({
-                    // 热力图的每个点的半径大小
-                    'radius': BMAP_POINT_SIZE_SMALL * 4,
-                    // 热力的透明度0~1
-                    'opacity': 0.8,
-                    // 其中 key 表示插值的位置0~1，value 为颜色值
-                    'gradient': {
+
+                    'radius': BMAP_POINT_SIZE_SMALL * 4,// 热力图的每个点的半径大小
+                    'opacity': 0.8,// 热力的透明度0~1
+                    'gradient': {// 其中 key 表示插值的位置0~1，value 为颜色值
                         0: 'rgb(102, 255, 0)',
                         .5: 'rgb(255, 170, 0)',
                         1: 'rgb(255, 0, 0)'
@@ -1047,72 +671,65 @@
                 map.addOverlay(this.heatMapOverlay);
                 this.heatMapOverlay.setDataSet({data: points, max: 100});
 
-                // // 显示隐藏热力图，
-                // this.heatMapOverlay.show();
-
             },
 
             /* 表单 --轨迹回放按钮*/
-            trackReplay(formName){
+            trackReplay(formName) {
                 this.$refs[formName].validate((valid) => {
                     if (valid) {
                         console.log('shipTrackForm submit!');
                         // 开关开启
-                        this.trackPathOpenOrClose =true;
-                        this.trackBoxShow =true;
+                        this.trackPathOpenOrClose = true;
                         //弹框隐藏
                         this.shipTrackDialog = false;
                         //清除覆盖物，若有网格重新加载网格
-                        if(this.existGrid === true){
+                        if (this.existGrid === true) {
                             this.deleteGrid();
                             map.clearOverlays();  //先关网格在清所有覆盖物 否则出错
-                            this.shipMarkerOpenOrClose =false;// 另外两栏开关关闭
+                            this.shipMarkerOpenOrClose = false;// 另外两栏开关关闭
                             this.heatMapOpenOrClose = false;
                             this.initFisheryGrid()
-                        }else{
+                        } else {
                             map.clearOverlays();
-                            this.shipMarkerOpenOrClose =false;// 另外两栏开关关闭
+                            this.shipMarkerOpenOrClose = false;// 另外两栏开关关闭
                             this.heatMapOpenOrClose = false;
                         }
 
                         this.getShipTrackPointsArr();//后台获取位置数据
-
-
 
                     } else {
                         console.log('error submit!!');
                         return false;
                     }
                 });
-
-
             },
 
             /* 根据条件，从后端获取渔船轨迹点数据 shipTrackArr*/
-            getShipTrackPointsArr(){
-                console.log(this.selectTrack.boatId);
-                console.log(this.selectTrack.beginDate);
-                console.log(this.selectTrack.endDate);
-
+            getShipTrackPointsArr() {
                 this.axios({
-                    method:'post',
-                    url:'/queryTrail',
-                    data:{
-                        shipId :this.selectTrack.boatId,
-                        startTime : this.selectTrack.beginDate,
-                        endTime : this.selectTrack.endDate,
-                        jobTypes : [],
-                        businessTypes : [],
+                    method: 'post',
+                    url: '/queryTrail',
+                    data: {
+                        shipId: this.selectTrack.boatId,
+                        startTime: this.selectTrack.beginDate,
+                        endTime: this.selectTrack.endDate,
+                        jobTypes: [],
+                        businessTypes: [],
 
                     }
                 }).then(res => {
                     this.shipTrackArr = res.data;
                     console.log(this.shipTrackArr.length)
-
-                    this.loadTrackPath();// 画轨迹线
-                    //
-                    this.luShuRunningFlag = false;
-                    this.loadLuShu(); //加载路书
+                    if (this.shipTrackArr.length === 0) {
+                        this.$message({
+                            type: "warning",
+                            message: '当前筛选条件下没有渔船轨迹信息!!!',
+                            showClose: 'true',
+                            duration: 4000,
+                        })
+                    } else {
+                        this.loadTrackPath();// 画轨迹线
+                    }
 
                 }).catch((response) => {
                     console.log(response)
@@ -1129,7 +746,6 @@
                     strokeWeight: '2',//设置线宽
                 });
                 var icons = new BMap.IconSequence(sy, '10', '30');
-                // this.trackIcons = new BMap.IconSequence(sy, '10', '30');
 
                 // 创建polyline对象
                 var pois = [];
@@ -1151,7 +767,7 @@
                 var view = map.getViewport(eval(pois));
                 var mapZoom = view.zoom;
                 var centerPoint = view.center;
-                map.centerAndZoom(centerPoint,mapZoom);
+                map.centerAndZoom(centerPoint, mapZoom);
 
                 /*轨迹点标注*/
                 var point = new Array();//定义数组标注经纬信息
@@ -1183,7 +799,7 @@
                         + "<p>渔船名：" + this.shipTrackArr[i].ship.shipName + "</p>"
                         + "<p>渔船作业类型：" + this.shipTrackArr[i].ship.jobType + "</p>"
                         + "<p>渔船业务类型：" + this.shipTrackArr[i].ship.businessType + "</p>"
-                        + "<p>航行时速(m/s)：" + this.shipTrackArr[i].speed + "</p>"
+                        + "<p>航行时速(节)：" + this.shipTrackArr[i].speed + "</p>"
                         + "<p>定位时间：" + this.shipTrackArr[i].acqTime + "</p>"
                         + "<p>地址经度：" + this.shipTrackArr[i].longitude + "</p>"
                         + "<p>地址纬度：" + this.shipTrackArr[i].latitude + "</p>"
@@ -1194,188 +810,12 @@
                 }
             },
 
-            /* 路书回放显示*/
-            loadLuShu(){
-                var _this =this;
-                var pois = [];
-                for (var i = 0; i < this.shipTrackArr.length; i++) {//遍历添加轨迹点
-                    pois.push(new BMap.Point(this.shipTrackArr[i].longitude, this.shipTrackArr[i].latitude));
-                }
-                //设置icon信息
-                var width = 32;
-                var height = 32;
-                var imgSrc = require("../../assets/shipTrack.png"); //引入icon图片 本地图片要用require
-                var myIcon = new BMap.Icon(imgSrc, new BMap.Size(width, height));//配置icon
-                this.lushu = new BMapLib.LuShu(map,pois,{
-                    defaultContent:"",
-                    autoView:true,//是否开启自动视野调整，如果开启那么路书在运动过程中会根据视野自动调整
-                    icon  : new BMap.Icon(require('../../assets/shipTrack.png'), new BMap.Size(52,26),{anchor : new BMap.Size(27, 13)}),
-                    speed: 3000,
-                    enableRotation:true,//是否设置marker随着道路的走向进行旋转
-                    landmarkPois: [],
-                });
-
-                BMapLib.LuShu.prototype._move = function(initPos, targetPos, effect) {
-                    // 轨迹线设置
-                    var sy = new BMap.Symbol(BMap_Symbol_SHAPE_BACKWARD_OPEN_ARROW, {
-                        scale: 0.5,//图标缩放大小
-                        strokeColor: '#fff',//设置矢量图标的线填充颜色
-                        strokeWeight: '2',//设置线宽
-                    });
-                    var icons = new BMap.IconSequence(sy, '10', '30');
-                    var pointsArr = [initPos, targetPos]; //点数组
-                    var me = this,
-                        //当前的帧数
-                        currentCount = 0,
-                        //步长，米/秒
-                        timer = 10,
-                        step = this._opts.speed / (1000 / timer),
-                        //初始坐标
-                        init_pos = this._projection.lngLatToPoint(initPos),
-                        //获取结束点的(x,y)坐标
-                        target_pos = this._projection.lngLatToPoint(targetPos),
-                        //总的步长
-                        count = Math.round(me._getDistance(init_pos, target_pos) / step);
-                    //显示折线 syj201607191107
-                    //显示小车走过的痕迹，
-                    // 旧方法：先清除之前走的痕迹，再画上，新方法：每段都画上，每次start会全清
-                    /* this._map.removeOverlay(_this.trackPoly);
-                     _this.trackPointArr.pop();//先将之前的终点抛出,再作为起点加入
-                     _this.trackPointArr.push(initPos);
-                     _this.trackPointArr.push(targetPos); */
-                    _this.trackPoly = new BMap.Polyline(pointsArr, {
-                        enableEditing: false,//是否启用线编辑，默认为false
-                        enableClicking: true,//是否响应点击事件，默认为true
-                        icons: [icons],
-                        strokeWeight: '5',//折线的宽度，以像素为单位
-                        strokeOpacity: 0.5,//折线的透明度，取值范围0 - 1
-                        strokeColor: "#18a45b" //折线颜色
-                    });
-                    this._map.addOverlay(_this.trackPoly);
-                    //画每个标注点,旧方法：先清之前画的点,再加上，新方法，先都画上，每次Start会全清
-                    /*for(var i =0;i<_this.trackMark.length;i++){
-                        this._map.removeOverlay(_this.trackMark[i]);
-                    }
-                    _this.trackMark.push( new window.BMap.Marker(initPos, {icon: myIcon}) );
-                    for(var i =0;i<_this.trackMark.length;i++){
-                        this._map.addOverlay(_this.trackMark[i]);
-                    }*/
-                    var everyMark =new window.BMap.Marker(initPos, {icon: myIcon});
-                    _this.trackMark.push(everyMark);
-                    this._map.addOverlay(everyMark);
-
-                    //如果小于1直接移动到下一点
-                    if (count < 1) {
-                        me._moveNext(++me.i);
-                        return;
-                    }
-                    me._intervalFlag = setInterval(function() {
-                        //两点之间当前帧数大于总帧数的时候，则说明已经完成移动
-                        if (currentCount >= count) {
-                            clearInterval(me._intervalFlag);
-                            //路书跑完最后一线端后,再次加载
-                            if(_this.trackMark.length === _this.shipTrackArr.length-1) {
-                                if (_this.existGrid === true) {
-                                    _this.deleteGrid();
-                                    map.clearOverlays();  //先关网格在清所有覆盖物 否则出错
-                                    _this.initFisheryGrid()
-                                    // _this.trackReplay();
-                                } else {
-                                    map.clearOverlays();
-                                }
-
-                                //重新画轨迹加载路书
-                                _this.loadTrackPath();// 画轨迹线
-                                _this.luShuRunningFlag = false;
-                                _this.loadLuShu(); //加载路书
-                            }
-                            //移动的点已经超过总的长度
-                            if (me.i > me._path.length) {
-
-                                return;
-                            }
-                            //运行下一个点
-                            me._moveNext(++me.i);
-                        } else {
-                            currentCount++;
-                            var x = effect(init_pos.x, target_pos.x, currentCount, count),
-                                y = effect(init_pos.y, target_pos.y, currentCount, count),
-                                pos = me._projection.pointToLngLat(new BMap.Pixel(x, y));
-                            //设置marker
-                            if (currentCount == 1) {
-                                var proPos = null;
-                                if (me.i - 1 >= 0) {
-                                    proPos = me._path[me.i - 1];
-                                }
-                                if (me._opts.enableRotation == true) {
-                                    me.setRotation(proPos, initPos, targetPos);
-                                }
-                                if (me._opts.autoView) {
-                                    if (!me._map.getBounds().containsPoint(pos)) {
-                                        me._map.setCenter(pos);
-                                    }
-                                }
-                            }
-                            //正在移动
-                            me._marker.setPosition(pos);
-                            //设置自定义overlay的位置
-                            me._setInfoWin(pos);
-                        }
-                    }, timer);
-
-                };
-
-            },
-
-            /*渔船路书回放开始*/
-            trackReplayStart(){
-                //路书初次运行 先清空覆盖物
-                if(this.luShuRunningFlag === false) {
-                    if (this.existGrid === true) {
-                        this.deleteGrid();
-                        map.clearOverlays();  //先关网格在清所有覆盖物 否则出错
-                        this.initFisheryGrid()
-                        this.loadLuShu();
-                    } else {
-                        map.clearOverlays();
-                    }
-
-                    this.trackPointArr = [];// 路书画折线的数组需重新置空,否则每次画线出错
-                    this.trackMark =[]; // 路书标注点同理
-                }
-                // 加完所有点,路书跑完 清空折线和标注点
-                if(this.trackMark.length === this.shipTrackArr.length-1){
-
-                    map.removeOverlay(this.trackPoly)
-                    for(var i =0;i<this.trackMark.length;i++){
-                        map.removeOverlay(this.trackMark[i]);
-                    }
-                    this.trackPointArr = [];
-                    this.trackMark =[];
-                }
-
-                map.setZoom(17);
-                this.lushu.start();
-                this.luShuRunningFlag =true;
-
-
-            },
-            /*渔船路书回放暂停*/
-            trackReplayPause(){
-                this.lushu.pause();
-            },
-            /*渔船路书回放停止*/
-            trackReplayStop(){
-                this.lushu.stop();
-                this.luShuRunningFlag =false;
-            },
-
             /* 点击渔船 悬浮渔船信息 */
             addInfo(info, marker) {
                 marker.addEventListener("click", function (e) {
                     var p = e.target
                     var point = new BMap.Point(p.getPosition().lng, p.getPosition().lat)
-                    map.centerAndZoom(point, 16);
+                    map.centerAndZoom(point, 17);
                     this.openInfoWindow(info)
                 })
             },
@@ -1386,7 +826,6 @@
                 this.initProperty();
                 this.initGrid();
                 var _this = this //外部变量 放到map里用
-
 
                 //添加移动后的点击事件
                 map.addEventListener("dragend", _this.showFisheryGrid);
@@ -1429,8 +868,8 @@
 
             },
 
-            /* 渔场网格取消，移除事件*/
-            closeFisheryGrid(){
+            /* 渔场网格取消后，后续处理逻辑*/
+            closeFisheryGrid() {
                 this.deleteGrid(); //先删除网格
 
                 // 获取当前地图新坐标和大小
@@ -1439,23 +878,22 @@
                 var nowLevel = map.getZoom();
 
                 //若原有渔船标注点 则重新显示
-                if(this.shipMarkerOpenOrClose === true){
+                if (this.shipMarkerOpenOrClose === true) {
                     this.addShipMarker();
                 }
                 //若有热力图 重新显示
-                if(this.heatMapOpenOrClose === true){
+                if (this.heatMapOpenOrClose === true) {
                     this.initHeatMap(this.heatMapOverlay.data.data);
                 }
                 //若原有渔船轨迹路径 则重新显示
-                if(this.trackPathOpenOrClose === true){
-                    this.trackReplay('shipTrackForm'); //todo 表单信息
-                    //因loadTrackPath会改变位置,以下保持定位在原位置
+                if (this.trackPathOpenOrClose === true) {
+                    this.loadTrackPath();
                     let newPoint = new BMap.Point(nowLng, nowLat);
                     map.centerAndZoom(newPoint, nowLevel);
                 }
             },
-            /*只是删除网格, 因其他地方也有调用 单独写出*/
-            deleteGrid(){
+            /*删除网格,移除事件 因其他地方也有调用 单独写出*/
+            deleteGrid() {
                 this.existGrid = false;
                 // 重新加载地图
                 var newLng = map.getCenter().lng;
@@ -1470,13 +908,12 @@
                 this.mapReady(newLng, newLat, newLevel);
             },
 
-            /*显示渔场网格*/
+            /* 网格子模块 显示渔场网格*/
             showFisheryGrid() {
                 this.initProperty();
                 this.initGrid();
             },
-
-            /*初始化当前地图的状态*/
+            /* 网格子模块 初始化当前地图的状态*/
             initProperty() {
                 this.level = map.getZoom();
                 this.bounds = {
@@ -1487,7 +924,7 @@
                 };
                 this.span = this.getSpan();//需要使用level属性
             },
-            /*初始化网格*/
+            /* 网格子模块 初始化网格*/
             initGrid() {
                 //将原来的网格线先去掉
                 for (var i in this.xgrids) {
@@ -1524,8 +961,7 @@
                     map.addOverlay(polyline);
                 }
             },
-
-            /*获取网格的跨度*/
+            /* 网格子模块 获取网格的跨度*/
             getSpan() {
                 var scale = 0.75;
                 var x = 0.0005;
@@ -1537,8 +973,7 @@
                 var y = parseFloat((scale * x).toFixed(5));
                 return {x: x, y: y};
             },
-
-            /*返回当前点在所在区块的四个顶点*/
+            /* 网格子模块 返回当前点在所在区块的四个顶点*/
             getGrid(_this, point) {
                 //先找出两条纵线坐标
                 var xpoints = this.xgrids.map(function (polyline) {
@@ -1666,7 +1101,8 @@
     text-align: center;
     margin-top: 5px;
   }
-  .track-replay-content{
+
+  .track-replay-content {
     top: 40%;
     right: 4%;
     float: right;
