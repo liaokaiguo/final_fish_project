@@ -872,38 +872,60 @@
 
       /*拖网后台数据 */
       initMiddleBottomLEchartsOption() {
+          var date = new Date();
+          var year = date.getFullYear();
         var middleBottomLeftEChart = this.$echarts.init(
           document.getElementById("middleBottomLEchartsId")
         );
         middleBottomLeftEChart.setOption(this.middleBottomLOption);
         //数据没有加载出来显示加载动画,样式添加todo
         middleBottomLeftEChart.showLoading();
-        this.axios.get('/getTuowangStatistic').then(res => {
-          middleBottomLeftEChart.hideLoading(); //加载出来隐藏加载动画
-          middleBottomLeftEChart.setOption({ //数据添加
-            series: [{
-              data: res.data.tuowang
-            }]
-          })
+          this.axios({
+              method: 'post',
+              url: '/getDataByMonthOrDay',
+              data: {
+                  jobType: "拖网",
+                  startTime: year + "-01-01 00:00:00",
+                  endTime: year + "-12-31 23:59:59",
+                  byDay: 0,
+              }
+          }).then(res => {
+              middleBottomLeftEChart.hideLoading(); //加载出来隐藏加载动画
+              middleBottomLeftEChart.setOption({ //数据添加
+                  series: [{
+                      data: res.data.total
+                  }]
+              })
 
         })
       },
 
       /*张网后台数据 */
       initMiddleBottomREchartsOption() {
+          var date = new Date();
+          var year = date.getFullYear();
         var middleBottomRightEChart = this.$echarts.init(
           document.getElementById("middleBottomREchartsId")
         );
         middleBottomRightEChart.setOption(this.middleBottomROption);
         //数据没有加载出来显示加载动画,样式添加todo
         middleBottomRightEChart.showLoading();
-        this.axios.get('/getZhangwangStatistic').then(res => {
-          middleBottomRightEChart.hideLoading(); //加载出来隐藏加载动画
-          middleBottomRightEChart.setOption({ //数据添加
-            series: [{
-              data: res.data.zhangwang
-            }]
-          })
+          this.axios({
+              method: 'post',
+              url: '/getDataByMonthOrDay',
+              data: {
+                  jobType: "张网",
+                  startTime: year + "-01-01 00:00:00",
+                  endTime: year + "-12-31 23:59:59",
+                  byDay: 0,
+              }
+          }).then(res => {
+              middleBottomRightEChart.hideLoading(); //加载出来隐藏加载动画
+              middleBottomRightEChart.setOption({ //数据添加
+                  series: [{
+                      data: res.data.total
+                  }]
+              })
 
         })
       },
@@ -983,19 +1005,30 @@
 
       /*刺网后台数据 */
       initRightBottomEchartsOption() {
+          var date = new Date();
+          var year = date.getFullYear();
         var rightBottomEChart = this.$echarts.init(
           document.getElementById("rightBottomEchartsId")
         );
         rightBottomEChart.setOption(this.rightBottomOption);
         //数据没有加载出来显示加载动画,样式添加todo
         rightBottomEChart.showLoading();
-        this.axios.get('/getCiwangStatistic').then(res => {
-          rightBottomEChart.hideLoading(); //加载出来隐藏加载动画
-          rightBottomEChart.setOption({ //数据添加
-            series: [{
-              data: res.data.ciwang
-            }]
-          })
+          this.axios({
+              method: 'post',
+              url: '/getDataByMonthOrDay',
+              data: {
+                  jobType: "刺网",
+                  startTime: year + "-01-01 00:00:00",
+                  endTime: year + "-12-31 23:59:59",
+                  byDay: 0,
+              }
+          }).then(res => {
+              rightBottomEChart.hideLoading(); //加载出来隐藏加载动画
+              rightBottomEChart.setOption({ //数据添加
+                  series: [{
+                      data: res.data.total
+                  }]
+              })
 
         })
       },
