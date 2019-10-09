@@ -14,8 +14,7 @@ import axios from 'axios'
 import VueAxios from 'vue-axios'
 
 Vue.use(VueAxios,axios);
-axios.defaults.baseURL = "http://172.16.55.118:8080";// 外网映射后端地址
-// axios.defaults.baseURL = "http://192.168.43.40:8080";
+axios.defaults.baseURL = "http://36.26.4.82:9101";
 
 Vue.prototype.$echarts = echarts
 
