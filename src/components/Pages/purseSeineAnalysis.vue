@@ -10,23 +10,11 @@
         <span v-on:click="$router.back(-1)">
             <img class="goback" src="../../assets/rebackLastIcon.png" style="cursor:pointer" alt="返回">
           </span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-        <router-link to="/">
+        <router-link to="/welcome">
           <img class="gohome" src="../../assets/rebackMainIcon.png">
         </router-link>
       </div>
       <div class="setMenu">
-        <div class="fish">
-          <div>
-            <form method="post">
-              <label>渔场：</label>
-              <select v-model="fishMode" class="selectST" id="fishGround" @change="showFishArea">
-                <option v-for="option in options" :value="option.value" class="fishingBackG">
-                  {{option.value}}
-                </option>
-              </select>
-            </form>
-          </div>
-        </div>
         <div class="time">
           <form method="post">
             <label>日期：</label>
@@ -42,20 +30,25 @@
         </div>
       </div>
       <div class="showResult">
-        <!--地图模块-->
-        <div class="showMap">
-          <div class="FishMap" id="FishGroundMap"></div>
+        <div class="normalBar">
+          <div class="GraphTitle">正常作业柱状图</div>
+          <div class="GraphEcharts" id="normalBarEchartsId"></div>
         </div>
-        <!--统计结果模块-->
-        <div class="showStatistics">
-          <div class="illegalOSBroken">
-            <div class="illBrokenTitle">非法作业统计折线图</div>
-            <div class="BrokenEcharts" id="BrokenEchartsId"></div>
-          </div>
-          <div class="illegalOSPercentage">
-            <div class="illPercentageTitle">非法作业统计占比图</div>
-            <div class="PercentageEcharts" id="PerIOSEchartsId"></div>
-          </div>
+        <div class="normalShipRadar">
+          <div class="GraphTitle">正常作业渔船星状图</div>
+          <div class="GraphEcharts" id="normalSREchartsId"></div>
+        </div>
+        <div class="illegalShipRadar">
+          <div class="GraphTitle">非法作业渔船星状图</div>
+          <div class="GraphEcharts" id="illegalSREchartsId"></div>
+        </div>
+        <div class="illegalOSBroken">
+          <div class="GraphTitle">非法作业统计折线图</div>
+          <div class="GraphEcharts" id="BrokenEchartsId"></div>
+        </div>
+        <div class="illegalOSPercentage">
+          <div class="GraphTitle">非法作业统计占比图</div>
+          <div class="GraphEcharts" id="PerIOSEchartsId"></div>
         </div>
       </div>
     </div>
@@ -69,15 +62,6 @@
                 fishMode: '所有渔场',
                 fisrtTime: '2019-07-15',
                 lastTime: '2019-08-31',
-                centerPoint: '',//地图中心点坐标
-                centerLng: "121",//地图中心经纬度
-                centerLat: "30.60",
-                level: "6",//地图级别
-                selectedBorderColor: 'red',//渔场区域选中颜色
-                selectedBorderWidth: 4,//渔场区域选中框宽度
-                forbidLable: 0,//是否禁止区域被清除
-                defaultBorderColor: 'gray',//渔场区域默认边框颜色
-                defaultBorderWidth: 2,
                 //非法作业折线图选项
                 BrokenOption: {
                     color: ["#f44"],
@@ -215,6 +199,154 @@
                     ],
                     color: ["#5b9bff", "#ed7d31",]
                 },
+                //正常作业柱状图选项
+                NormalBarOption:{
+                    grid:{
+                        left: "10%",
+                        top: "10%",
+                        width: "80%",
+                        height: "70%",
+                    },//使得图表覆盖整个div
+                    tooltip: {
+                        trigger: "axis",
+                        axisPointer: {
+                            type: "line",
+                            lineStyle: {
+                                type: "dashed",
+                            },
+                        },
+                    },
+                    xAxis: [
+                        {
+                            type: "category",
+                            data: [],
+                            axisTick: {
+                                show: true,
+                                inside: false,
+                                alignWithLabel: true
+                            },
+                            axisLine: {
+                                lineStyle: {
+                                    color: "#5bbdff",
+                                    width: 2,
+                                }
+                            },
+                            axisLabel: {
+                                fontSize: 14,
+                                color: "#5b9bd5",
+                                rotate: 0,
+                            }
+                        }
+                    ],
+                    yAxis: [
+                        {
+                            minInterval: 1,
+                            type: "value",
+                            axisTick: {
+                                show: true,
+                                inside: true,
+                                alignWithLabel: true,
+                            },
+                            axisLine: {
+                                lineStyle: {
+                                    color: "#5bbdff",
+                                    width: 2,
+                                },
+                            },
+                            scale: false,
+                            axisLabel: {
+                                fontSize: 14,
+                                color: "#5b9bd5"
+                            },
+                            splitLine: {
+                                show: true,
+                                lineStyle: {
+                                    color: "#ccc",
+                                    width: 1,
+                                    type: "dashed",
+                                },
+                            },
+                        }
+                    ],
+                    series:[
+                        {
+                            name:"每日数量",
+                            type:"bar",
+                            data:[],
+                        }
+                    ],
+                    color:"#5b9bff",
+                },
+                //正常作业渔船类型星状图选项
+                NormalShipOption:{
+                    tooltip:{},
+                    radar:
+                        {
+                            center:["50%","50%"],
+                            radius:"75%",
+                            indicator:[
+                                {name:"养殖船", max:500},
+                                {name:"国内捕捞船",max:500},
+                                {name:"捕捞辅助船",max:500},
+                                {name:"其他辅助船",max:500},
+                                {name:"专业远洋渔船",max:500},
+                                {name:"非专业远洋渔船",max:500}
+                            ]
+                        },
+                    series:[
+                        {
+                            name:"正常作业",
+                            type:"radar",
+                            lineStyle:{
+                                //color:"#000",
+                                width:1,
+                                opacity:0.2,
+                            },
+                            areaStyle:{
+                                //color:'#000',
+                                opacity:0.6,
+                            },
+                            data:[
+                                [200,300,100,220,150,310]
+                            ]
+                        }
+                    ]
+                },
+                //非法作业渔船类型星状图选项
+                IllegalShipOption:{
+                    tooltip:{},
+                    radar:
+                        {
+                            center:["50%","50%"],
+                            radius:"75%",
+                            indicator:[
+                                {name:"养殖船", max:500},
+                                {name:"国内捕捞船",max:500},
+                                {name:"捕捞辅助船",max:500},
+                                {name:"其他辅助船",max:500},
+                                {name:"专业远洋渔船",max:500},
+                                {name:"非专业远洋渔船",max:500}
+                            ]
+                        },
+                    series:[
+                        {
+                            name:"非法作业",
+                            type:"radar",
+                            lineStyle:{
+                                //color:"#000",
+                                width:1,
+                                opacity:0.2,
+                            },
+                            areaStyle:{
+                                //color:'#000',
+                                opacity:0.6,
+                            },
+                            data:[
+                                [200,300,100,220,150,310]
+                            ]
+                        }
+                    ]
+                },
                 //渔场列表
                 options: [
                     {value: '所有渔场'},
@@ -230,20 +362,6 @@
                     {value: '温台渔场'},
                     {value: '温外渔场'},
                 ],
-                //渔场区域位置信息
-                /*fishArea:[
-                    {leftLng:120.2,leftLat:32,rightLng:122.5,rightLat:34},//吕泗渔场
-                    {leftLng:122.5,leftLat:32,rightLng:125,rightLat:34},//大沙渔场
-                    {leftLng:122.2,leftLat:31,rightLng:125,rightLat:32},//长江口渔场
-                    {leftLng:121.8,leftLat:29.5,rightLng:125,rightLat:31},//舟山渔场
-                    {leftLng:121,leftLat:28,rightLng:125,rightLat:29.5},//鱼山渔场
-                    {leftLng:120,leftLat:27,rightLng:125,rightLat:28},//温台渔场
-                    {leftLng:125,leftLat:32,rightLng:128,rightLat:34},//沙外渔场
-                    {leftLng:125,leftLat:31,rightLng:128,rightLat:32},//江外渔场
-                    {leftLng:125,leftLat:29.5,rightLng:128,rightLat:31},//舟外渔场
-                    {leftLng:125,leftLat:28,rightLng:127,rightLat:29.5},//鱼外渔场
-                    {leftLng:125,leftLat:27,rightLng:127.5,rightLat:28},//温外渔场
-                ],*/
                 //存储占比图数据
                 data: {
                     normal: {value: 0, name: '正常作业'},
@@ -255,7 +373,6 @@
         },
         mounted() {
             this.initCharts();
-            this.fishMap(this.centerLng,this.centerLat,this.level);
         },
         methods: {
             reback() {
@@ -265,333 +382,6 @@
                 //初始化图表
                 this.dataAskDeal();
             },
-            //显示单个渔场网格框（矩形区域）
-            fishgrid(leftLng,downLat,rightLng,upLat,color,bordWidth,forbid) {
-                var pStart,pEnd,rectangle;
-                pStart = new BMap.Point(leftLng,downLat);
-                pEnd = new BMap.Point(rightLng,upLat);
-                rectangle = new BMap.Polygon([
-                    new BMap.Point(pStart.lng,pStart.lat),
-                    new BMap.Point(pEnd.lng,pStart.lat),
-                    new BMap.Point(pEnd.lng,pEnd.lat),
-                    new BMap.Point(pStart.lng,pEnd.lat)
-                ],{strokeColor:color,strokeWeight:bordWidth,strokeStyle:'dashed'});
-                rectangle.setFillColor('none');//设置覆盖物透明
-                if(forbid){
-                    rectangle.disableMassClear();
-                }
-                map.addOverlay(rectangle);
-            },
-            //显示区域直线
-            linefish(startLng,startLat,endLng,endLat,color,bordWidth,forbid){
-                var line;
-                line = new BMap.Polyline([
-                    new BMap.Point(startLng,startLat),
-                    new BMap.Point(endLng,endLat)
-                ],{strokeColor:color,strokeWeight:bordWidth,strokeStyle:'dashed'});
-                if(forbid){
-                    line.disableMassClear();
-                }
-                map.addOverlay(line);
-            },
-            //渔场地图
-            fishMap(lng,lat,level) {
-                var map = new BMap.Map('FishGroundMap',{enableMapClick: false}); //创建地图实例
-                this.centerpoint = new BMap.Point(lng, lat);//创建点坐标
-                map.addControl(new BMap.MapTypeControl({
-                    mapTypes:[
-                        BMAP_NORMAL_MAP,
-                        BMAP_SATELLITE_MAP,
-                        BMAP_HYBRID_MAP
-                    ]
-                }));
-                map.centerAndZoom(this.centerpoint, level);//初始化地图，设置中心点坐标和地图级别
-                map.enableScrollWheelZoom(true);//开启鼠标滚轮缩放
-                window.map=map;//存储map变量
-                var _this = this;
-                //默认显示整个渔场范围
-                this.fullShow();
-                //点击显示渔场信息和经纬度
-                map.addEventListener("click",function(click) {
-                    if(click.point.lng >= 120.2 && click.point.lng <= 122.5 &&
-                        click.point.lat >= 32 && click.point.lat <= 34){
-                        map.clearOverlays();//清除渔场区域范围
-                        var infoWindow = new BMap.InfoWindow("左经度:120.2 下纬度:32" +'<br />'+
-                            "右经度:122.5 上纬度:34",{title:"吕泗渔场",width:290,height:100});
-                        map.openInfoWindow(infoWindow,click.point);
-                        _this.forbidLable=0;
-                        _this.fishgrid(120.2,32,122.5,34,_this.selectedBorderColor,_this.selectedBorderWidth,_this.forbidLable);//this在map中的作用域出问题，需先声明
-                    }
-                    else if(click.point.lng >= 122.5 && click.point.lng <= 125 &&
-                        click.point.lat >= 32 && click.point.lat <= 34){
-                        map.clearOverlays();//清除渔场区域范围
-                        var infoWindow = new BMap.InfoWindow("左经度:122.5 下纬度:32" +'<br />'+
-                            "右经度:125 上纬度:34",{title:"大沙渔场",width:290,height:100});
-                        map.openInfoWindow(infoWindow,click.point);
-                        _this.forbidLable=0;
-                        _this.fishgrid(122.5,32,125,34,_this.selectedBorderColor,_this.selectedBorderWidth,_this.forbidLable);//this在map中的作用域出问题，需先声明
-                    }
-                    else if(click.point.lng >= 122 && click.point.lng <= 125 &&
-                        click.point.lat >= 31 && click.point.lat <= 32){
-                        map.clearOverlays();//清除渔场区域范围
-                        var infoWindow = new BMap.InfoWindow("左经度:122 下纬度:31" +'<br />'+
-                            "右经度:125 上纬度:32",{title:"长江口渔场",width:290,height:100});
-                        map.openInfoWindow(infoWindow,click.point);
-                        _this.forbidLable=0;
-                        _this.fishgrid(122,31,125,32,_this.selectedBorderColor,_this.selectedBorderWidth,_this.forbidLable);//this在map中的作用域出问题，需先声明
-                    }
-                    else if(click.point.lng >= 121.8 && click.point.lng <= 125 &&
-                        click.point.lat >= 29.5 && click.point.lat <= 31){
-                        map.clearOverlays();//清除渔场区域范围
-                        var infoWindow = new BMap.InfoWindow("左经度:121.8 下纬度:29.5" +'<br />'+
-                            "右经度:125 上纬度:31",{title:"舟山渔场",width:290,height:100});
-                        map.openInfoWindow(infoWindow,click.point);
-                        _this.forbidLable=0;
-                        _this.fishgrid(121.8,29.5,125,31,_this.selectedBorderColor,_this.selectedBorderWidth,_this.forbidLable);//this在map中的作用域出问题，需先声明
-                    }
-                    else if(click.point.lng >= 121 && click.point.lng <= 125 &&
-                        click.point.lat >= 28 && click.point.lat <= 29.5){
-                        map.clearOverlays();//清除渔场区域范围
-                        var infoWindow = new BMap.InfoWindow("左经度:121 下纬度:28" +'<br />'+
-                            "右经度:125 上纬度:29.5",{title:"鱼山渔场",width:290,height:100});
-                        map.openInfoWindow(infoWindow,click.point);
-                        _this.forbidLable=0;
-                        _this.fishgrid(121,28,125,29.5,_this.selectedBorderColor,_this.selectedBorderWidth,_this.forbidLable);//this在map中的作用域出问题，需先声明
-                    }
-                    else if(click.point.lng >= 120 && click.point.lng <= 125 &&
-                        click.point.lat >= 27 && click.point.lat <= 28){
-                        map.clearOverlays();//清除渔场区域范围
-                        var infoWindow = new BMap.InfoWindow("左经度:120 下纬度:27" +'<br />'+
-                            "右经度:125 上纬度:28",{title:"温台渔场",width:290,height:100});
-                        map.openInfoWindow(infoWindow,click.point);
-                        _this.forbidLable=0;
-                        _this.fishgrid(120,27,125,28,_this.selectedBorderColor,_this.selectedBorderWidth,_this.forbidLable);//this在map中的作用域出问题，需先声明
-                    }
-                    else if(click.point.lng >= 125 && click.point.lng <= 128 &&
-                        click.point.lat >= 32 && click.point.lat <= 34){
-                        map.clearOverlays();//清除渔场区域范围
-                        var infoWindow = new BMap.InfoWindow("左经度:125 下纬度:32" +'<br />'+
-                            "右经度:128 上纬度:34",{title:"沙外渔场",width:290,height:100});
-                        map.openInfoWindow(infoWindow,click.point);
-                        _this.forbidLable=0;
-                        _this.fishgrid(125,32,128,34,_this.selectedBorderColor,_this.selectedBorderWidth,_this.forbidLable);//this在map中的作用域出问题，需先声明
-                    }
-                    else if(click.point.lng >= 125 && click.point.lng <= 128 &&
-                        click.point.lat >= 31 && click.point.lat <= 32){
-                        map.clearOverlays();//清除渔场区域范围
-                        var infoWindow = new BMap.InfoWindow("左经度:125 下纬度:31" +'<br />'+
-                            "右经度:128 上纬度:32",{title:"江外渔场",width:290,height:100});
-                        map.openInfoWindow(infoWindow,click.point);
-                        _this.forbidLable=0;
-                        _this.fishgrid(125,31,128,32,_this.selectedBorderColor,_this.selectedBorderWidth,_this.forbidLable);//this在map中的作用域出问题，需先声明
-                    }
-                    else if(click.point.lng >= 125 && click.point.lng <= 128 &&
-                        click.point.lat >= 29.5 && click.point.lat <= 31){
-                        map.clearOverlays();//清除渔场区域范围
-                        var infoWindow = new BMap.InfoWindow("左经度:125 下纬度:29.5" +'<br />'+
-                            "右经度:128 上纬度:31",{title:"舟外渔场",width:290,height:100});
-                        map.openInfoWindow(infoWindow,click.point);
-                        _this.forbidLable=0;
-                        _this.fishgrid(125,29.5,128,31,_this.selectedBorderColor,_this.selectedBorderWidth,_this.forbidLable);//this在map中的作用域出问题，需先声明
-                    }
-                    else if(click.point.lng >= 125 && click.point.lng <= 127 &&
-                        click.point.lat >= 28 && click.point.lat <= 29.5){
-                        map.clearOverlays();//清除渔场区域范围
-                        var infoWindow = new BMap.InfoWindow("左经度:125 下纬度:28" +'<br />'+
-                            "右经度:127 上纬度:29.5",{title:"鱼外渔场",width:290,height:100});
-                        map.openInfoWindow(infoWindow,click.point);
-                        _this.forbidLable=0;
-                        _this.fishgrid(125,28,127,29.5,_this.selectedBorderColor,_this.selectedBorderWidth,_this.forbidLable);//this在map中的作用域出问题，需先声明
-                    }
-                    else if(click.point.lng >= 125 && click.point.lng <= 127.5 &&
-                        click.point.lat >= 27 && click.point.lat <= 28){
-                        map.clearOverlays();//清除渔场区域范围
-                        var infoWindow = new BMap.InfoWindow("左经度:125 下纬度:27" +'<br />'+
-                            "右经度:127.5 上纬度:28",{title:"温外渔场",width:290,height:100});
-                        map.openInfoWindow(infoWindow,click.point);
-                        _this.forbidLable=0;
-                        _this.fishgrid(125,27,127.5,28,_this.selectedBorderColor,_this.selectedBorderWidth,_this.forbidLable);//this在map中的作用域出问题，需先声明
-                    }
-                    else{
-                        map.clearOverlays();//清除渔场区域范围
-                    }
-                });
-            },
-            //通过文本框选择渔场区域在地图中显示
-            showFishArea(){
-                if(this.fishMode=='吕泗渔场'){
-                    map.clearOverlays();//清除渔场区域范围
-                    var infoWindow = new BMap.InfoWindow("左经度:120.2 下纬度:32" +'<br />'+
-                        "右经度:122.5 上纬度:34",{title:"吕泗渔场",width:290,height:100});
-                    var changeCenterPoint = new BMap.Point(121.3, 33);//创建点坐标
-                    /*map.setCenter(changeCenterPoint);//设置地图中心点
-                    map.setZoom(9);//设置地图级别*/
-                    map.openInfoWindow(infoWindow,changeCenterPoint);//显示经纬度信息和渔场名称
-                    this.forbidLable=0;
-                    this.fishgrid(120.2,32,122.5,34,this.selectedBorderColor,this.selectedBorderWidth,this.forbidLable);//显示渔场范围
-                }
-                else if(this.fishMode=='大沙渔场'){
-                    map.clearOverlays();//清除渔场区域范围
-                    var infoWindow = new BMap.InfoWindow("左经度:122.5 下纬度:32" +'<br />'+
-                        "右经度:125 上纬度:34",{title:"大沙渔场",width:290,height:100});
-                    var changeCenterPoint = new BMap.Point(123.7, 33);//创建点坐标
-                    /*map.setCenter(changeCenterPoint);//设置地图中心点
-                    map.setZoom(9);//设置地图级别*/
-                    map.openInfoWindow(infoWindow,changeCenterPoint);//显示经纬度信息和渔场名称
-                    this.forbidLable=0;
-                    this.fishgrid(122.5,32,125,34,this.selectedBorderColor,this.selectedBorderWidth,this.forbidLable);//显示渔场范围
-                }
-                else if(this.fishMode=='长江口渔场'){
-                    map.clearOverlays();//清除渔场区域范围
-                    var infoWindow = new BMap.InfoWindow("左经度:122 下纬度:31" +'<br />'+
-                        "右经度:125 上纬度:32",{title:"长江口渔场",width:290,height:100});
-                    var changeCenterPoint = new BMap.Point(123.5, 31.5);//创建点坐标
-                    /*map.setCenter(changeCenterPoint);//设置地图中心点
-                    map.setZoom(9);//设置地图级别*/
-                    map.openInfoWindow(infoWindow,changeCenterPoint);//显示经纬度信息和渔场名称
-                    this.forbidLable=0;
-                    this.fishgrid(122,31,125,32,this.selectedBorderColor,this.selectedBorderWidth,this.forbidLable);//显示渔场范围
-                }
-                else if(this.fishMode=='舟山渔场'){
-                    map.clearOverlays();//清除渔场区域范围
-                    var infoWindow = new BMap.InfoWindow("左经度:121.8 下纬度:29.5" +'<br />'+
-                        "右经度:125 上纬度:31",{title:"舟山渔场",width:290,height:100});
-                    var changeCenterPoint = new BMap.Point(123.6, 30.5);//创建点坐标
-                    /*map.setCenter(changeCenterPoint);//设置地图中心点
-                    map.setZoom(9);//设置地图级别*/
-                    map.openInfoWindow(infoWindow,changeCenterPoint);//显示经纬度信息和渔场名称
-                    this.forbidLable=0;
-                    this.fishgrid(121.8,29.5,125,31,this.selectedBorderColor,this.selectedBorderWidth,this.forbidLable);//显示渔场范围
-                }
-                else if(this.fishMode=='鱼山渔场'){
-                    map.clearOverlays();//清除渔场区域范围
-                    var infoWindow = new BMap.InfoWindow("左经度:121 下纬度:28" +'<br />'+
-                        "右经度:125 上纬度:29.5",{title:"鱼山渔场",width:290,height:100});
-                    var changeCenterPoint = new BMap.Point(123, 28.7);//创建点坐标
-                    /*map.setCenter(changeCenterPoint);//设置地图中心点
-                    map.setZoom(9);//设置地图级别*/
-                    map.openInfoWindow(infoWindow,changeCenterPoint);//显示经纬度信息和渔场名称
-                    this.forbidLable=0;
-                    this.fishgrid(121,28,125,29.5,this.selectedBorderColor,this.selectedBorderWidth,this.forbidLable);//显示渔场范围
-                }
-                else if(this.fishMode=='温台渔场'){
-                    map.clearOverlays();//清除渔场区域范围
-                    var infoWindow = new BMap.InfoWindow("左经度:120 下纬度:27" +'<br />'+
-                        "右经度:125 上纬度:28",{title:"温台渔场",width:290,height:100});
-                    var changeCenterPoint = new BMap.Point(122.5, 27.5);//创建点坐标
-                    /*map.setCenter(changeCenterPoint);//设置地图中心点
-                    map.setZoom(9);//设置地图级别*/
-                    map.openInfoWindow(infoWindow,changeCenterPoint);//显示经纬度信息和渔场名称
-                    this.forbidLable=0;
-                    this.fishgrid(120,27,125,28,this.selectedBorderColor,this.selectedBorderWidth,this.forbidLable);//显示渔场范围
-                }
-                else if(this.fishMode=='沙外渔场'){
-                    map.clearOverlays();//清除渔场区域范围
-                    var infoWindow = new BMap.InfoWindow("左经度:125 下纬度:32" +'<br />'+
-                        "右经度:128 上纬度:34",{title:"沙外渔场",width:290,height:100});
-                    var changeCenterPoint = new BMap.Point(126.5, 33);//创建点坐标
-                    /*map.setCenter(changeCenterPoint);//设置地图中心点
-                    map.setZoom(9);//设置地图级别*/
-                    map.openInfoWindow(infoWindow,changeCenterPoint);//显示经纬度信息和渔场名称
-                    this.forbidLable=0;
-                    this.fishgrid(125,32,128,34,this.selectedBorderColor,this.selectedBorderWidth,this.forbidLable);//显示渔场范围
-                }
-                else if(this.fishMode=='江外渔场'){
-                    map.clearOverlays();//清除渔场区域范围
-                    var infoWindow = new BMap.InfoWindow("左经度:125 下纬度:31" +'<br />'+
-                        "右经度:129 上纬度:32",{title:"江外渔场",width:290,height:100});
-                    var changeCenterPoint = new BMap.Point(127, 31.5);//创建点坐标
-                    /*map.setCenter(changeCenterPoint);//设置地图中心点
-                    map.setZoom(9);//设置地图级别*/
-                    map.openInfoWindow(infoWindow,changeCenterPoint);//显示经纬度信息和渔场名称
-                    this.forbidLable=0;
-                    this.fishgrid(125,31,128,32,this.selectedBorderColor,this.selectedBorderWidth,this.forbidLable);//显示渔场范围
-                }
-                else if(this.fishMode=='舟外渔场'){
-                    map.clearOverlays();//清除渔场区域范围
-                    var infoWindow = new BMap.InfoWindow("左经度:125 下纬度:29.5" +'<br />'+
-                        "右经度:128 上纬度:31",{title:"舟外渔场",width:290,height:100});
-                    var changeCenterPoint = new BMap.Point(126.5, 30.5);//创建点坐标
-                    /*map.setCenter(changeCenterPoint);//设置地图中心点
-                    map.setZoom(9);//设置地图级别*/
-                    map.openInfoWindow(infoWindow,changeCenterPoint);//显示经纬度信息和渔场名称
-                    this.forbidLable=0;
-                    this.fishgrid(125,29.5,128,31,this.selectedBorderColor,this.selectedBorderWidth,this.forbidLable);//显示渔场范围
-                }
-                else if(this.fishMode=='鱼外渔场'){
-                    map.clearOverlays();//清除渔场区域范围
-                    var infoWindow = new BMap.InfoWindow("左经度:125 下纬度:28" +'<br />'+
-                        "右经度:127 上纬度:29.5",{title:"鱼外渔场",width:290,height:100});
-                    var changeCenterPoint = new BMap.Point(126, 28.5);//创建点坐标
-                    /*map.setCenter(changeCenterPoint);//设置地图中心点
-                    map.setZoom(9);//设置地图级别*/
-                    map.openInfoWindow(infoWindow,changeCenterPoint);//显示经纬度信息和渔场名称
-                    this.forbidLable=0;
-                    this.fishgrid(125,28,127,29.5,this.selectedBorderColor,this.selectedBorderWidth,this.forbidLable);//显示渔场范围
-                }
-                else if(this.fishMode=='温外渔场'){
-                    map.clearOverlays();//清除渔场区域范围
-                    var infoWindow = new BMap.InfoWindow("左经度:125 下纬度:27" +'<br />'+
-                        "右经度:127.5 上纬度:28",{title:"温外渔场",width:290,height:100});
-                    var changeCenterPoint = new BMap.Point(126, 27.5);//创建点坐标
-                    /*map.setCenter(changeCenterPoint);//设置地图中心点
-                    map.setZoom(9);//设置地图级别*/
-                    map.openInfoWindow(infoWindow,changeCenterPoint);//显示经纬度信息和渔场名称
-                    this.forbidLable=0;
-                    this.fishgrid(125,27,127.5,28,this.selectedBorderColor,this.selectedBorderWidth,this.forbidLable);//显示渔场范围
-                }
-                else {
-                    map.clearOverlays();//清除渔场区域范围
-                    //this.fullShow();
-                }
-            },
-            //整个渔场范围显示
-            fullShow(){
-                this.forbidLable=1;
-                /*this.fishgrid(120.2,32,122.5,34,this.defaultBorderColor,this.defaultBorderWidth,this.forbidLable);//吕泗渔场
-                this.fishgrid(122.5,32,125,34,this.defaultBorderColor,this.defaultBorderWidth,this.forbidLable);//大沙渔场
-                this.fishgrid(122,31,125,32,this.defaultBorderColor,this.defaultBorderWidth,this.forbidLable);//长江口渔场
-                this.fishgrid(121.8,29.5,125,31,this.defaultBorderColor,this.defaultBorderWidth,this.forbidLable);//舟山渔场
-                this.fishgrid(121,28,125,29.5,this.defaultBorderColor,this.defaultBorderWidth,this.forbidLable);//鱼山渔场
-                this.fishgrid(120,27,125,28,this.defaultBorderColor,this.defaultBorderWidth,this.forbidLable);//温台渔场
-                this.fishgrid(125,32,128,34,this.defaultBorderColor,this.defaultBorderWidth,this.forbidLable);//沙外渔场
-                this.fishgrid(125,31,128,32,this.defaultBorderColor,this.defaultBorderWidth,this.forbidLable);//江外渔场
-                this.fishgrid(125,29.5,128,31,this.defaultBorderColor,this.defaultBorderWidth,this.forbidLable);//舟外渔场
-                this.fishgrid(125,28,127,29.5,this.defaultBorderColor,this.defaultBorderWidth,this.forbidLable);//鱼外渔场
-                this.fishgrid(125,27,127.5,28,this.defaultBorderColor,this.defaultBorderWidth,this.forbidLable);//温外渔场*/
-                var fullArea=new BMap.Polygon([
-                    new BMap.Point(120.2,34),
-                    new BMap.Point(120.2,32),//渔场外边缘坐标点
-                    new BMap.Point(122,32),
-                    new BMap.Point(122,31),
-                    new BMap.Point(121.8,31),
-                    new BMap.Point(121.8,29.5),
-                    new BMap.Point(121,29.5),
-                    new BMap.Point(121,28),
-                    new BMap.Point(120,28),
-                    new BMap.Point(120,27),
-                    new BMap.Point(127.5,27),
-                    new BMap.Point(127.5,28),
-                    new BMap.Point(127,28),
-                    new BMap.Point(127,29.5),
-                    new BMap.Point(128,29.5),
-                    new BMap.Point(128,34),
-                ],{strokeColor:this.defaultBorderColor,strokeWeight:this.defaultBorderWidth,strokeStyle:'dashed'});
-                fullArea.setFillColor('none');
-                fullArea.disableMassClear();
-                map.addOverlay(fullArea);
-                /*画出渔场区域内的线段*/
-                this.linefish(125,34,125,27,this.defaultBorderColor,this.defaultBorderWidth,this.forbidLable);
-                this.linefish(125,32,128,32,this.defaultBorderColor,this.defaultBorderWidth,this.forbidLable);
-                this.linefish(125,31,128,31,this.defaultBorderColor,this.defaultBorderWidth,this.forbidLable);
-                this.linefish(125,29.5,127,29.5,this.defaultBorderColor,this.defaultBorderWidth,this.forbidLable);
-                this.linefish(125,28,127,28,this.defaultBorderColor,this.defaultBorderWidth,this.forbidLable);
-                this.linefish(122.5,34,122.5,32,this.defaultBorderColor,this.defaultBorderWidth,this.forbidLable);
-                this.linefish(122,32,125,32,this.defaultBorderColor,this.defaultBorderWidth,this.forbidLable);
-                this.linefish(122,31,125,31,this.defaultBorderColor,this.defaultBorderWidth,this.forbidLable);
-                this.linefish(121.8,29.5,125,29.5,this.defaultBorderColor,this.defaultBorderWidth,this.forbidLable);
-                this.linefish(121,28,125,28,this.defaultBorderColor,this.defaultBorderWidth,this.forbidLable);
-            },
             //画出两个Echarts图
             drawPurseCharts() {
                 var brokenEChart = this.$echarts.init(
@@ -600,6 +390,26 @@
                 var percentageEChart = this.$echarts.init(
                     document.getElementById("PerIOSEchartsId")
                 );
+                var normalBarEcharts = this.$echarts.init(
+                    document.getElementById("normalBarEchartsId")
+                );
+                var normalSEcharts = this.$echarts.init(
+                    document.getElementById("normalSREchartsId")
+                );
+                var illegalSEcharts = this.$echarts.init(
+                    document.getElementById("illegalSREchartsId")
+                );
+                illegalSEcharts.setOption(this.IllegalShipOption);
+                normalSEcharts.setOption(this.NormalShipOption);
+                normalBarEcharts.setOption(this.NormalBarOption);
+                normalBarEcharts.setOption({
+                    xAxis:[{
+                        data:this.saveData.time,
+                    }],
+                    series:[{
+                        data:this.saveData.normal,
+                    }]
+                });
                 brokenEChart.setOption(this.BrokenOption);
                 brokenEChart.setOption({
                     xAxis:[{
@@ -622,6 +432,15 @@
                 window.addEventListener("resize", function() {
                     percentageEChart.resize();
                 });
+                window.addEventListener("resize", function() {
+                    normalBarEcharts.resize();
+                });
+                window.addEventListener("resize", function() {
+                    normalSEcharts.resize();
+                });
+                window.addEventListener("resize", function() {
+                    illegalSEcharts.resize();
+                });
             },
             //查询方法
             SearCh () {
@@ -640,10 +459,6 @@
                 this.fisrtTime='2019-07-15';
                 this.lastTime='2019-08-31';
                 this.initCharts();//重置图表
-                //重置渔场区域
-                map.clearOverlays();//清除渔场区域范围
-                map.reset();//恢复初始的中心点和级别
-                this.fullShow();
             },
             //保存报告
             Save () {
@@ -794,28 +609,6 @@
     /* background-color 测试用 */
     /*background-color: #ffffff;*/
   }
-  /*渔场菜单*/
-  .fish{
-    position: absolute;
-    color:#58a0ee;
-    font-size: 2.8vh;
-    width: 18%;
-    height: 100%;
-  }
-  /*渔场下拉菜单背景格式*/
-  .fishingBackG{
-    background-color: #0e0270;
-    color:#58a0ee;
-  }
-  .selectST{
-    width: 60%;
-    height:5vh;
-    color:#58a0ee;
-    background-color:#0c034b;
-    font-size: 2.8vh;
-    border-color:#58a0ee ;
-    border-width: 2px;
-  }
   /*time为时间类别*/
   .time{
     position: absolute;
@@ -884,40 +677,22 @@
     position: absolute;
     width: 90vw;
     height: 74vh;
-    left: 5vw;
+    left: 10vw;
     top: 18vh;
     margin-top: 0vh;
     margin-bottom: 0vh;
     /*background-color: #FFFFFF;*/
   }
-  /*地图显示区域*/
-  .showMap {
+  /*正常作业柱状图格式*/
+  .normalBar{
     position: absolute;
-    width: 60%;
-    height: 95%;
-    left: 2%;
+    width: 30%;
+    height: 40%;
     top: 5%;
-    /* background-color 测试用 */
-    /*background-color: #EFAB00;*/
+    left:1%;
+    /*background-color: #d3dce6;*/
   }
-  .FishMap {
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    overflow: hidden;
-    font-family: '微软雅黑';
-  }
-  /*统计结果显示区域*/
-  .showStatistics {
-    position: absolute;
-    width: 33%;
-    height: 95%;
-    right: 2%;
-    top: 5%;
-    /* background-color 测试用 */
-    /*background-color: #FFFFFF;*/
-  }
-  .illBrokenTitle {
+  .GraphTitle{
     width: 60%;
     height: 5%;
     /*font-family: MicrosoftYaHei;*/
@@ -927,50 +702,51 @@
     top: -5%;
     left: 20%;
     position: absolute;
+  }
+  .GraphEcharts{
+    top:6%;
+    width: 100%;
+    height: 94%;
+    position: absolute;
+  }
+  /*正常作业渔船星状图*/
+  .normalShipRadar{
+    position: absolute;
+    width: 30%;
+    height: 40%;
+    left: 12%;
+    top: 50%;
+    /*background-color: #d3dce6;*/
+  }
+  /*非法作业渔船星状图*/
+  .illegalShipRadar{
+    position: absolute;
+    width: 30%;
+    height: 40%;
+    left: 46%;
+    top: 50%;
+    /*background-color: #d3dce6;*/
   }
   /*非法作业折线图模块格式*/
   .illegalOSBroken {
     position: absolute;
-    top: 0%;
-    left: 0%;
-    height: 50%;
-    width: 100%;
+    width: 30%;
+    height: 40%;
+    top: 5%;
+    left:33%;
     /* background-color 测试用 */
     /*background-color: greenyellow;*/
   }
-  .BrokenEcharts{
-    top:6%;
-    width: 100%;
-    height: 94%;
-    position: absolute;
-  }
-  /*非法作业占比图模块格式*/
+  /*非法作业占比图*/
   .illegalOSPercentage {
     position: absolute;
-    top: 50%;
-    height: 50%;
-    width: 100%;
+    width: 30%;
+    height: 40%;
+    top: 5%;
+    left:65%;
     /* background-color 测试用 */
     /*background-color: darkred;*/
   }
-  .illPercentageTitle{
-    width: 60%;
-    height: 5%;
-    /*font-family: MicrosoftYaHei;*/
-    font-size: 2.8vh;
-    letter-spacing: 0.1vw;
-    color: #58a0ee;
-    top: -5%;
-    left: 20%;
-    position: absolute;
-  }
-  .PercentageEcharts{
-    top:6%;
-    width: 100%;
-    height: 94%;
-    position: absolute;
-  }
-  /*清楚日期框后的上下两个按钮*/
   input[type=date] {
     -moz-appearance:textfield;/*火狐浏览器*/
   }
