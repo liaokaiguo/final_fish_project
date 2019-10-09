@@ -544,7 +544,7 @@
 <style scoped>
   /*the whole web background style*/
   .background {
-    background-image: url("../../assets/bg.png");
+    background-image: url("../../assets/background_high.png");
     background-size: 100% 100%;
     height: 100%;
     position: absolute;
@@ -676,8 +676,8 @@
   .showResult{
     position: absolute;
     width: 90vw;
-    height: 74vh;
-    left: 10vw;
+    height: 85vh;
+    left: 10%;
     top: 18vh;
     margin-top: 0vh;
     margin-bottom: 0vh;
@@ -690,7 +690,7 @@
     height: 40%;
     top: 5%;
     left:1%;
-    /*background-color: #d3dce6;*/
+    background-image:url("../../assets/内容框.gif");
   }
   .GraphTitle{
     width: 60%;
@@ -716,7 +716,7 @@
     height: 40%;
     left: 12%;
     top: 50%;
-    /*background-color: #d3dce6;*/
+    background-image:url("../../assets/内容框.gif");
   }
   /*非法作业渔船星状图*/
   .illegalShipRadar{
@@ -725,7 +725,7 @@
     height: 40%;
     left: 46%;
     top: 50%;
-    /*background-color: #d3dce6;*/
+    background-image:url("../../assets/内容框.gif");
   }
   /*非法作业折线图模块格式*/
   .illegalOSBroken {
@@ -735,7 +735,7 @@
     top: 5%;
     left:33%;
     /* background-color 测试用 */
-    /*background-color: greenyellow;*/
+    background-image:url("../../assets/内容框.gif");
   }
   /*非法作业占比图*/
   .illegalOSPercentage {
@@ -745,7 +745,7 @@
     top: 5%;
     left:65%;
     /* background-color 测试用 */
-    /*background-color: darkred;*/
+    background-image:url("../../assets/内容框.gif");
   }
   input[type=date] {
     -moz-appearance:textfield;/*火狐浏览器*/
