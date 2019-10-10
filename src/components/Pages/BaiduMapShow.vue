@@ -1309,18 +1309,18 @@
 <style>
   /*右下角表格变透明*/
   .el-table,  .el-table tr {
-    background-color: transparent;
+    background-color: transparent !important;
   }
   .el-table__header th, .el-table__header tr {
-    background-color: transparent;
-    color: black;
-    text-align: center;
+    background-color: transparent !important;
+    color: black !important;
+    text-align: center !important;
   }
   .el-table__body td, .el-table__body th{
     background-color: transparent !important;
-    color: black;
-    padding:2px;
-    text-align: center;
+    color: black !important;
+    padding:2px !important;
+    text-align: center !important;
   }
 
 </style>
