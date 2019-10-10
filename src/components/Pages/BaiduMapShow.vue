@@ -91,8 +91,35 @@
 
     </el-row>
 
+    <el-row class="right-bottom-content">
+      <el-col>
+        <div >
+          <el-table style="left:2%; width: 96%; top:5%;"
+                    height="260"
+                    :data=shipArr>
+            <el-table-column
+              prop="shipId"
+              label="渔船编号"
+              width="100">
+            </el-table-column>
+            <el-table-column
+              prop="ship.shipName"
+              label="渔船名"
+              width="150">
+            </el-table-column>
+            <el-table-column
+              prop="ship.jobType"
+              label="作业方式"
+              width="100">
+            </el-table-column>
+          </el-table>
+        </div>
+      </el-col>
+    </el-row>
+
     <!--渔船位置信息选择弹出框-->
-    <el-dialog title="渔船位置信息选择" :visible.sync="shipLocationDialog" @close="resetForm('shipLocationForm')">
+    <el-dialog title="渔船位置信息选择" :visible.sync="shipLocationDialog"
+               @close="resetForm('shipLocationForm')">
       <el-form ref="shipLocationForm" :model="selectLocation" :label-width="formLabelWidth">
         <el-form-item label="渔船编号:" prop="boatId">
           <el-input v-model="selectLocation.boatId" class="select-input-data"
@@ -1033,7 +1060,6 @@
 
             },
 
-
         }
 
 
@@ -1133,10 +1159,33 @@
     margin-top: 5px;
   }
 
-  .track-replay-content {
-    top: 40%;
-    right: 4%;
+  .right-bottom-content {
+    position: absolute;
+    bottom: 2%;
+    right: 1%;
+    height: 25%;
+    width: 23%;
     float: right;
+    background-image: url("../../assets/mapInfo.gif");
+    background-size: 100% 100%;
+    opacity: 0.8;
+  }
+
+</style>
+<style>
+  .el-table,  .el-table tr {
+    background-color: transparent;
+  }
+  .el-table__header th, .el-table__header tr {
+    background-color: transparent;
+    color: black;
+    text-align: center;
+  }
+  .el-table__body td, .el-table__body th{
+    background-color: transparent !important;
+    color: black;
+    padding:2px;
+    text-align: center;
   }
 
 </style>
