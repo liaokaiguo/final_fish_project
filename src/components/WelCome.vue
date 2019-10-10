@@ -1095,7 +1095,7 @@
           }
         }).then(res => {
 
-          this.shipLocationArr = res.data;
+          this.shipLocationArr = res.data.tAcqDatas;
           console.log("渔船数量" + this.shipLocationArr.length)
           // console.log(this.shipLocationArr)
           this.addShipMarker();
