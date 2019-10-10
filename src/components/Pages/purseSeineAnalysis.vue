@@ -31,15 +31,15 @@
       </div>
       <div class="showResult">
         <div class="normalBar">
-          <div class="GraphTitle">正常作业柱状图</div>
+          <div class="GraphTitle">正常作业统计柱状图</div>
           <div class="GraphEcharts" id="normalBarEchartsId"></div>
         </div>
         <div class="normalShipRadar">
-          <div class="GraphTitle">正常作业渔船星状图</div>
+          <div class="GraphTitle">正常作业渔船类型分布图</div>
           <div class="GraphEcharts" id="normalSREchartsId"></div>
         </div>
         <div class="illegalShipRadar">
-          <div class="GraphTitle">非法作业渔船星状图</div>
+          <div class="GraphTitle">非法作业渔船类型分布图</div>
           <div class="GraphEcharts" id="illegalSREchartsId"></div>
         </div>
         <div class="illegalOSBroken">
@@ -59,7 +59,7 @@
     export default {
         data() {
             return {
-                fishMode: '所有渔场',
+                numIndex:0,//定义辐射图数据的个数
                 fisrtTime: '2019-07-15',
                 lastTime: '2019-08-31',
                 //非法作业折线图选项
@@ -282,33 +282,57 @@
                     tooltip:{},
                     radar:
                         {
-                            center:["50%","50%"],
-                            radius:"75%",
+                            center:["43%","46%"],
+                            radius:"60%",
+                            name:{
+                                color:"#58a0ee",
+                                fontStyle:'normal',
+                                fontSize:14,
+                            },
+                            nameGap:12,
+                            shape:"circle",
+                            axisLine:{
+                                show:true,
+                                lineStyle:{
+                                    color:"#58a0ee",
+                                    width:1,
+                                    opacity:1,
+                                    type:"dashed",
+                                }
+                            },
+                            splitLine:{
+                              lineStyle:{
+                                  color:"#CCC",
+                                  opacity:0.1,
+                              }
+                            },
+                            splitArea:{
+                                show:false,
+                            },
                             indicator:[
-                                {name:"养殖船", max:500},
-                                {name:"国内捕捞船",max:500},
-                                {name:"捕捞辅助船",max:500},
-                                {name:"其他辅助船",max:500},
-                                {name:"专业远洋渔船",max:500},
-                                {name:"非专业远洋渔船",max:500}
+                                {name:"养殖船", min:0},
+                                {name:"国内捕捞船",min:0},
+                                {name:"捕捞辅助船",min:0},
+                                {name:"其他辅助船",min:0},
+                                {name:"专业远洋渔船",min:0},
+                                {name:"非专业远洋渔船",min:0}
                             ]
                         },
                     series:[
                         {
                             name:"正常作业",
                             type:"radar",
+                            symbol:"none",
                             lineStyle:{
-                                //color:"#000",
-                                width:1,
-                                opacity:0.2,
+                                color:"#58a0ee",
+                                width:2,
+                                opacity:1,
                             },
                             areaStyle:{
-                                //color:'#000',
+                                color:'#58a0ee',
                                 opacity:0.6,
                             },
-                            data:[
-                                [200,300,100,220,150,310]
-                            ]
+                            data:[],
                         }
                     ]
                 },
@@ -317,58 +341,70 @@
                     tooltip:{},
                     radar:
                         {
-                            center:["50%","50%"],
-                            radius:"75%",
+                            center:["43%","46%"],
+                            radius:"60%",
+                            name:{
+                                color:"#58a0ee",
+                                fontStyle:'normal',
+                                fontSize:14,
+                            },
+                            nameGap:12,
+                            shape:"circle",
+                            axisLine:{
+                                show:true,
+                                lineStyle:{
+                                    color:"#58a0ee",
+                                    width:1,
+                                    opacity:1,
+                                    type:"dashed",
+                                }
+                            },
+                            splitLine:{
+                                lineStyle:{
+                                    color:"#CCC",
+                                    opacity:0.1,
+                                }
+                            },
+                            splitArea:{
+                                show:false,
+                            },
                             indicator:[
-                                {name:"养殖船", max:500},
-                                {name:"国内捕捞船",max:500},
-                                {name:"捕捞辅助船",max:500},
-                                {name:"其他辅助船",max:500},
-                                {name:"专业远洋渔船",max:500},
-                                {name:"非专业远洋渔船",max:500}
+                                {name:"养殖船",min:0},
+                                {name:"国内捕捞船",min:0},
+                                {name:"捕捞辅助船",min:0},
+                                {name:"其他辅助船",min:0},
+                                {name:"专业远洋渔船",min:0},
+                                {name:"非专业远洋渔船",min:0}
                             ]
                         },
                     series:[
                         {
-                            name:"非法作业",
+                            name:"正常作业",
                             type:"radar",
+                            symbol:"none",
                             lineStyle:{
-                                //color:"#000",
-                                width:1,
-                                opacity:0.2,
+                                color:"#ed7d31",
+                                width:2,
+                                opacity:1,
                             },
                             areaStyle:{
-                                //color:'#000',
+                                color:'#ed7d31',
                                 opacity:0.6,
                             },
-                            data:[
-                                [200,300,100,220,150,310]
-                            ]
+                            data:[],
                         }
                     ]
                 },
-                //渔场列表
-                options: [
-                    {value: '所有渔场'},
-                    {value: '舟山渔场'},
-                    {value: '舟外渔场'},
-                    {value: '长江口渔场'},
-                    {value: '江外渔场'},
-                    {value: '吕泗渔场'},
-                    {value: '大沙渔场'},
-                    {value: '沙外渔场'},
-                    {value: '鱼山渔场'},
-                    {value: '鱼外渔场'},
-                    {value: '温台渔场'},
-                    {value: '温外渔场'},
-                ],
                 //存储占比图数据
                 data: {
                     normal: {value: 0, name: '正常作业'},
                     illegal: {value: 0, name: '非法作业'},
                 },
+                shipType:['养殖船','国内捕捞船','捕捞辅助船','其他辅助船','专业远洋渔船','非专业远洋渔船'],
                 /*存储返回的数据以及时间序列*/
                 saveData:[],
+                /*存储渔船星状图数据*/
+                radarData:[],
             };
         },
         mounted() {
@@ -400,7 +436,17 @@
                     document.getElementById("illegalSREchartsId")
                 );
                 illegalSEcharts.setOption(this.IllegalShipOption);
+                illegalSEcharts.setOption({
+                    series:[{
+                        data:[this.radarData.illegal],
+                    }]
+                });
                 normalSEcharts.setOption(this.NormalShipOption);
+                normalSEcharts.setOption({
+                    series:[{
+                        data:[this.radarData.normal],
+                    }]
+                });
                 normalBarEcharts.setOption(this.NormalBarOption);
                 normalBarEcharts.setOption({
                     xAxis:[{
@@ -509,7 +555,6 @@
                     i +=1;
                     startTime.setDate(startTime.getDate() + 1);
                 }
-                //this.saveData.time = this.time;
                 this.axios({
                     method: "post",
                     url: "/getDataByMonthOrDay",
@@ -532,11 +577,33 @@
                     this.saveData.illegal = (response).data.illegal;
                     this.data.normal.value=sumlegal;
                     this.data.illegal.value=sumillegal;
-                    //this.Polydata.series=response.data.illegal;
                     this.drawPurseCharts();
+                    //onsole.log(this.saveData);
                 }).catch((response)=>{
                     console.log(response);
-                })
+                });
+                this.axios({
+                    method:"post",
+                    url:"/countBstype",
+                    data:{
+                        startTime : this.fisrtTime + ' 00:00:00',
+                        endTime : this.lastTime + ' 23:59:59',
+                        jobType :"围网",
+                    }
+                }).then((res)=>{
+                    var normalNum=[];
+                    var illegalNum=[];
+                    for(var j=0;j<6;j++){
+                        normalNum[j]=(res).data.normal[this.shipType[j]];
+                        illegalNum[j]=(res).data.illegal[this.shipType[j]];
+                    }
+                    this.radarData.normal=normalNum;
+                    this.radarData.illegal=illegalNum;
+                    this.drawPurseCharts();
+                }).catch((res)=>{
+                    console.log(res);
+                });
+                //console.log(this.radarData);
             },
         }
     };
@@ -619,14 +686,14 @@
   }
   #lastTime{
     border-color:#58a0ee;
-    background-color:#0e0270;
+    background-color: #053670;
     color:#58a0ee;
     width: 35%;
     height: 5vh;
   }
   #fisrtTime{
     border-color:#58a0ee;
-    background-color:#0e0270;
+    background-color:#053670;
     color:#58a0ee;
     width: 35%;
     height: 5vh;
@@ -644,7 +711,7 @@
     width:24%;
     height: 5vh;
     font-size: 2.8vh;
-    background-color: #0e0270;
+    background-color: #053670;
     color:#58a0ee;
     border-color:#58a0ee ;
     border-width: 2px;
@@ -654,7 +721,7 @@
   .buttonReset{
     width:24%;
     font-size: 2.8vh;
-    background-color: #0e0270;
+    background-color: #053670;
     color:#58a0ee;
     border-color:#58a0ee ;
     border-width: 2px;
@@ -665,7 +732,7 @@
   .buttonSave{
     width:24%;
     font-size: 2.8vh;
-    background-color: #0e0270;
+    background-color: #053670;
     color:#58a0ee;
     border-color:#58a0ee ;
     border-width: 2px;
@@ -677,7 +744,7 @@
     position: absolute;
     width: 90vw;
     height: 85vh;
-    left: 10%;
+    left: 10vw;
     top: 18vh;
     margin-top: 0vh;
     margin-bottom: 0vh;
@@ -690,7 +757,7 @@
     height: 40%;
     top: 5%;
     left:1%;
-    background-image:url("../../assets/内容框.gif");
+    background-image:url("../../assets/msgBg.png");
   }
   .GraphTitle{
     width: 60%;
@@ -699,33 +766,34 @@
     font-size: 2.8vh;
     letter-spacing: 0.1vw;
     color: #58a0ee;
-    top: -5%;
+    top: 3.5%;
     left: 20%;
     position: absolute;
   }
   .GraphEcharts{
-    top:6%;
+    top:15%;
     width: 100%;
     height: 94%;
     position: absolute;
+    left:8%;
   }
   /*正常作业渔船星状图*/
   .normalShipRadar{
     position: absolute;
-    width: 30%;
-    height: 40%;
+    width: 35%;
+    height: 45%;
     left: 12%;
     top: 50%;
-    background-image:url("../../assets/内容框.gif");
+    background-image:url("../../assets/msgBg.png");
   }
   /*非法作业渔船星状图*/
   .illegalShipRadar{
     position: absolute;
-    width: 30%;
-    height: 40%;
-    left: 46%;
+    width: 35%;
+    height: 45%;
+    left: 52%;
     top: 50%;
-    background-image:url("../../assets/内容框.gif");
+    background-image:url("../../assets/msgBg.png");
   }
   /*非法作业折线图模块格式*/
   .illegalOSBroken {
@@ -735,7 +803,7 @@
     top: 5%;
     left:33%;
     /* background-color 测试用 */
-    background-image:url("../../assets/内容框.gif");
+    background-image:url("../../assets/msgBg.png");
   }
   /*非法作业占比图*/
   .illegalOSPercentage {
@@ -745,7 +813,7 @@
     top: 5%;
     left:65%;
     /* background-color 测试用 */
-    background-image:url("../../assets/内容框.gif");
+    background-image:url("../../assets/msgBg.png");
   }
   input[type=date] {
     -moz-appearance:textfield;/*火狐浏览器*/
@@ -766,21 +834,21 @@
     right: 2%;
     border: 0.1em solid #58a0ee;
     border-radius: 0.2em;
-    color: #0e0270;
+    color: #053670;
     background-image: -webkit-linear-gradient(top, #58a0ee, #acc8e6);
   }
   /*年月日格式*/
   input[type="date"]::-webkit-datetime-edit-year-field {
     color: #58a0ee;
-    background-color: #0e0270;
+    background-color: #053670;
   }
   input[type="date"]::-webkit-datetime-edit-month-field {
     color: #58a0ee;
-    background-color: #0e0270;
+    background-color: #053670;
   }
   input[type="date"]::-webkit-datetime-edit-day-field {
     color: #58a0ee;
-    background-color: #0e0270;
+    background-color: #053670;
   }
   /*控制年月日之间的斜线或短横线的*/
   input[type="date"]::-webkit-datetime-edit-text {
