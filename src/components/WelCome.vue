@@ -608,7 +608,7 @@
             orient: "horizontal",
             left: "center",
             top: "5%",
-            data: ["拖网", "张网", "围网"],
+            data: ["拖网", "刺网", "围网","其它" ],
             textStyle: {
               color: "default"
             }
@@ -628,10 +628,11 @@
                 shadowBlur: 10,
                 shadowOffsetX: 0,
                 shadowColor: "rgba(0, 0, 0, 0.5)"
+
               }
             }
           }],
-          color: ["#5b9bff", "#ed7d31", "#005ec2"]
+          color: ["#5b9bff", "#ed7d31", "#11d6ee","#eea5d1"]
         },
         rightBottomOption: {
           color: ["#f44"],
@@ -980,22 +981,34 @@
         rightMiddleEChart.setOption(this.rightMiddleOption);
         //数据没有加载出来显示加载动画,样式添加todo
         rightMiddleEChart.showLoading();
-        this.axios.get('/getIllegalOperationStatistic').then(res => {
+          this.axios({
+              method: 'post',
+              url: '/statisShipJob',
+              data: {
+                  dateTime: "",
+                  idtfyFlag: 0,
+              }
+          }).then(res => {
+              console.log(res.data);
           rightMiddleEChart.hideLoading(); //加载出来隐藏加载动画
           rightMiddleEChart.setOption({ //数据添加
             series: [{
               data: [{
-                  value: res.data.tuowang,
+                  value: res.data.tuoWang,
                   name: "拖网"
                 },
                 {
-                  value: res.data.zhangwang,
-                  name: "张网"
+                  value: res.data.ciWang,
+                  name: "刺网"
                 },
                 {
-                  value: res.data.weiwang,
+                  value: res.data.weiWang,
                   name: "围网"
-                }
+                },
+                 {
+                   value: res.data.other,
+                   name: "其它"
+                 }
               ]
             }]
           })
