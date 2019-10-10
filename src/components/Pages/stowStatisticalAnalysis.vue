@@ -44,7 +44,7 @@
 			<!-- 左侧透明导航栏 -->
 			<div id="leftNavigaList" >
 				<ul>
-<!--					<li>目录</li>-->
+					<li class="leftNavTitle">目&nbsp;&nbsp;&nbsp;&nbsp;录</li>
 					<li><router-link to="/mapShow">地图显示</router-link></li>
 					<li><router-link to="/passPort" >渔船出入港</router-link></li>
 					<li><router-link to="/workModeSta" >渔船作业方式<br>统计及查询</router-link></li>
@@ -769,13 +769,14 @@
 		position: absolute;
 		bottom: 10vh;
 		left: 0.5vw;
-		width: 10vw;
+		width: 8vw;
 		height: 75vh;
 		z-index: 99;
 		/*text-align: center;*/
 		/* background-color 测试用 */
 		background-color: rgba(0, 0, 0, 0.24);
 	}
+
 	#leftNavigaList ul{
 		/* 清除ul标签的默认样式 */
 		position: absolute;
@@ -785,10 +786,21 @@
 		margin: 0;
 		padding: 0;
 
-		font-size: 2.4vh;
+		font-size: 2.2vh;
 		list-style-type: none;
 		display: block;
 		/*background-color: #3f72c5;*/
+	}
+	#leftNavigaList .leftNavTitle{
+		float: top;     /* 使li内容纵向浮动 */
+		margin-top:0;   /* 两个li之间的距离 */
+		display: block;
+		color: #62dbff;
+		text-align: center;
+		padding: 1vh 1vh;
+		font-size: 2.4vh;
+		font-weight: bold;
+		border-bottom: #55a6ee 1px solid;
 	}
 	#leftNavigaList li {
 		float: top;     /* 使li内容纵向浮动 */
