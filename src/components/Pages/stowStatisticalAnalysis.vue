@@ -24,7 +24,7 @@
 				<!-- 选择时间菜单 -->
 				<div class="selectDT">
 					<form method="post">
-						<label for="date">日期：</label>
+						日期：
 						<input type="date" v-model="startDate" v-bind:title="startDateTips"/>
 						&nbsp;到&nbsp;
 						<input type="date" v-model="endDate" v-bind:title="endDateTips"/>
@@ -44,33 +44,24 @@
 			<!-- 左侧透明导航栏 -->
 			<div id="leftNavigaList" >
 				<ul>
-					<li>
-						目录
-					</li>
+<!--					<li>目录</li>-->
+					<li><router-link to="/mapShow">地图显示</router-link></li>
+					<li><router-link to="/passPort" >渔船出入港</router-link></li>
+					<li><router-link to="/workModeSta" >渔船作业方式<br>统计及查询</router-link></li>
+					<li><router-link to="#" >船舶明细</router-link></li>
+					<li><router-link to="/purseSeineAnalysis" >围网作业方式<br>统计及分析</router-link></li>
+					<li><router-link to="/trawlSA" >拖网作业方式<br>统计及分析</router-link></li>
+					<li><router-link to="/gillNetStAnalysis" >刺网作业方式<br>统计及分析</router-link></li>
+					<li><router-link to="/stowSA" >张网作业方式<br>统计及分析</router-link></li>
 
-					<li>
-						<a href="#">一级菜单</a>
-						<ul>
-							<li><a href="#">二级菜单</a></li>
-							<li><a href="#">二级菜单</a></li>
-						</ul>
-					</li>
-					<li>
-						<a href="#">一级菜单</a>
-						<ul>
-							<li><a href="#">二级菜单</a></li>
-							<li><a href="#">二级菜单</a></li>
-						</ul>
-					</li>
-					<li><a href="#">一集菜单1</a></li>
-					<li><a href="#">一级菜单1</a></li>
-					<li>
-						<a href="#">一级菜单</a>
-						<ul>
-							<li><a href="#">二级菜单</a></li>
-							<li><a href="#">二级菜单</a></li>
-						</ul>
-					</li>
+<!--					<li><a href="#">一级菜单1</a>-->
+<!--						<ul>-->
+<!--							<li><a href="#">二级菜单1</a></li>-->
+<!--							<li><a href="#">二级菜单2</a></li>-->
+<!--							<li><a href="#">二级菜单3</a></li>-->
+<!--						</ul>-->
+<!--					</li>-->
+
 				</ul>
 			</div>
 
@@ -776,76 +767,55 @@
 	/* 左侧透明导航栏 */
 	#leftNavigaList{
 		position: absolute;
-		bottom: 2%;
-		left: 0;
+		bottom: 10vh;
+		left: 0.5vw;
 		width: 10vw;
-		height: 92vh;
+		height: 75vh;
 		z-index: 99;
-		text-align: center;
+		/*text-align: center;*/
+		/* background-color 测试用 */
+		background-color: rgba(0, 0, 0, 0.24);
 	}
-
 	#leftNavigaList ul{
 		/* 清除ul标签的默认样式 */
-		list-style-type: none;
+		position: absolute;
+		top: 0;
+		left: 0;
 		width: 100%;
 		margin: 0;
 		padding: 0;
+
+		font-size: 2.4vh;
+		list-style-type: none;
 		display: block;
-		opacity: 1;
-		background-color: #000a2b;
+		/*background-color: #3f72c5;*/
 	}
 	#leftNavigaList li {
 		float: top;     /* 使li内容纵向浮动 */
 		margin-top:0;   /* 两个li之间的距离 */
-		border: solid 1px red;
-		background-color: none;
+		/*border: solid 1px #191762;*/
 	}
-
-	#leftNavigaList .mulu{
-
-		display: block; /* 把链接显示为块元素可使整个链接区域可点击 */
-		color: #FFFFFF;
-		text-align: center;
-		padding: 14px 16px;
-
-		/*list-style-image:url(../../assets/目录.png);*/
-		/*position: absolute;*/
-		/*left: 20%;*/
-		/*top: 0;*/
-		/*height: 100%;*/
-		/*width: 40%;*/
-	}
-
-
-	#leftNavigaList li a{
+	#leftNavigaList li a {
 		/* 设置链接内容显示的格式*/
-		display: block; /* 把链接显示为块元素可使整个链接区域可点击 */
-		color:white;
+		/* 把链接显示为块元素可使整个链接区域可点击 */
+		display: block;
+		color: #62dbff;
 		text-align: center;
-		padding: 14px 16px;
-		text-decoration: none; /* 去除下划线 */
+		padding: 1vh 1vh;
+		/* 去除下划线 */
+		text-decoration: none;
 	}
 	#leftNavigaList li a:hover{
-		/* 鼠标选中时背景变为黑色 */
-		background-color: #111;
-	}
-	#leftNavigaList ul li ul{
-		/* 设置二级菜单 */
-		width: auto;
-		background:rgb(189, 181, 181);
-		position: absolute;
-		display: none; /* 默认隐藏二级菜单的内容 */
-
-	}
-	#leftNavigaList ul li ul li{
-		/* 二级菜单li内容的显示 */
-		margin-right:0;
-		float:none;
-		text-align: center;
-	}
-	#leftNavigaList ul li:hover ul{
-		/* 鼠标选中二级菜单内容时 */
-		display: block;
+		/* 鼠标选中时背景变色 */
+		background-color: #40c0ff;
+		color: #0c034b;
+		/*height:100%;*/
+		/*width:100%;*/
+		/*overflow: hidden;*/
+		/*background-size:cover;*/
+		/*或者background-size:100%;*/
+		/*background-image: url("../../assets/菜单选中背景.png");*/
+		/*background-repeat: no-repeat;*/
 	}
 
 
