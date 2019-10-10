@@ -2,35 +2,29 @@
 	<!-- 张网作业方式统计分析 stow net statistic and analysis -->
 	<div>
 		<!-- 背景 -->
-		<div id="background">
-			<img class="img" src="../../assets/background_high.png"/>
-		</div>
-		<!-- 左侧透明导航栏 -->
-		<div id="leftNavigaList">
-
+		<div id="backGround">
+			<img class="bgimg" src="../../assets/background_high.png"/>
 		</div>
 
 		<!-- 主要内容 -->
 		<div id="main-content">
 			<!-- 主标题 -->
-			<div class="centTitle">
-				<p class="myp1" @click="refreshPage" v-bind:title="thisPageTips">张网作业方式统计分析</p>
+			<div class="mainTitle">
+				<p class="titleP" @click="refreshPage" v-bind:title="thisPageTips">张网作业方式统计分析</p>
 			</div>
-
-			<!-- 导航按钮 -->
+			<!-- 右上角导航按钮 -->
 			<div class="navigaIcon" id="navigaIcon">
 				<img class="goBack" src="../../assets/rebackLastIcon.png" alt="后退" v-on:click="goBack"
 				     v-bind:title="backTips">
 				<img class="goHome" src="../../assets/rebackMainIcon.png" alt="主页" v-on:click="goHome"
 				     v-bind:title="homeTips">
 			</div>
-
 			<!-- 菜单栏 -->
 			<div class="setMenu">
 				<!-- 选择时间菜单 -->
 				<div class="selectDT">
 					<form method="post">
-						<label for="date">日期：</label>
+						日期：
 						<input type="date" v-model="startDate" v-bind:title="startDateTips"/>
 						&nbsp;到&nbsp;
 						<input type="date" v-model="endDate" v-bind:title="endDateTips"/>
@@ -46,22 +40,64 @@
 				</div>
 			</div>
 
-			<div class="showResult">
 
+			<!-- 左侧透明导航栏 -->
+			<div id="leftNavigaList" >
+				<ul>
+<!--					<li>目录</li>-->
+					<li><router-link to="/mapShow">地图显示</router-link></li>
+					<li><router-link to="/passPort" >渔船出入港</router-link></li>
+					<li><router-link to="/workModeSta" >渔船作业方式<br>统计及查询</router-link></li>
+					<li><router-link to="#" >船舶明细</router-link></li>
+					<li><router-link to="/purseSeineAnalysis" >围网作业方式<br>统计及分析</router-link></li>
+					<li><router-link to="/trawlSA" >拖网作业方式<br>统计及分析</router-link></li>
+					<li><router-link to="/gillNetStAnalysis" >刺网作业方式<br>统计及分析</router-link></li>
+					<li><router-link to="/stowSA" >张网作业方式<br>统计及分析</router-link></li>
 
-				<!-- 统计结果容器 -->
-				<div class="showStatistics">
-					<div class="topEcharts">
-						<div class="illLineTitle">非法作业统计折线图</div>
-						<div class="lineEcharts" id="lineEchartsId"></div>
-					</div>
-					<div class="bottomEcharts">
-						<div class="illPieTitle">非法作业统计占比图</div>
-						<div class="pieEcharts" id="pieEchartsId"></div>
-					</div>
-				</div>
+<!--					<li><a href="#">一级菜单1</a>-->
+<!--						<ul>-->
+<!--							<li><a href="#">二级菜单1</a></li>-->
+<!--							<li><a href="#">二级菜单2</a></li>-->
+<!--							<li><a href="#">二级菜单3</a></li>-->
+<!--						</ul>-->
+<!--					</li>-->
+
+				</ul>
 			</div>
+
+			<!--主要内容展示区域-->
+			<div class="showResult">
+				<div class="topright">
+
+				</div>
+				<div class="topmiddle">
+
+				</div>
+				<div class="topleft">
+
+				</div>
+				<div class="bottomright">
+
+				</div>
+				<div class="bottomleft">
+
+				</div>
+
+				<div class="topEcharts">
+					<div class="illLineTitle">非法作业统计折线图</div>
+					<div class="lineEcharts" id="lineEchartsId"></div>
+				</div>
+				<div class="bottomEcharts">
+					<div class="illPieTitle">非法作业统计占比图</div>
+					<div class="pieEcharts" id="pieEchartsId"></div>
+				</div>
+
+			</div>
+
+
 		</div>
+
+
 	</div>
 </template>
 
@@ -321,7 +357,7 @@
 
 		mounted() {
 			//this.init();
-			// this.baiduMap();
+			//this.baiduMap();
 			//this.fishMap(this.centerLng, this.centerLat, this.level);
 		},
 
@@ -523,9 +559,9 @@
 
 
 <style scoped>
-	/* 底层背景样式，窗口自适应 */
+	/* 1 底层背景样式，窗口自适应 */
 	/* 底层背景 */
-	#background {
+	#backGround {
 		position: absolute;
 		width: 100%;
 		height: 100%;
@@ -534,28 +570,14 @@
 		z-index: 1;
 	}
 	/* 底层背景图片 */
-	#background .img {
+	#backGround .bgimg {
 		width: 100%;
 		height: 100%;
 		/* 底层背景图片层 */
 		z-index: 2;
 	}
 
-	/* 左侧透明导航栏 */
-	#leftNavigaList{
-		position: absolute;
-		bottom: 0;
-		left: 0;
-		width: 14%;
-		height: 96%;
-		/*background-color: #505050; */
-		background-color: #000a2b;
-		z-index: 90;
-		opacity:0.4;
-	}
-
-
-	/* 主要内容样式，窗口自适应 */
+	/* 2 主要内容样式，窗口自适应 */
 	/* 主要内容 */
 	#main-content {
 		position: absolute;
@@ -563,34 +585,30 @@
 		height: 100%;
 		overflow: hidden;
 		/* 内容层 */
-		z-index: 90;
+		z-index: 80;
 	}
-
-
-
 
 	/* 中心标题样式 */
-	#main-content .centTitle {
+	.mainTitle {
 		position: absolute;
-		left: 30vw;
-		width: 40vw;
-		top: 1.2vh;
-		height: 5.5vh;
+		left: 35vw;
+		width: 30vw;
+		top: 0;
+		height: 5.4vh;
+		text-align:center;
 		/* background-color 测试用 */
-		/* background-color: #FFFFFF; */
+		/*background-color: #FFFFFF;*/
 	}
 
-	#main-content .centTitle .myp1 {
+	.mainTitle .titleP {
 		font-family: FZDHTJW--GB1-0;
-		color: #58a0ee;
+		color: #55a6ee;
 		cursor: pointer;
-		position: absolute;
 		letter-spacing: 0.2vw;
-		left: 20%;
-		width: 60%;
-		height: 80%;
-		top: -5%;
-		font-size: 4.5vh;
+		font-size: 4.3vh;
+		display: inline-block;
+		/* background-color 测试用 */
+		/*background-color: #ff5234;*/
 	}
 
 	#main-content .navigaIcon {
@@ -746,35 +764,78 @@
 		cursor: pointer;
 	}
 
+	/* 左侧透明导航栏 */
+	#leftNavigaList{
+		position: absolute;
+		bottom: 10vh;
+		left: 0.5vw;
+		width: 10vw;
+		height: 75vh;
+		z-index: 99;
+		/*text-align: center;*/
+		/* background-color 测试用 */
+		background-color: rgba(0, 0, 0, 0.24);
+	}
+	#leftNavigaList ul{
+		/* 清除ul标签的默认样式 */
+		position: absolute;
+		top: 0;
+		left: 0;
+		width: 100%;
+		margin: 0;
+		padding: 0;
+
+		font-size: 2.4vh;
+		list-style-type: none;
+		display: block;
+		/*background-color: #3f72c5;*/
+	}
+	#leftNavigaList li {
+		float: top;     /* 使li内容纵向浮动 */
+		margin-top:0;   /* 两个li之间的距离 */
+		/*border: solid 1px #191762;*/
+	}
+	#leftNavigaList li a {
+		/* 设置链接内容显示的格式*/
+		/* 把链接显示为块元素可使整个链接区域可点击 */
+		display: block;
+		color: #62dbff;
+		text-align: center;
+		padding: 1vh 1vh;
+		/* 去除下划线 */
+		text-decoration: none;
+	}
+	#leftNavigaList li a:hover{
+		color: #0c034b;
+		/* 鼠标选中时背景变色 */
+		/*用背景色*/
+		/* 浏览器不支持的时候显示 */
+		/*background-color: #40c0ff;*/
+		/* 标准的语法（必须放在最后） */
+		background-image: radial-gradient(#96f0ff, #5ee4ff, #40c0ff);
+		/*用图片*/
+		/*height:100%;*/
+		/*width:100%;*/
+		/*overflow: hidden;*/
+		/*background-size:cover;*/
+		/*或者background-size:100%;*/
+		/*background-image: url("../../assets/菜单选中背景.png");*/
+		/*background-repeat: no-repeat;*/
+	}
+
+
 	/* 显示结果区域 */
 	#main-content .showResult {
 		position: absolute;
-		width: 90vw;
+		width: 85vw;
 		height: 74vh;
-		left: 5vw;
-		top: 18vh;
+		left: 12vw;
+		top: 20vh;
 		margin-top: 0vh;
 		margin-bottom: 0vh;
 		/* background-color 测试用 */
-		/* background-color: #FFFFFF; */
+		 background-color: #FFFFFF;
 
-	}
-
-	#main-content .showMap {
-		position: absolute;
-		width: 60%;
-		height: 95%;
-		left: 2%;
-		top: 5%;
-		/* background-color 测试用 */
-		/* background-color: #EFAB00; */
-	}
-
-	#main-content .showMap .baiduMapImage {
-		position: absolute;
-		width: 100%;
-		height: 100%;
-		margin: 0px;
 	}
 
 	#main-content .showStatistics {
@@ -853,4 +914,5 @@
 		/* background-color 测试用 */
 		/* background-color: #FFFFFF; */
 	}
+
 </style>
