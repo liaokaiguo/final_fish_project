@@ -91,6 +91,59 @@
 
     </el-row>
 
+    <!--左侧工具栏 -->
+    <div class="middle-tool-content">
+      <div class="location-content">
+        <el-tooltip effect="dark" content="坐标定位" placement="right" hide-after="2000">
+          <img src="../../assets/mapShowImg/location32.png" height="32" width="32" @click="locationVisible = !locationVisible" />
+        </el-tooltip>
+        <el-popover
+          placement="right"
+          title="坐标定位"
+          width="300"
+          trigger="manual"
+          v-model="locationVisible">
+          <el-form ref="reLocationForm" :model="reLocationForm" label-width="60px" >
+            <el-form-item label="经度:" prop="lng">
+              <el-input oninput ="value=value.replace(/[^0-9.]/g,'')" v-model="reLocationForm.lng"></el-input>
+            </el-form-item>
+            <el-form-item label="纬度:" prop="lat">
+              <el-input oninput ="value=value.replace(/[^0-9.]/g,'')" v-model="reLocationForm.lat"></el-input>
+            </el-form-item>
+          </el-form>
+          <div  style="text-align: right; margin: 0">
+            <el-button size="mini" type="text" @click="locationVisible = false">取消</el-button>
+            <el-button type="primary" size="mini" @click="reLocation">确定</el-button>
+          </div>
+        </el-popover>
+      </div>
+
+      <div class="distance-content">
+        <el-tooltip effect="dark" content="测距" placement="right" hide-after="2000">
+          <img src="../../assets/mapShowImg/distance32.png" height="32" width="32" @click="openDistanceTool"/>
+        </el-tooltip>
+      </div>
+      <div class="feedback-content">
+        <el-tooltip effect="dark" content="意见反馈" placement="right" hide-after="2000">
+          <img src="../../assets/mapShowImg/feedback32.png" height="32" width="32"/>
+        </el-tooltip>
+      </div>
+      <div class="online-content">
+        <el-tooltip effect="dark" content="在线客服" placement="right" hide-after="2000">
+          <img src="../../assets/mapShowImg/online32.png" height="32" width="32"/>
+        </el-tooltip>
+      </div>
+
+
+      <div >
+        xixix
+
+      </div>
+    </div>
+
+
+
+    <!--右下角 渔船信息 -->
     <el-row class="right-bottom-content">
       <el-col>
         <div >
@@ -322,6 +375,14 @@
                 beSelectBounds: [],
                 existGrid: false,//是否存在网格
 
+                /*左侧小工具栏 相关*/
+                locationVisible:false,
+                reLocationMarker:'',
+                reLocationForm: {
+                    lng: '',
+                    lat: '',
+                },
+
             }
 
         },
@@ -475,7 +536,7 @@
                     }
                 }).then(res => {
                     shipLocationLoading.close();
-                    this.shipArr = res.data;
+                    this.shipArr = res.data.tAcqDatas;
                     this.addShipMarker();
                 }).catch((response) => {
                     console.log(response)
@@ -616,6 +677,7 @@
                             spinner: 'el-icon-loading',
                             background: 'rgba(0, 0, 0, 0.2)'
                         });
+
                         //请求后台数据
                         this.axios({
                             method: 'post',
@@ -630,7 +692,7 @@
                             }
                         }).then(res => {
                             selectShipLocationLoading.close();
-                            this.shipArr = res.data;
+                            this.shipArr = res.data.tAcqDatas;
                             console.log("选择后的渔船数量" + this.shipArr.length)
                             if (this.shipArr.length === 0) {
                                 this.$message({
@@ -776,7 +838,7 @@
                     }
                 }).then(res => {
                     shipTrackLoading.close();
-                    this.shipTrackArr = res.data;
+                    this.shipTrackArr = res.data.tAcqDatas;
                     console.log(this.shipTrackArr.length)
                     if (this.shipTrackArr.length === 0) {
                         this.$message({
@@ -1060,6 +1122,37 @@
 
             },
 
+            /*
+            *左侧小工具栏 相关
+            *
+            * */
+            reLocation() {
+
+                if(this.reLocationForm.lng !='' && this.reLocationForm.lat !=''){
+                    map.removeOverlay(this.reLocationMarker);
+                    var new_point = new BMap.Point(this.reLocationForm.lng,this.reLocationForm.lat);
+                    this.reLocationMarker = new BMap.Marker(new_point);  // 创建标注
+                    map.addOverlay(this.reLocationMarker);
+                    map.panTo(new_point);
+                    this.locationVisible =false;
+                }else{
+                    this.$message({
+                        type: "error",
+                        message: '请输入正确经纬度格式!!!',
+                        showClose: 'true',
+                        duration: 4000,
+                    })
+                }
+                this.resetForm('reLocationForm');
+
+            },
+
+            openDistanceTool(){
+                var myDis = new BMapLib.DistanceTool(map);
+                myDis.open();
+            }
+
+
         }
 
 
@@ -1171,8 +1264,50 @@
     opacity: 0.8;
   }
 
+  .middle-tool-content {
+    position: absolute;
+    top:40%;
+    left: 2%;
+    width: 3%;
+    height: 20%;
+    float: left;
+    background-color: white;
+    border-radius: 10px;
+
+  }
+  .location-content{
+    width: 100%;
+    height: 28%;
+
+  }
+  .distance-content{
+    width: 100%;
+    height: 28%;
+  }
+  .feedback-content{
+    width: 100%;
+    height: 28%;
+  }
+  .online-content{
+    width: 100%;
+    height: 28%;
+  }
+  .middle-tool-content img {
+    filter: grayscale(100%);
+    opacity: 0.66;
+  }
+
+  .middle-tool-content img:hover {
+    filter: none;
+    opacity: 1;
+    cursor: pointer;
+
+  }
+
+
 </style>
 <style>
+  /*右下角表格变透明*/
   .el-table,  .el-table tr {
     background-color: transparent;
   }
