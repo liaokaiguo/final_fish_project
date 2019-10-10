@@ -806,9 +806,14 @@
 		text-decoration: none;
 	}
 	#leftNavigaList li a:hover{
-		/* 鼠标选中时背景变色 */
-		background-color: #40c0ff;
 		color: #0c034b;
+		/* 鼠标选中时背景变色 */
+		/*用背景色*/
+		/* 浏览器不支持的时候显示 */
+		/*background-color: #40c0ff;*/
+		/* 标准的语法（必须放在最后） */
+		background-image: radial-gradient(#96f0ff, #5ee4ff, #40c0ff);
+		/*用图片*/
 		/*height:100%;*/
 		/*width:100%;*/
 		/*overflow: hidden;*/
