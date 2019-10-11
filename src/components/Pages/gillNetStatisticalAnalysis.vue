@@ -646,51 +646,6 @@
 				var date = new Date(temp[0], temp[1] - 1, temp[2]);
 				return date;
 			},
-
-			drawStowCharts(len) {
-				var lineEchart = this.$echarts.init(
-					document.getElementById("lineEchartsId")
-				);
-				var pieEchart = this.$echarts.init(
-					document.getElementById("pieEchartsId")
-				);
-
-				console.log("echarts实例创建完成");
-				lineEchart.setOption(this.LineOption);
-				lineEchart.setOption({
-					xAxis: {
-						data: this.dateArray,
-						axisLabel: {
-							interval: function (idx, val) {
-								if (idx == 0 || idx == Math.floor((len - 1) / 3) || idx == Math.floor((len - 1) / 3 * 2) || idx == len - 1) {
-									return true;
-								}
-							},
-						},
-					},
-					series: {
-						data: this.illDataByDate,
-					},
-				});
-
-
-				pieEchart.setOption(this.PieOption);
-				pieEchart.setOption({
-					series: {
-
-						data: [this.pieData.normal, this.pieData.illegal],
-					}
-				});
-
-				// pieEchart.showLoading();
-				window.addEventListener("resize", function () {
-					lineEchart.resize();
-				});
-				window.addEventListener("resize", function () {
-					pieEchart.resize();
-				});
-			},
-
 			// 查询方法
 			search() {
 				var startTime = this.getDate(this.startDate);
@@ -702,56 +657,37 @@
 				}
 			},
 			//保存报告
-			save() {
-				console.log("我要保存报告到本地！");
-				// 先查询，后保存
-				var nowTime = new Date();
-				this.exportData("刺网统计报告 " + nowTime.toLocaleString() + ".txt", this.dealDataToExport());
-			},
+		  save() {
+			  this.axios({
+				  method: "post",
+				  url: "/downloadExcel",
+				  data: {
+				  	jobType :'刺网',
+					  startTime : this.startDate + ' 00:00:00',
+					  endTime : this.endDate + ' 23:59:59',
+					  byDay:1
+			  	},
+				  responseType:'blob'
+			  }).then((response)=>{
+				  console.log(response);
+				  const link = document.createElement('a');
+				  let blob = new Blob([response.data],{type:'application/vnd.ms-excel'});
+				  link.style.display = 'none';
+				  link.href = URL.createObjectURL(blob);
+				  link.setAttribute('download','刺网分析报告('+this.startDate+'至'+this.endDate+').xlsx');
+				  document.body.appendChild(link);
+				  link.click();
+				  document.body.removeChild(link);
+		  	}).catch((response)=> {
+			  	console.log(response);
+			  })
+		  },
 			//重置方法 恢复到默认渔场、默认时间
 			reset() {
 				this.startDate = '2019-07-15';
 				this.endDate = '2019-08-31';
 				this.dataAskDeal();
 			},
-
-			fake_click(obj) {
-				var ev = document.createEvent("MouseEvents");
-				ev.initMouseEvent(
-					"click", true, false, window, 0, 0, 0, 0, 0, false, false, false, false, 0, null
-				);
-				obj.dispatchEvent(ev);
-			},
-
-			exportData(name, data) {
-				var urlObject = window.URL || window.webkitURL || window;
-				var downloadData = new Blob([data]);
-				var save_link = document.createElementNS("http://www.w3.org/1999/xhtml", "a");
-				save_link.href = urlObject.createObjectURL(downloadData);
-				save_link.download = name;
-				this.fake_click(save_link);
-			},
-
-			dealDataToExport() {
-				var datatoexport = "";
-				var allsum = this.pieData.normal.value + this.pieData.illegal.value;
-				var normalPer = (this.pieData.normal.value / allsum * 100).toFixed(2);
-				var illegalPer = (this.pieData.illegal.value / allsum * 100).toFixed(2);
-				datatoexport += "作业方式：刺网\n"
-				datatoexport += "渔场范围：" + this.fishGround + "\n";
-				datatoexport += "时间范围：" + this.startDate + "\t到\t" + this.endDate + "\n\n";
-				datatoexport += "总作业次数：" + allsum
-					+ "\t正常作业次数：" + this.pieData.normal.value + "\t非法作业次数：" + this.pieData.illegal.value + "\n";
-				datatoexport += "正常作业占比：" + normalPer + "%";
-				datatoexport += "\t非法作业占比：" + illegalPer + "%" + "\n\n";
-				var i;
-				datatoexport += "时间" + "\t\t\t" + "违法作业次数\n"
-				for (i = 0; i < this.dataLength; i++) {
-					datatoexport += this.dateArray[i] + "\t\t" + this.illDataByDate[i] + "\n";
-				}
-				return datatoexport;
-			},
-
 		},
 
 	};
