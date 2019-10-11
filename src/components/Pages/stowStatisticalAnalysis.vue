@@ -96,12 +96,9 @@
 					resetTips: '重置条件',
 					saveTips: '保存结果',
 				},
-				//定义辐射图数据的个数
-				numIndex:0,
 				// 默认时间设置
 				startDate: '2019-07-15',
 				endDate: '2019-08-31',
-
 				//正常作业柱状图选项
 				NormalBarOption:{
 					grid:{
@@ -478,18 +475,15 @@
 			},
 
 			//初始化图表
-			init() {
+			initCharts(){
 				var myDate = new Date();
 				console.log("----------" + myDate.toLocaleString() + "----------");
 				console.log("正在执行init()...");
-				this.dataAskDeal();
-			},
-			initCharts(){
 				//初始化图表
 				this.dataAskDeal();
 			},
-			//画出两个Echarts图
-			drawPurseCharts() {
+			//画Echarts图
+			drawCharts() {
 				var brokenEChart = this.$echarts.init(
 					document.getElementById("BrokenEchartsId")
 				);
@@ -558,22 +552,11 @@
 					illegalSEcharts.resize();
 				});
 			},
-			//查询方法
-			SearCh () {
-				//请求数据
-				var startTime = this.getDate(this.fisrtTime);
-				var endTime = this.getDate(this.lastTime);
-				if (endTime.getTime() - startTime.getTime() < 0) {
-					alert("终止时间不得早于起始时间！");
-				} else {
-					this.dataAskDeal();
-				}
-			},
 
 			//数据请求及返回数据处理
 			dataAskDeal () {
 				this.saveData.time=[];
-				var i=0;//i作为time数组的索引
+				var i=0; //i作为time数组的索引
 				var startTime = this.getDate(this.startDate);
 				var endTime = this.getDate(this.endDate);
 				while((endTime.getTime()-startTime.getTime())>=0) {
@@ -584,10 +567,10 @@
 					var day = startTime.getDate().toString().length == 1 ? "0" + startTime.getDate() : startTime.getDate();
 					//保存时间序列
 					this.saveData.time[i]=year + '-' + month + '-' + day;
-					i +=1;
+					i++;
 					startTime.setDate(startTime.getDate() + 1);
 				}
-				console.log("开始提取数据");
+				console.log("开始提取数据/getDataByMonthOrDay");
 				this.axios({
 					method: "post",
 					url: "/getDataByMonthOrDay",
@@ -610,6 +593,7 @@
 					this.saveData.illegal = (response).data.illegal;
 					this.data.normal.value=sumlegal;
 					this.data.illegal.value=sumillegal;
+					console.log("开始提取数据/countBstype");
 					this.axios({
 						method:"post",
 						url:"/countBstype",
@@ -627,11 +611,10 @@
 						}
 						this.radarData.normal=normalNum;
 						this.radarData.illegal=illegalNum;
-						this.drawPurseCharts();
-					}).catch((res)=>{
-						console.log(res);
+						this.drawCharts()
+					}).catch((response)=>{
+						console.log(response);
 					});
-
 				}).catch((response)=>{
 					console.log(response);
 				});
@@ -707,7 +690,6 @@
 			},
 			//重置方法 恢复到默认渔场、默认时间
 			reset() {
-				this.fishGround = '所有渔场';
 				this.startDate = '2019-07-15';
 				this.endDate = '2019-08-31';
 				this.dataAskDeal();
@@ -747,7 +729,6 @@
 				for (i = 0; i < this.dataLength; i++) {
 					datatoexport += this.dateArray[i] + "\t\t" + this.illDataByDate[i] + "\n";
 				}
-
 				return datatoexport;
 			},
 
