@@ -2,22 +2,19 @@
 	<!-- 张网作业方式统计分析 stow net statistic and analysis -->
 	<div>
 		<!-- 背景 -->
-		<div id="backGround">
-			<img class="bgimg" src="../../assets/background_high.png"/>
-		</div>
-
+		<div id="backGround"></div>
 		<!-- 主要内容 -->
 		<div id="main-content">
 			<!-- 主标题 -->
 			<div class="mainTitle">
-				<p class="title" @click="refreshPage" v-bind:title="thisPageTips">张网作业方式统计分析</p>
+				<p class="title" @click="refreshPage" v-bind:title="tipMsg.thisPageName">张网作业方式统计分析</p>
 			</div>
 			<!-- 右上角导航按钮 -->
 			<div class="navigaIcon" id="navigaIcon">
-				<img class="goBack" src="../../assets/rebackLastIcon.png" alt="后退" v-on:click="goBack"
-				     v-bind:title="backTips">
-				<img class="goHome" src="../../assets/rebackMainIcon.png" alt="主页" v-on:click="goHome"
-				     v-bind:title="homeTips">
+				<img class="goBack" src="../../assets/backico.png" alt="后退" v-on:click="goBack"
+				     v-bind:title="tipMsg.goBack">
+				<img class="goHome" src="../../assets/homeico.png" alt="主页" v-on:click="goHome"
+				     v-bind:title="tipMsg.goHome">
 			</div>
 			<!-- 菜单栏 -->
 			<div class="setMenu">
@@ -25,21 +22,20 @@
 				<div class="selectDT">
 					<form method="post">
 						日期：
-						<input type="date" v-model="startDate" v-bind:title="startDateTips"/>
+						<input type="date" v-model="startDate" v-bind:title="tipMsg.startDateTips"/>
 						&nbsp;到&nbsp;
-						<input type="date" v-model="endDate" v-bind:title="endDateTips"/>
+						<input type="date" v-model="endDate" v-bind:title="tipMsg.endDateTips"/>
 					</form>
 				</div>
 				<!-- 菜单按钮 -->
 				<div class="menuButtons">
 					<div class="button">
-						<button @click="search" v-bind:title="checkTips">查询</button>
-						<button @click="save" v-bind:title="saveTips">保存</button>
-						<button @click="reset" v-bind:title="resetTips">重置</button>
+						<button @click="search" v-bind:title="tipMsg.checkTips">查询</button>
+						<button @click="save" v-bind:title="tipMsg.saveTips">保存</button>
+						<button @click="reset" v-bind:title="tipMsg.resetTips">重置</button>
 					</div>
 				</div>
 			</div>
-
 
 			<!-- 左侧透明导航栏 -->
 			<div id="leftNavigaList" >
@@ -53,37 +49,30 @@
 					<li><router-link to="/trawlSA" >拖网作业方式<br>统计及分析</router-link></li>
 					<li><router-link to="/gillNetStAnalysis" >刺网作业方式<br>统计及分析</router-link></li>
 					<li><router-link to="/stowSA" >张网作业方式<br>统计及分析</router-link></li>
-<!--					<li><a href="#">一级菜单1</a>-->
-<!--						<ul>-->
-<!--							<li><a href="#">二级菜单1</a></li>-->
-<!--							<li><a href="#">二级菜单2</a></li>-->
-<!--							<li><a href="#">二级菜单3</a></li>-->
-<!--						</ul>-->
-<!--					</li>-->
 				</ul>
 			</div>
 
 			<!--主要内容展示区域-->
-			<div class="showResult">
-				<div class="normalBar">
+			<div id="showResult">
+				<div id="normalBar">
 					<div class="GraphTitle">正常作业统计柱状图</div>
 					<div class="GraphEcharts" id="normalBarEchartsId"></div>
 				</div>
-				<div class="normalShipRadar">
-					<div class="GraphTitle">正常作业渔船类型分布图</div>
-					<div class="GraphEcharts" id="normalSREchartsId"></div>
-				</div>
-				<div class="illegalShipRadar">
-					<div class="GraphTitle">非法作业渔船类型分布图</div>
-					<div class="GraphEcharts" id="illegalSREchartsId"></div>
-				</div>
-				<div class="illegalOSBroken">
+				<div id="illegalOSBroken">
 					<div class="GraphTitle">非法作业统计折线图</div>
 					<div class="GraphEcharts" id="BrokenEchartsId"></div>
 				</div>
-				<div class="illegalOSPercentage">
+				<div id="illegalOSPercentage">
 					<div class="GraphTitle">非法作业统计占比图</div>
 					<div class="GraphEcharts" id="PerIOSEchartsId"></div>
+				</div>
+				<div id="normalShipRadar">
+					<div class="GraphTitle">正常作业渔船类型分布图</div>
+					<div class="GraphEcharts" id="normalSREchartsId"></div>
+				</div>
+				<div id="illegalShipRadar">
+					<div class="GraphTitle">非法作业渔船类型分布图</div>
+					<div class="GraphEcharts" id="illegalSREchartsId"></div>
 				</div>
 			</div>
 		</div>
@@ -97,28 +86,28 @@
 		data() {
 			return {
 				// Tips提示
-				thisPageTips: '张网作业方式统计分析',
-				backTips: '后退',
-				homeTips: '主页',
-				selectFGTips: '请选择渔场',
-				startDateTips: '请选择起始日期',
-				endDateTips: '请选择终止日期',
-				checkTips: '查询结果',
-				resetTips: '重置条件',
-				saveTips: '保存结果',
+				tipMsg:{
+					thisPageName: '张网作业方式统计分析',
+					goBack: '后退',
+					goHome: '主页',
+					startDateTips: '请选择起始日期',
+					endDateTips: '请选择终止日期',
+					checkTips: '查询结果',
+					resetTips: '重置条件',
+					saveTips: '保存结果',
+				},
 				//定义辐射图数据的个数
 				numIndex:0,
 				// 默认时间设置
 				startDate: '2019-07-15',
 				endDate: '2019-08-31',
 
-				//非法作业折线图选项
-				BrokenOption: {
-					color: ["#f44"],
+				//正常作业柱状图选项
+				NormalBarOption:{
 					grid:{
-						left: "10%",
+						left: "13%",
 						top: "10%",
-						width: "80%",
+						width: "75%",
 						height: "70%",
 					},//使得图表覆盖整个div
 					tooltip: {
@@ -135,20 +124,22 @@
 							type: "category",
 							data: [],
 							axisTick: {
-								show: true,
-								inside: true,
+								show: false,
+								inside: false,
 								alignWithLabel: true
 							},
 							axisLine: {
 								lineStyle: {
-									color: "#5bbdff",
+									color: "#5bb1ff",
 									width: 2,
 								}
 							},
 							axisLabel: {
 								fontSize: 14,
-								color: "#5b9bd5",
-								rotate: 0,
+								color: "#5bb1ff",
+								//rotate: 10,
+								//margin:18,
+								align:'center',
 							}
 						}
 					],
@@ -163,14 +154,98 @@
 							},
 							axisLine: {
 								lineStyle: {
-									color: "#5bbdff",
+									color: "#5bb1ff",
 									width: 2,
 								},
 							},
 							scale: false,
 							axisLabel: {
 								fontSize: 14,
-								color: "#5b9bd5"
+								color: "#5bb1ff"
+							},
+							splitLine: {
+								show: true,
+								lineStyle: {
+									color: "#ccc",
+									width: 1,
+									type: "dashed",
+								},
+							},
+						}
+					],
+					series:[
+						{
+							name:"每日数量",
+							type:"bar",
+							data:[],
+							itemStyle:{
+								barBorderRadius:[4,4,0,0],
+							}
+						}
+					],
+					color:"rgb(145,249,184)",
+				},
+				//非法作业折线图选项
+				BrokenOption: {
+					color: ["#f44"],
+					grid:{
+						left: "13%",
+						top: "10%",
+						width: "75%",
+						height: "70%",
+					},//使得图表覆盖整个div
+					tooltip: {
+						trigger: "axis",
+						axisPointer: {
+							type: "line",
+							lineStyle: {
+								type: "dashed",
+							},
+						},
+					},
+					xAxis: [
+						{
+							type: "category",
+							data: [],
+							axisTick: {
+								show: false,
+								inside: true,
+								alignWithLabel: true
+							},
+							axisLine: {
+								lineStyle: {
+									color: "#5bb1ff",
+									width: 2,
+								}
+							},
+							axisLabel: {
+								fontSize: 14,
+								color: "#5bb1ff",
+								//rotate: 10,
+								//margin:18,
+								align:'center',
+							}
+						}
+					],
+					yAxis: [
+						{
+							minInterval: 1,
+							type: "value",
+							axisTick: {
+								show: true,
+								inside: true,
+								alignWithLabel: true,
+							},
+							axisLine: {
+								lineStyle: {
+									color: "#5bb1ff",
+									width: 2,
+								},
+							},
+							scale: false,
+							axisLabel: {
+								fontSize: 14,
+								color: "#5bb1ff"
 							},
 							splitLine: {
 								show: true,
@@ -186,7 +261,6 @@
 						{
 							name: "每日数量",
 							type: "line",
-							smooth: true,
 							symbolSize: 2,
 							showSymbol: false,
 							cursor: 'pointer',
@@ -202,10 +276,10 @@
 				//非法作业占比图选项
 				PercentageOption: {
 					grid: {
-						left: "10%",
-						top: "0%",
-						width: "80%",
-						height: "100%",
+						left: "13%",
+						top: "10%",
+						width: "75%",
+						height: "70%",
 					},
 					tooltip: {
 						trigger: "item",
@@ -213,7 +287,7 @@
 					},
 					legend: {
 						orient: "vertical",
-						left: "4%",
+						right: "8%",
 						top: "middle",
 						data: ["正常作业", "非法作业"],
 						textStyle: {
@@ -226,7 +300,7 @@
 							name: "占比情况",
 							type: "pie",
 							radius: "75%",
-							center: ["50%", "50%"],
+							center: ["35%", "50%"],
 							labelLine: {
 								show: false,
 							},
@@ -247,95 +321,19 @@
 							}
 						}
 					],
-					color: ["#5b9bff", "#ed7d31",]
-				},
-				//正常作业柱状图选项
-				NormalBarOption:{
-					grid:{
-						left: "10%",
-						top: "10%",
-						width: "80%",
-						height: "70%",
-					},//使得图表覆盖整个div
-					tooltip: {
-						trigger: "axis",
-						axisPointer: {
-							type: "line",
-							lineStyle: {
-								type: "dashed",
-							},
-						},
-					},
-					xAxis: [
-						{
-							type: "category",
-							data: [],
-							axisTick: {
-								show: true,
-								inside: false,
-								alignWithLabel: true
-							},
-							axisLine: {
-								lineStyle: {
-									color: "#5bbdff",
-									width: 2,
-								}
-							},
-							axisLabel: {
-								fontSize: 14,
-								color: "#5b9bd5",
-								rotate: 0,
-							}
-						}
-					],
-					yAxis: [
-						{
-							minInterval: 1,
-							type: "value",
-							axisTick: {
-								show: true,
-								inside: true,
-								alignWithLabel: true,
-							},
-							axisLine: {
-								lineStyle: {
-									color: "#5bbdff",
-									width: 2,
-								},
-							},
-							scale: false,
-							axisLabel: {
-								fontSize: 14,
-								color: "#5b9bd5"
-							},
-							splitLine: {
-								show: true,
-								lineStyle: {
-									color: "#ccc",
-									width: 1,
-									type: "dashed",
-								},
-							},
-						}
-					],
-					series:[
-						{
-							name:"每日数量",
-							type:"bar",
-							data:[],
-						}
-					],
-					color:"#5b9bff",
+					color: ["rgb(145,249,184)", "#ed7d31",]
 				},
 				//正常作业渔船类型星状图选项
 				NormalShipOption:{
-					tooltip:{},
+					tooltip:{
+						show:true,
+					},
 					radar:
 						{
-							center:["43%","46%"],
-							radius:"60%",
+							center:["45%","49%"],
+							radius:"68%",
 							name:{
-								color:"#58a0ee",
+								color:"#5bb1ff",
 								fontStyle:'normal',
 								fontSize:14,
 							},
@@ -344,7 +342,7 @@
 							axisLine:{
 								show:true,
 								lineStyle:{
-									color:"#58a0ee",
+									color:"#5bb1ff",
 									width:1,
 									opacity:1,
 									type:"dashed",
@@ -353,7 +351,7 @@
 							splitLine:{
 								lineStyle:{
 									color:"#CCC",
-									opacity:0.1,
+									opacity:0.4,
 								}
 							},
 							splitArea:{
@@ -374,13 +372,13 @@
 							type:"radar",
 							symbol:"none",
 							lineStyle:{
-								color:"#58a0ee",
+								color:"rgb(145,249,184)",
 								width:2,
 								opacity:1,
 							},
 							areaStyle:{
-								color:'#58a0ee',
-								opacity:0.6,
+								color:'rgb(145,249,184)',
+								opacity:0.3,
 							},
 							data:[],
 						}
@@ -391,10 +389,10 @@
 					tooltip:{},
 					radar:
 						{
-							center:["43%","46%"],
-							radius:"60%",
+							center:["45%","50%"],
+							radius:"68%",
 							name:{
-								color:"#58a0ee",
+								color:"#5bb1ff",
 								fontStyle:'normal',
 								fontSize:14,
 							},
@@ -403,7 +401,7 @@
 							axisLine:{
 								show:true,
 								lineStyle:{
-									color:"#58a0ee",
+									color:"#5bb1ff",
 									width:1,
 									opacity:1,
 									type:"dashed",
@@ -412,7 +410,7 @@
 							splitLine:{
 								lineStyle:{
 									color:"#CCC",
-									opacity:0.1,
+									opacity:0.4,
 								}
 							},
 							splitArea:{
@@ -429,7 +427,7 @@
 						},
 					series:[
 						{
-							name:"正常作业",
+							name:"非法作业",
 							type:"radar",
 							symbol:"none",
 							lineStyle:{
@@ -439,7 +437,7 @@
 							},
 							areaStyle:{
 								color:'#ed7d31',
-								opacity:0.6,
+								opacity:0.3,
 							},
 							data:[],
 						}
@@ -455,7 +453,7 @@
 				},
 				shipType:['养殖船','国内捕捞船','捕捞辅助船','其他辅助船','专业远洋渔船','非专业远洋渔船'],
 				/*存储返回的数据以及时间序列*/
-				saveData:[],
+				saveData:{},
 				/*存储渔船星状图数据*/
 				radarData:[],
 			};
@@ -612,90 +610,31 @@
 					this.saveData.illegal = (response).data.illegal;
 					this.data.normal.value=sumlegal;
 					this.data.illegal.value=sumillegal;
-					this.drawPurseCharts();
-					//onsole.log(this.saveData);
+					this.axios({
+						method:"post",
+						url:"/countBstype",
+						data:{
+							startTime : this.startDate + ' 00:00:00',
+							endTime : this.endDate + ' 23:59:59',
+							jobType :"张网",
+						}
+					}).then((res)=>{
+						var normalNum=[];
+						var illegalNum=[];
+						for(var j=0;j<6;j++){
+							normalNum[j]=(res).data.normal[this.shipType[j]];
+							illegalNum[j]=(res).data.illegal[this.shipType[j]];
+						}
+						this.radarData.normal=normalNum;
+						this.radarData.illegal=illegalNum;
+						this.drawPurseCharts();
+					}).catch((res)=>{
+						console.log(res);
+					});
+
 				}).catch((response)=>{
 					console.log(response);
 				});
-
-				this.axios({
-					method:"post",
-					url:"/countBstype",
-					data:{
-						startTime : this.startDate + ' 00:00:00',
-						endTime : this.endDate + ' 23:59:59',
-						jobType :"张网",
-					}
-				}).then((res)=>{
-					var normalNum=[];
-					var illegalNum=[];
-					for(var j=0;j<6;j++){
-						normalNum[j]=(res).data.normal[this.shipType[j]];
-						illegalNum[j]=(res).data.illegal[this.shipType[j]];
-					}
-					this.radarData.normal=normalNum;
-					this.radarData.illegal=illegalNum;
-					this.drawPurseCharts();
-				}).catch((res)=>{
-					console.log(res);
-				});
-				//console.log(this.radarData);
-			},
-
-
-			dataAskDeal11() {
-				console.log("正在执行dataAskDeal()...");
-				console.log("startDate:" + this.startDate);
-				console.log("endDate:" + this.endDate);
-
-				this.dateArray = [];
-				var i = 0;
-				var startTime = this.getDate(this.startDate);
-				var endTime = this.getDate(this.endDate);
-				while ((endTime.getTime() - startTime.getTime()) >= 0) {
-					var year = startTime.getFullYear();
-					var x = startTime.getMonth() + 1;
-					var month = x.toString().length == 1 ? "0" + x.toString() : x;
-					var day = startTime.getDate().toString().length == 1 ? "0" + startTime.getDate() : startTime.getDate();
-					//保存时间序列
-					this.dateArray[i] = year + '-' + month + '-' + day;
-					i += 1;
-					startTime.setDate(startTime.getDate() + 1);
-				}
-				this.axios({
-					method: "post",
-					url: "/getDataByMonthOrDay",
-					data: {
-						jobType: '张网',
-						startTime: this.startDate + ' 00:00:00',
-						endTime: this.endDate + ' 23:59:59',
-						byDay: 1
-					},
-				}).then((response) => {
-					console.log("响应正常...");
-					var sum_nor = 0;
-					var sum_ill = 0;
-					var length = response.data.total.length;
-					this.dataLength = length;
-					console.log("数据总长度：" + length);
-					for (var i = 0; i < response.data.normal.length; i++) {
-						sum_nor += response.data.normal[i];
-					}
-					;
-					for (var i = 0; i < response.data.illegal.length; i++) {
-						sum_ill += response.data.illegal[i];
-					}
-					;
-					console.log("正常总数:" + sum_nor);
-					console.log("非法总数:" + sum_ill);
-					this.pieData.normal.value = sum_nor;
-					this.pieData.illegal.value = sum_ill;
-					this.illDataByDate = response.data.illegal;
-					this.drawStowCharts(length);
-				}).catch((response) => {
-					console.log("响应错误...");
-					console.log("错误是：" + response);
-				})
 			},
 
 			//String to Date 时间调整函数 月份-1，适配Date类型
@@ -819,9 +758,20 @@
 
 
 <style scoped>
-	/* 1 底层背景样式，窗口自适应 */
+	/* #1 底层背景样式，窗口自适应 */
 	/* 底层背景 */
 	#backGround {
+		background-image: url("../../assets/background_high.png");
+		background-size: 100% 100%;
+		width: 100%;
+		height: 100%;
+		position: absolute;
+		background-repeat: no-repeat;
+		/* 底层背景层 */
+		z-index: 1;
+		overflow: hidden;
+	}
+	#backGround_backup1 {
 		position: absolute;
 		width: 100%;
 		height: 100%;
@@ -830,14 +780,14 @@
 		z-index: 1;
 	}
 	/* 底层背景图片 */
-	#backGround .bgimg {
+	#backGround_backup1 .bgimg {
 		width: 100%;
 		height: 100%;
 		/* 底层背景图片层 */
 		z-index: 2;
 	}
 
-	/* 2 主要内容样式，窗口自适应 */
+	/* #2 主要内容样式，窗口自适应 */
 	/* 主要内容 */
 	#main-content {
 		position: absolute;
@@ -848,7 +798,7 @@
 		z-index: 80;
 	}
 
-	/* 中心标题样式 */
+	/* #2.1 中心标题样式 */
 	.mainTitle {
 		position: absolute;
 		left: 35vw;
@@ -859,10 +809,9 @@
 		/* background-color 测试用 */
 		/*background-color: #FFFFFF;*/
 	}
-
 	.mainTitle .title {
-		font-family: FZDHTJW--GB1-0;
-		color: #55a6ee;
+		font-family: Microsoft YaHei;
+		color: #5bb1ff;
 		cursor: pointer;
 		letter-spacing: 0.2vw;
 		font-size: 4.3vh;
@@ -871,6 +820,7 @@
 		/*background-color: #ff5234;*/
 	}
 
+	/* #2.2 右上角导航按钮 */
 	#main-content .navigaIcon {
 		position: absolute;
 		right: 2vw;
@@ -896,91 +846,73 @@
 		height: 80%;
 	}
 
-	/* 菜单栏 */
+	/* #2.3 中上方菜单栏 */
 	#main-content .setMenu {
 		position: absolute;
 		width: 80vw;
 		height: 6vh;
 		left: 10vw;
-		top: 12vh;
+		top: 9.5vh;
 		margin-top: 1vh;
 		margin-bottom: 1vh;
-		color: #58a0ee;
+		color: #5bb1ff;
 		/* background-color 测试用 */
-		/* background-color: #FFFFFF; */
+		/* background-color: #FFFFFF;*/
 	}
-
-	/*选择渔场菜单*/
-	#main-content .setMenu .selectFG {
-		position: absolute;
-		width: 18%;
-		height: 100%;
-		color: #58a0ee;
-		font-size: 2.8vh;
-		/* background-color 测试用 */
-		/* background-color: #0e0270; */
-	}
-
-	#main-content .setMenu .selectFG form select {
-		width: 60%;
-		height: 5vh;
-		background-color: #0e0270;
-		color: #58a0ee;
-		border-color: #58a0ee;
-		border-width: 1px;
-	}
-
 
 	/* 选择日期时间菜单 */
 	#main-content .setMenu .selectDT {
 		position: absolute;
-		left: 20%;
+		left: 10%;
 		width: 50%;
 		height: 100%;
 		font-size: 2.8vh;
 		/* background-color 测试用 */
-		/* background-color: #0e0270; */
+		/* background-color: #FFFFFF;*/
 	}
 
 	#main-content .setMenu .selectDT form input {
 		width: 35%;
 		height: 5vh;
-		background-color: #0e0270;
-		color: #58a0ee;
-		border-color: #58a0ee;
+		background-color: rgba(255, 255, 255, 0.04);
+		color: #5bb1ff;
+		border-color: #5bb1ff;
+		text-align: center;
 	}
 
 	/*  修改日历控件类型 */
 	/*控制编辑区域的*/
 	input[type="date"]::-webkit-datetime-edit {
+		background-color: rgba(255, 255, 255, 0);
 	}
 
 	/*控制年月日这个区域的*/
 	input[type="date"]::-webkit-datetime-edit-fields-wrapper {
+		/*background-color: #FFFFFF;*/
 	}
 
 	/*这是控制年月日之间的斜线或短横线的*/
 	input[type="date"]::-webkit-datetime-edit-text {
-		color: #58a0ee;
+		color: #5bb1ff;
 		padding: 0.5em;
 	}
 
 	/*控制年文字, 如2019四个字母占据的那片地方*/
 	input[type="date"]::-webkit-datetime-edit-year-field {
-		color: #58a0ee;
-		background-color: #0e0270;
+		color: #5bb1ff;
+		background-color: none;
 	}
 
 	/*控制月文字*/
 	input[type="date"]::-webkit-datetime-edit-month-field {
-		color: #58a0ee;
-		background-color: #0e0270;
+		color: #5bb1ff;
+		background-color: none;
 	}
 
 	/*控制日文字*/
 	input[type="date"]::-webkit-datetime-edit-day-field {
-		color: #58a0ee;
-		background-color: #0e0270;
+		color: #5bb1ff;
+		background-color: none;
 	}
 
 	/*这是控制上下小箭头的*/
@@ -992,11 +924,12 @@
 	/*这是控制下拉小箭头的*/
 	input[type="date"]::-webkit-calendar-picker-indicator {
 		position: relative;
-		right: 2%;
+		right: 3%;
 		border: 0.1em solid #58a0ee;
 		border-radius: 0.2em;
 		color: #0e0270;
 		background-image: -webkit-linear-gradient(top, #58a0ee, #acc8e6);
+		visibility: visible;
 	}
 
 	/*控制清除按钮*/
@@ -1004,39 +937,38 @@
 		/* 直接隐藏 */
 		visibility: hidden;
 	}
-
+	/*菜单按钮栏*/
 	#main-content .setMenu .menuButtons {
 		position: absolute;
-		left: 75%;
+		left: 68%;
 		width: 25%;
 		height: 100%;
 		font-size: 2.8vh;
 		/* background-color 测试用 */
-		/* background-color: #0e0270; */
+		/* background-color: #FFFFFF;*/
 	}
-
+	/*菜单按钮*/
 	#main-content .setMenu .menuButtons button {
 		width: 24%;
 		height: 5vh;
-		background-color: #0e0270;
-		color: #58a0ee;
-		border-color: #58a0ee;
+		background-color: rgba(8, 17, 44, 0.11);
+		color: #5bb1ff;
+		border-color: #5bb1ff;
 		cursor: pointer;
 	}
 
-	/* 左侧透明导航栏 */
+	/* #2.4 左侧透明导航栏 */
 	#leftNavigaList{
 		position: absolute;
-		bottom: 10vh;
-		left: 0.5vw;
+		top: 18vh;
+		left: 1vw;
 		width: 8vw;
-		height: 75vh;
+		height: 72vh;
 		z-index: 99;
 		/*text-align: center;*/
-		/* background-color 测试用 */
 		background-color: rgba(0, 0, 0, 0.24);
+		border-radius: 0.5rem;
 	}
-
 	#leftNavigaList ul{
 		/* 清除ul标签的默认样式 */
 		position: absolute;
@@ -1045,7 +977,6 @@
 		width: 100%;
 		margin: 0;
 		padding: 0;
-
 		font-size: 2.2vh;
 		list-style-type: none;
 		display: block;
@@ -1064,7 +995,7 @@
 	}
 	#leftNavigaList li {
 		float: top;     /* 使li内容纵向浮动 */
-		margin-top:0;   /* 两个li之间的距离 */
+		margin-top: 0.5vh;   /* 两个li之间的距离 */
 		/*border: solid 1px #191762;*/
 	}
 	#leftNavigaList li a {
@@ -1095,87 +1026,104 @@
 		/*background-repeat: no-repeat;*/
 	}
 
-	/*结果显示区域格式*/
-	.showResult{
+	/*2.5 结果显示区域格式*/
+	/*磨砂背景*/
+	#showResult{
 		position: absolute;
-		width: 90vw;
-		height: 85vh;
-		left: 10vw;
+		width: 85vw;
+		height: 78vh;
+		left: 12vw;
 		top: 18vh;
 		margin-top: 0vh;
 		margin-bottom: 0vh;
-		/*background-color: #FFFFFF;*/
+		background-color: rgba(0, 0, 0, 0.14);
+		border-radius: 2rem;
 	}
 	/*正常作业柱状图格式*/
-	.normalBar{
+	#normalBar{
 		position: absolute;
-		width: 30%;
-		height: 40%;
-		top: 5%;
-		left:1%;
-		background-image:url("../../assets/msgBg.png");
-	}
-	.GraphTitle{
-		width: 60%;
-		height: 5%;
-		/*font-family: MicrosoftYaHei;*/
-		font-size: 2.8vh;
-		letter-spacing: 0.1vw;
-		color: #58a0ee;
-		top: 3.5%;
-		left: 20%;
-		position: absolute;
-	}
-	.GraphEcharts{
-		top:15%;
-		width: 100%;
-		height: 94%;
-		position: absolute;
-		left:8%;
-	}
-	/*正常作业渔船星状图*/
-	.normalShipRadar{
-		position: absolute;
-		width: 35%;
-		height: 45%;
-		left: 12%;
-		top: 50%;
-		background-image:url("../../assets/msgBg.png");
-	}
-	/*非法作业渔船星状图*/
-	.illegalShipRadar{
-		position: absolute;
-		width: 35%;
-		height: 45%;
-		left: 52%;
-		top: 50%;
-		background-image:url("../../assets/msgBg.png");
+		width: 32%;
+		height: 48%;
+		top: 2%;
+		left: 1%;
+		/* background-color 测试用 */
+		/*background-color: #FFFFFF;*/
+		background-image:url("../../assets/msgBg2.png");
+		background-size: 100% 100%;
+		background-repeat: no-repeat;
 	}
 	/*非法作业折线图模块格式*/
-	.illegalOSBroken {
+	#illegalOSBroken {
 		position: absolute;
-		width: 30%;
-		height: 40%;
-		top: 5%;
-		left:33%;
+		width: 32%;
+		height: 48%;
+		top: 2%;
+		left: 34%;
 		/* background-color 测试用 */
-		background-image:url("../../assets/msgBg.png");
+		/*background-color: #FFFFFF;*/
+		background-image:url("../../assets/msgBg2.png");
+		background-size: 100% 100%;
+		background-repeat: no-repeat;
 	}
 	/*非法作业占比图*/
-	.illegalOSPercentage {
+	#illegalOSPercentage {
 		position: absolute;
-		width: 30%;
-		height: 40%;
-		top: 5%;
-		left:65%;
+		width: 32%;
+		height: 48%;
+		top: 2%;
+		left: 67%;
 		/* background-color 测试用 */
-		background-image:url("../../assets/msgBg.png");
+		/*background-color: #FFFFFF;*/
+		background-image:url("../../assets/msgBg2.png");
+		background-size: 100% 100%;
+		background-repeat: no-repeat;
 	}
-
-
-
-
-
-
-
+	/*正常作业渔船星状图*/
+	#normalShipRadar{
+		position: absolute;
+		width: 36%;
+		height: 48%;
+		left: 12%;
+		top: 52%;
+		/* background-color 测试用 */
+		/*background-color: #FFFFFF;*/
+		background-image:url("../../assets/msgBg2.png");
+		background-size: 100% 100%;
+		background-repeat: no-repeat;
+	}
+	/*非法作业渔船星状图*/
+	#illegalShipRadar{
+		position: absolute;
+		width: 36%;
+		height: 48%;
+		left: 52%;
+		top: 52%;
+		/* background-color 测试用 */
+		/*background-color: #FFFFFF;*/
+		background-image:url("../../assets/msgBg2.png");
+		background-size: 100% 100%;
+		background-repeat: no-repeat;
+	}
+	.GraphTitle{
+		position: absolute;
+		top: 0%;
+		left: 20%;
+		width: 60%;
+		height: 10%;
+		margin-top: 1.15%;
+		font-size: 2.8vh;
+		letter-spacing: 0.1vw;
+		color: #5bb1ff;
+		/* background-color 测试用 */
+		/*background-color: #FFFFFF;*/
+	}
+	.GraphEcharts{
+		top: 15%;
+		left: 6%;
+		height: 75%;
+		width: 88%;
+		position: absolute;
+		/* background-color 测试用 */
+		/*background-color: #FFFFFF;*/
+	}
 </style>
