@@ -1,93 +1,93 @@
 <template>
-	<!-- 围网作业方式统计分析 stow net statistic and analysis -->
-	<div>
-		<!-- 背景 -->
-		<div id="backGround"></div>
-		<!-- 主要内容 -->
-		<div id="main-content">
-			<!-- 主标题 -->
-			<div class="mainTitle">
-				<p class="title" @click="refreshPage" v-bind:title="tipMsg.thisPageName">围网作业方式统计分析</p>
-			</div>
-			<!-- 右上角导航按钮 -->
-			<div class="navigaIcon" id="navigaIcon">
-				<img class="goBack" src="../../assets/backico.png" alt="后退" v-on:click="goBack"
-				     v-bind:title="tipMsg.goBack">
-				<img class="goHome" src="../../assets/homeico.png" alt="主页" v-on:click="goHome"
-				     v-bind:title="tipMsg.goHome">
-			</div>
-			<!-- 菜单栏 -->
-			<div class="setMenu">
-				<!-- 选择时间菜单 -->
-				<div class="selectDT">
-					<form method="post">
-						日期：
-						<input type="date" v-model="startDate" v-bind:title="tipMsg.startDateTips"/>
-						&nbsp;到&nbsp;
-						<input type="date" v-model="endDate" v-bind:title="tipMsg.endDateTips"/>
-					</form>
-				</div>
-				<!-- 菜单按钮 -->
-				<div class="menuButtons">
-					<div class="button">
-						<button @click="search" v-bind:title="tipMsg.checkTips">查询</button>
-						<button @click="save" v-bind:title="tipMsg.saveTips">保存</button>
-						<button @click="reset" v-bind:title="tipMsg.resetTips">重置</button>
-					</div>
-				</div>
-			</div>
+  <!-- 拖网作业方式统计分析 stow net statistic and analysis -->
+  <div>
+    <!-- 背景 -->
+    <div id="backGround"></div>
+    <!-- 主要内容 -->
+    <div id="main-content">
+      <!-- 主标题 -->
+      <div class="mainTitle">
+        <p class="title" @click="refreshPage" v-bind:title="tipMsg.thisPageName">拖网作业方式统计分析</p>
+      </div>
+      <!-- 右上角导航按钮 -->
+      <div class="navigaIcon" id="navigaIcon">
+        <img class="goBack" src="../../assets/backico.png" alt="后退" v-on:click="goBack"
+             v-bind:title="tipMsg.goBack">
+        <img class="goHome" src="../../assets/homeico.png" alt="主页" v-on:click="goHome"
+             v-bind:title="tipMsg.goHome">
+      </div>
+      <!-- 菜单栏 -->
+      <div class="setMenu">
+        <!-- 选择时间菜单 -->
+        <div class="selectDT">
+          <form method="post">
+            日期：
+            <input type="date" v-model="startDate" v-bind:title="tipMsg.startDateTips"/>
+            &nbsp;到&nbsp;
+            <input type="date" v-model="endDate" v-bind:title="tipMsg.endDateTips"/>
+          </form>
+        </div>
+        <!-- 菜单按钮 -->
+        <div class="menuButtons">
+          <div class="button">
+            <button @click="search" v-bind:title="tipMsg.checkTips">查询</button>
+            <button @click="save" v-bind:title="tipMsg.saveTips">保存</button>
+            <button @click="reset" v-bind:title="tipMsg.resetTips">重置</button>
+          </div>
+        </div>
+      </div>
 
-			<!-- 左侧透明导航栏 -->
-			<div id="leftNavigaList" >
-				<ul>
-					<li class="leftNavTitle">目&nbsp;&nbsp;&nbsp;&nbsp;录</li>
-					<li><router-link to="/mapShow">地图显示</router-link></li>
-					<li><router-link to="/passPort" >渔船出入港</router-link></li>
-					<li><router-link to="/workModeSta" >渔船作业方式<br>统计及查询</router-link></li>
-					<li><router-link to="#" >船舶明细</router-link></li>
-					<li><router-link to="/purseSeineAnalysis" >围网作业方式<br>统计及分析</router-link></li>
-					<li><router-link to="/trawlSA" >拖网作业方式<br>统计及分析</router-link></li>
-					<li><router-link to="/gillNetStAnalysis" >刺网作业方式<br>统计及分析</router-link></li>
-					<li><router-link to="/stowSA" >张网作业方式<br>统计及分析</router-link></li>
-				</ul>
-			</div>
+      <!-- 左侧透明导航栏 -->
+      <div id="leftNavigaList" >
+        <ul>
+          <li class="leftNavTitle">目&nbsp;&nbsp;&nbsp;&nbsp;录</li>
+          <li><router-link to="/mapShow">地图显示</router-link></li>
+          <li><router-link to="/passPort" >渔船出入港</router-link></li>
+          <li><router-link to="/workModeSta" >渔船作业方式<br>统计及查询</router-link></li>
+          <li><router-link to="#" >船舶明细</router-link></li>
+          <li><router-link to="/purseSeineAnalysis" >围网作业方式<br>统计及分析</router-link></li>
+          <li><router-link to="/trawlSA" >拖网作业方式<br>统计及分析</router-link></li>
+          <li><router-link to="/gillNetStAnalysis" >刺网作业方式<br>统计及分析</router-link></li>
+          <li><router-link to="/stowSA" >张网作业方式<br>统计及分析</router-link></li>
+        </ul>
+      </div>
 
-			<!--主要内容展示区域-->
-			<div id="showResult">
-				<div id="normalBar">
-					<div class="GraphTitle">正常作业统计柱状图</div>
-					<div class="GraphEcharts" id="normalBarEchartsId"></div>
-				</div>
-				<div id="illegalOSBroken">
-					<div class="GraphTitle">非法作业统计折线图</div>
-					<div class="GraphEcharts" id="BrokenEchartsId"></div>
-				</div>
-				<div id="illegalOSPercentage">
-					<div class="GraphTitle">非法作业统计占比图</div>
-					<div class="GraphEcharts" id="PerIOSEchartsId"></div>
-				</div>
-				<div id="normalShipRadar">
-					<div class="GraphTitle">正常作业渔船类型分布图</div>
-					<div class="GraphEcharts" id="normalSREchartsId"></div>
-				</div>
-				<div id="illegalShipRadar">
-					<div class="GraphTitle">非法作业渔船类型分布图</div>
-					<div class="GraphEcharts" id="illegalSREchartsId"></div>
-				</div>
-			</div>
-		</div>
-	</div>
+      <!--主要内容展示区域-->
+      <div id="showResult">
+        <div id="normalBar">
+          <div class="GraphTitle">正常作业统计柱状图</div>
+          <div class="GraphEcharts" id="normalBarEchartsId"></div>
+        </div>
+        <div id="illegalOSBroken">
+          <div class="GraphTitle">非法作业统计折线图</div>
+          <div class="GraphEcharts" id="BrokenEchartsId"></div>
+        </div>
+        <div id="illegalOSPercentage">
+          <div class="GraphTitle">非法作业统计占比图</div>
+          <div class="GraphEcharts" id="PerIOSEchartsId"></div>
+        </div>
+        <div id="normalShipRadar">
+          <div class="GraphTitle">正常作业渔船类型分布图</div>
+          <div class="GraphEcharts" id="normalSREchartsId"></div>
+        </div>
+        <div id="illegalShipRadar">
+          <div class="GraphTitle">非法作业渔船类型分布图</div>
+          <div class="GraphEcharts" id="illegalSREchartsId"></div>
+        </div>
+      </div>
+    </div>
+  </div>
 </template>
 
 
 <script>
-	//围网 stow net statistic and analysis
+	//拖网 stow net statistic and analysis
 	export default {
 		data() {
 			return {
 				// Tips提示
 				tipMsg:{
-					thisPageName: '围网作业方式统计分析',
+					thisPageName: '拖网作业方式统计分析',
 					goBack: '后退',
 					goHome: '主页',
 					startDateTips: '请选择起始日期',
@@ -105,7 +105,7 @@
 						left: "13%",
 						top: "10%",
 						width: "75%",
-						height: "70%",
+						height: "78%",
 					},//使得图表覆盖整个div
 					tooltip: {
 						trigger: "axis",
@@ -132,11 +132,12 @@
 								}
 							},
 							axisLabel: {
-								fontSize: 14,
+								fontSize: 16,
 								color: "#5bb1ff",
 								//rotate: 10,
 								//margin:18,
 								align:'center',
+								fontFamily:"Times New Roman"
 							}
 						}
 					],
@@ -157,8 +158,9 @@
 							},
 							scale: false,
 							axisLabel: {
-								fontSize: 14,
-								color: "#5bb1ff"
+								fontSize: 16,
+								color: "#5bb1ff",
+								fontFamily:"Times New Roman"
 							},
 							splitLine: {
 								show: true,
@@ -189,7 +191,7 @@
 						left: "13%",
 						top: "10%",
 						width: "75%",
-						height: "70%",
+						height: "78%",
 					},//使得图表覆盖整个div
 					tooltip: {
 						trigger: "axis",
@@ -216,11 +218,12 @@
 								}
 							},
 							axisLabel: {
-								fontSize: 14,
+								fontSize: 16,
 								color: "#5bb1ff",
 								//rotate: 10,
 								//margin:18,
 								align:'center',
+								fontFamily:"Times New Roman"
 							}
 						}
 					],
@@ -241,8 +244,9 @@
 							},
 							scale: false,
 							axisLabel: {
-								fontSize: 14,
-								color: "#5bb1ff"
+								fontSize: 16,
+								color: "#5bb1ff",
+								fontFamily:"Times New Roman"
 							},
 							splitLine: {
 								show: true,
@@ -327,14 +331,14 @@
 					},
 					radar:
 						{
-							center:["45%","49%"],
-							radius:"68%",
+							center:["45%","51%"],
+							radius:"72%",
 							name:{
 								color:"#5bb1ff",
 								fontStyle:'normal',
 								fontSize:14,
 							},
-							nameGap:12,
+							nameGap:10,
 							shape:"circle",
 							axisLine:{
 								show:true,
@@ -348,7 +352,7 @@
 							splitLine:{
 								lineStyle:{
 									color:"#CCC",
-									opacity:0.4,
+									opacity:0.6,
 								}
 							},
 							splitArea:{
@@ -386,14 +390,14 @@
 					tooltip:{},
 					radar:
 						{
-							center:["45%","50%"],
-							radius:"68%",
+							center:["45%","51%"],
+							radius:"72%",
 							name:{
 								color:"#5bb1ff",
 								fontStyle:'normal',
 								fontSize:14,
 							},
-							nameGap:12,
+							nameGap:10,
 							shape:"circle",
 							axisLine:{
 								show:true,
@@ -407,7 +411,7 @@
 							splitLine:{
 								lineStyle:{
 									color:"#CCC",
-									opacity:0.4,
+									opacity:0.6,
 								}
 							},
 							splitArea:{
@@ -484,6 +488,7 @@
 			},
 			//画Echarts图
 			drawCharts() {
+				var _this=this;
 				var brokenEChart = this.$echarts.init(
 					document.getElementById("BrokenEchartsId")
 				);
@@ -512,9 +517,17 @@
 					}]
 				});
 				normalBarEcharts.setOption(this.NormalBarOption);
+				console.log(this.saveData);
 				normalBarEcharts.setOption({
 					xAxis:[{
 						data:this.saveData.time,
+						axisLabel: {
+							interval: function (idx, val) {
+								if (idx == 0 || idx == Math.floor((_this.saveData.time.length - 1) / 2) || idx == _this.saveData.time.length  - 1) {
+									return true;
+								}
+							},
+						},
 					}],
 					series:[{
 						data:this.saveData.normal,
@@ -524,6 +537,13 @@
 				brokenEChart.setOption({
 					xAxis:[{
 						data:this.saveData.time,
+						axisLabel: {
+							interval: function (idx, val) {
+								if (idx == 0 || idx == Math.floor((_this.saveData.time.length - 1) / 2) || idx == _this.saveData.time.length  - 1) {
+									return true;
+								}
+							},
+						},
 					}],
 					series:[{
 						data:this.saveData.illegal,
@@ -575,7 +595,7 @@
 					method: "post",
 					url: "/getDataByMonthOrDay",
 					data: {
-						jobType :'围网',
+						jobType :'拖网',
 						startTime : this.startDate + ' 00:00:00',
 						endTime : this.endDate + ' 23:59:59',
 						byDay:1,
@@ -600,7 +620,7 @@
 						data:{
 							startTime : this.startDate + ' 00:00:00',
 							endTime : this.endDate + ' 23:59:59',
-							jobType :"围网",
+							jobType :"拖网",
 						}
 					}).then((res)=>{
 						var normalNum=[];
@@ -686,7 +706,7 @@
 				console.log("我要保存报告到本地！");
 				// 先查询，后保存
 				var nowTime = new Date();
-				this.exportData("围网统计报告 " + nowTime.toLocaleString() + ".txt", this.dealDataToExport());
+				this.exportData("拖网统计报告 " + nowTime.toLocaleString() + ".txt", this.dealDataToExport());
 			},
 			//重置方法 恢复到默认渔场、默认时间
 			reset() {
@@ -717,7 +737,7 @@
 				var allsum = this.pieData.normal.value + this.pieData.illegal.value;
 				var normalPer = (this.pieData.normal.value / allsum * 100).toFixed(2);
 				var illegalPer = (this.pieData.illegal.value / allsum * 100).toFixed(2);
-				datatoexport += "作业方式：围网\n"
+				datatoexport += "作业方式：拖网\n"
 				datatoexport += "渔场范围：" + this.fishGround + "\n";
 				datatoexport += "时间范围：" + this.startDate + "\t到\t" + this.endDate + "\n\n";
 				datatoexport += "总作业次数：" + allsum
@@ -739,372 +759,372 @@
 
 
 <style scoped>
-	/* #1 底层背景样式，窗口自适应 */
-	/* 底层背景 */
-	#backGround {
-		background-image: url("../../assets/background_high.png");
-		background-size: 100% 100%;
-		width: 100%;
-		height: 100%;
-		position: absolute;
-		background-repeat: no-repeat;
-		/* 底层背景层 */
-		z-index: 1;
-		overflow: hidden;
-	}
-	#backGround_backup1 {
-		position: absolute;
-		width: 100%;
-		height: 100%;
-		overflow: hidden;
-		/* 底层背景层 */
-		z-index: 1;
-	}
-	/* 底层背景图片 */
-	#backGround_backup1 .bgimg {
-		width: 100%;
-		height: 100%;
-		/* 底层背景图片层 */
-		z-index: 2;
-	}
+  /* #1 底层背景样式，窗口自适应 */
+  /* 底层背景 */
+  #backGround {
+    background-image: url("../../assets/background_high.png");
+    background-size: 100% 100%;
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    background-repeat: no-repeat;
+    /* 底层背景层 */
+    z-index: 1;
+    overflow: hidden;
+  }
+  #backGround_backup1 {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    /* 底层背景层 */
+    z-index: 1;
+  }
+  /* 底层背景图片 */
+  #backGround_backup1 .bgimg {
+    width: 100%;
+    height: 100%;
+    /* 底层背景图片层 */
+    z-index: 2;
+  }
 
-	/* #2 主要内容样式，窗口自适应 */
-	/* 主要内容 */
-	#main-content {
-		position: absolute;
-		width: 100%;
-		height: 100%;
-		overflow: hidden;
-		/* 内容层 */
-		z-index: 80;
-	}
+  /* #2 主要内容样式，窗口自适应 */
+  /* 主要内容 */
+  #main-content {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    /* 内容层 */
+    z-index: 80;
+  }
 
-	/* #2.1 中心标题样式 */
-	.mainTitle {
-		position: absolute;
-		left: 35vw;
-		width: 30vw;
-		top: 0;
-		height: 5.4vh;
-		text-align:center;
-		/* background-color 测试用 */
-		/*background-color: #FFFFFF;*/
-	}
-	.mainTitle .title {
-		font-family: Microsoft YaHei;
-		color: #5bb1ff;
-		cursor: pointer;
-		letter-spacing: 0.2vw;
-		font-size: 4.3vh;
-		display: inline-block;
-		/* background-color 测试用 */
-		/*background-color: #ff5234;*/
-	}
+  /* #2.1 中心标题样式 */
+  .mainTitle {
+    position: absolute;
+    left: 35vw;
+    width: 30vw;
+    top: 0;
+    height: 5.4vh;
+    text-align:center;
+    /* background-color 测试用 */
+    /*background-color: #FFFFFF;*/
+  }
+  .mainTitle .title {
+    font-family: Microsoft YaHei;
+    color: #5bb1ff;
+    cursor: pointer;
+    letter-spacing: 0.2vw;
+    font-size: 4.3vh;
+    display: inline-block;
+    /* background-color 测试用 */
+    /*background-color: #ff5234;*/
+  }
 
-	/* #2.2 右上角导航按钮 */
-	#main-content .navigaIcon {
-		position: absolute;
-		right: 2vw;
-		width: 15vw;
-		height: 5.5vh;
-		margin-top: 5vh;
-		margin-bottom: 0.1vh;
-		/* background-color 测试用 */
-		/* background-color: #FFFFFF; */
-	}
+  /* #2.2 右上角导航按钮 */
+  #main-content .navigaIcon {
+    position: absolute;
+    right: 2vw;
+    width: 15vw;
+    height: 5.5vh;
+    margin-top: 5vh;
+    margin-bottom: 0.1vh;
+    /* background-color 测试用 */
+    /* background-color: #FFFFFF; */
+  }
 
-	#main-content .navigaIcon .goBack {
-		cursor: pointer;
-		position: absolute;
-		right: 50%;
-		height: 80%;
-	}
+  #main-content .navigaIcon .goBack {
+    cursor: pointer;
+    position: absolute;
+    right: 50%;
+    height: 80%;
+  }
 
-	#main-content .navigaIcon .goHome {
-		cursor: pointer;
-		position: absolute;
-		right: 25%;
-		height: 80%;
-	}
+  #main-content .navigaIcon .goHome {
+    cursor: pointer;
+    position: absolute;
+    right: 25%;
+    height: 80%;
+  }
 
-	/* #2.3 中上方菜单栏 */
-	#main-content .setMenu {
-		position: absolute;
-		width: 80vw;
-		height: 6vh;
-		left: 10vw;
-		top: 9.5vh;
-		margin-top: 1vh;
-		margin-bottom: 1vh;
-		color: #5bb1ff;
-		/* background-color 测试用 */
-		/* background-color: #FFFFFF;*/
-	}
+  /* #2.3 中上方菜单栏 */
+  #main-content .setMenu {
+    position: absolute;
+    width: 80vw;
+    height: 6vh;
+    left: 10vw;
+    top: 9.5vh;
+    margin-top: 1vh;
+    margin-bottom: 1vh;
+    color: #5bb1ff;
+    /* background-color 测试用 */
+    /* background-color: #FFFFFF;*/
+  }
 
-	/* 选择日期时间菜单 */
-	#main-content .setMenu .selectDT {
-		position: absolute;
-		left: 10%;
-		width: 50%;
-		height: 100%;
-		font-size: 2.8vh;
-		/* background-color 测试用 */
-		/* background-color: #FFFFFF;*/
-	}
+  /* 选择日期时间菜单 */
+  #main-content .setMenu .selectDT {
+    position: absolute;
+    left: 10%;
+    width: 50%;
+    height: 100%;
+    font-size: 2.8vh;
+    /* background-color 测试用 */
+    /* background-color: #FFFFFF;*/
+  }
 
-	#main-content .setMenu .selectDT form input {
-		width: 35%;
-		height: 5vh;
-		background-color: rgba(255, 255, 255, 0.04);
-		color: #5bb1ff;
-		border-color: #5bb1ff;
-		text-align: center;
-	}
+  #main-content .setMenu .selectDT form input {
+    width: 35%;
+    height: 5vh;
+    background-color: rgba(255, 255, 255, 0.04);
+    color: #5bb1ff;
+    border-color: #5bb1ff;
+    text-align: center;
+  }
 
-	/*  修改日历控件类型 */
-	/*控制编辑区域的*/
-	input[type="date"]::-webkit-datetime-edit {
-		background-color: rgba(255, 255, 255, 0);
-	}
+  /*  修改日历控件类型 */
+  /*控制编辑区域的*/
+  input[type="date"]::-webkit-datetime-edit {
+    background-color: rgba(255, 255, 255, 0);
+  }
 
-	/*控制年月日这个区域的*/
-	input[type="date"]::-webkit-datetime-edit-fields-wrapper {
-		/*background-color: #FFFFFF;*/
-	}
+  /*控制年月日这个区域的*/
+  input[type="date"]::-webkit-datetime-edit-fields-wrapper {
+    /*background-color: #FFFFFF;*/
+  }
 
-	/*这是控制年月日之间的斜线或短横线的*/
-	input[type="date"]::-webkit-datetime-edit-text {
-		color: #5bb1ff;
-		padding: 0.5em;
-	}
+  /*这是控制年月日之间的斜线或短横线的*/
+  input[type="date"]::-webkit-datetime-edit-text {
+    color: #5bb1ff;
+    padding: 0.5em;
+  }
 
-	/*控制年文字, 如2019四个字母占据的那片地方*/
-	input[type="date"]::-webkit-datetime-edit-year-field {
-		color: #5bb1ff;
-		background-color: none;
-	}
+  /*控制年文字, 如2019四个字母占据的那片地方*/
+  input[type="date"]::-webkit-datetime-edit-year-field {
+    color: #5bb1ff;
+    background-color: none;
+  }
 
-	/*控制月文字*/
-	input[type="date"]::-webkit-datetime-edit-month-field {
-		color: #5bb1ff;
-		background-color: none;
-	}
+  /*控制月文字*/
+  input[type="date"]::-webkit-datetime-edit-month-field {
+    color: #5bb1ff;
+    background-color: none;
+  }
 
-	/*控制日文字*/
-	input[type="date"]::-webkit-datetime-edit-day-field {
-		color: #5bb1ff;
-		background-color: none;
-	}
+  /*控制日文字*/
+  input[type="date"]::-webkit-datetime-edit-day-field {
+    color: #5bb1ff;
+    background-color: none;
+  }
 
-	/*这是控制上下小箭头的*/
-	input[type="date"]::-webkit-inner-spin-button {
-		/* 直接隐藏 */
-		visibility: hidden;
-	}
+  /*这是控制上下小箭头的*/
+  input[type="date"]::-webkit-inner-spin-button {
+    /* 直接隐藏 */
+    visibility: hidden;
+  }
 
-	/*这是控制下拉小箭头的*/
-	input[type="date"]::-webkit-calendar-picker-indicator {
-		position: relative;
-		right: 3%;
-		border: 0.1em solid #58a0ee;
-		border-radius: 0.2em;
-		color: #0e0270;
-		background-image: -webkit-linear-gradient(top, #58a0ee, #acc8e6);
-		visibility: visible;
-	}
+  /*这是控制下拉小箭头的*/
+  input[type="date"]::-webkit-calendar-picker-indicator {
+    position: relative;
+    right: 3%;
+    border: 0.1em solid #58a0ee;
+    border-radius: 0.2em;
+    color: #0e0270;
+    background-image: -webkit-linear-gradient(top, #58a0ee, #acc8e6);
+    visibility: visible;
+  }
 
-	/*控制清除按钮*/
-	input[type="date"]::-webkit-clear-button {
-		/* 直接隐藏 */
-		visibility: hidden;
-	}
-	/*菜单按钮栏*/
-	#main-content .setMenu .menuButtons {
-		position: absolute;
-		left: 68%;
-		width: 25%;
-		height: 100%;
-		font-size: 2.8vh;
-		/* background-color 测试用 */
-		/* background-color: #FFFFFF;*/
-	}
-	/*菜单按钮*/
-	#main-content .setMenu .menuButtons button {
-		width: 24%;
-		height: 5vh;
-		background-color: rgba(8, 17, 44, 0.11);
-		color: #5bb1ff;
-		border-color: #5bb1ff;
-		cursor: pointer;
-	}
+  /*控制清除按钮*/
+  input[type="date"]::-webkit-clear-button {
+    /* 直接隐藏 */
+    visibility: hidden;
+  }
+  /*菜单按钮栏*/
+  #main-content .setMenu .menuButtons {
+    position: absolute;
+    left: 68%;
+    width: 25%;
+    height: 100%;
+    font-size: 2.8vh;
+    /* background-color 测试用 */
+    /* background-color: #FFFFFF;*/
+  }
+  /*菜单按钮*/
+  #main-content .setMenu .menuButtons button {
+    width: 24%;
+    height: 5vh;
+    background-color: rgba(8, 17, 44, 0.11);
+    color: #5bb1ff;
+    border-color: #5bb1ff;
+    cursor: pointer;
+  }
 
-	/* #2.4 左侧透明导航栏 */
-	#leftNavigaList{
-		position: absolute;
-		top: 18vh;
-		left: 1vw;
-		width: 8vw;
-		height: 72vh;
-		z-index: 99;
-		/*text-align: center;*/
-		background-color: rgba(0, 0, 0, 0.24);
-		border-radius: 0.5rem;
-	}
-	#leftNavigaList ul{
-		/* 清除ul标签的默认样式 */
-		position: absolute;
-		top: 0;
-		left: 0;
-		width: 100%;
-		margin: 0;
-		padding: 0;
-		font-size: 2.2vh;
-		list-style-type: none;
-		display: block;
-		/*background-color: #3f72c5;*/
-	}
-	#leftNavigaList .leftNavTitle{
-		float: top;     /* 使li内容纵向浮动 */
-		margin-top:0;   /* 两个li之间的距离 */
-		display: block;
-		color: #62dbff;
-		text-align: center;
-		padding: 1vh 1vh;
-		font-size: 2.4vh;
-		font-weight: bold;
-		border-bottom: #55a6ee 1px solid;
-	}
-	#leftNavigaList li {
-		float: top;     /* 使li内容纵向浮动 */
-		margin-top: 0.5vh;   /* 两个li之间的距离 */
-		/*border: solid 1px #191762;*/
-	}
-	#leftNavigaList li a {
-		/* 设置链接内容显示的格式*/
-		/* 把链接显示为块元素可使整个链接区域可点击 */
-		display: block;
-		color: #62dbff;
-		text-align: center;
-		padding: 1vh 1vh;
-		/* 去除下划线 */
-		text-decoration: none;
-	}
-	#leftNavigaList li a:hover{
-		color: #0c034b;
-		/* 鼠标选中时背景变色 */
-		/*用背景色*/
-		/* 浏览器不支持的时候显示 */
-		/*background-color: #40c0ff;*/
-		/* 标准的语法（必须放在最后） */
-		background-image: radial-gradient(#96f0ff, #5ee4ff, #40c0ff);
-		/*用图片*/
-		/*height:100%;*/
-		/*width:100%;*/
-		/*overflow: hidden;*/
-		/*background-size:cover;*/
-		/*或者background-size:100%;*/
-		/*background-image: url("../../assets/菜单选中背景.png");*/
-		/*background-repeat: no-repeat;*/
-	}
+  /* #2.4 左侧透明导航栏 */
+  #leftNavigaList{
+    position: absolute;
+    top: 18vh;
+    left: 1vw;
+    width: 8vw;
+    height: 72vh;
+    z-index: 99;
+    /*text-align: center;*/
+    background-color: rgba(0, 0, 0, 0.24);
+    border-radius: 0.5rem;
+  }
+  #leftNavigaList ul{
+    /* 清除ul标签的默认样式 */
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    font-size: 2.2vh;
+    list-style-type: none;
+    display: block;
+    /*background-color: #3f72c5;*/
+  }
+  #leftNavigaList .leftNavTitle{
+    float: top;     /* 使li内容纵向浮动 */
+    margin-top:0;   /* 两个li之间的距离 */
+    display: block;
+    color: #62dbff;
+    text-align: center;
+    padding: 1vh 1vh;
+    font-size: 2.4vh;
+    font-weight: bold;
+    border-bottom: #55a6ee 1px solid;
+  }
+  #leftNavigaList li {
+    float: top;     /* 使li内容纵向浮动 */
+    margin-top: 0.5vh;   /* 两个li之间的距离 */
+    /*border: solid 1px #191762;*/
+  }
+  #leftNavigaList li a {
+    /* 设置链接内容显示的格式*/
+    /* 把链接显示为块元素可使整个链接区域可点击 */
+    display: block;
+    color: #62dbff;
+    text-align: center;
+    padding: 1vh 1vh;
+    /* 去除下划线 */
+    text-decoration: none;
+  }
+  #leftNavigaList li a:hover{
+    color: #0c034b;
+    /* 鼠标选中时背景变色 */
+    /*用背景色*/
+    /* 浏览器不支持的时候显示 */
+    /*background-color: #40c0ff;*/
+    /* 标准的语法（必须放在最后） */
+    background-image: radial-gradient(#96f0ff, #5ee4ff, #40c0ff);
+    /*用图片*/
+    /*height:100%;*/
+    /*width:100%;*/
+    /*overflow: hidden;*/
+    /*background-size:cover;*/
+    /*或者background-size:100%;*/
+    /*background-image: url("../../assets/菜单选中背景.png");*/
+    /*background-repeat: no-repeat;*/
+  }
 
-	/*2.5 结果显示区域格式*/
-	/*磨砂背景*/
-	#showResult{
-		position: absolute;
-		width: 85vw;
-		height: 78vh;
-		left: 12vw;
-		top: 18vh;
-		margin-top: 0vh;
-		margin-bottom: 0vh;
-		background-color: rgba(0, 0, 0, 0.14);
-		border-radius: 2rem;
-	}
-	/*正常作业柱状图格式*/
-	#normalBar{
-		position: absolute;
-		width: 32%;
-		height: 48%;
-		top: 2%;
-		left: 1%;
-		/* background-color 测试用 */
-		/*background-color: #FFFFFF;*/
-		background-image:url("../../assets/msgBg2.png");
-		background-size: 100% 100%;
-		background-repeat: no-repeat;
-	}
-	/*非法作业折线图模块格式*/
-	#illegalOSBroken {
-		position: absolute;
-		width: 32%;
-		height: 48%;
-		top: 2%;
-		left: 34%;
-		/* background-color 测试用 */
-		/*background-color: #FFFFFF;*/
-		background-image:url("../../assets/msgBg2.png");
-		background-size: 100% 100%;
-		background-repeat: no-repeat;
-	}
-	/*非法作业占比图*/
-	#illegalOSPercentage {
-		position: absolute;
-		width: 32%;
-		height: 48%;
-		top: 2%;
-		left: 67%;
-		/* background-color 测试用 */
-		/*background-color: #FFFFFF;*/
-		background-image:url("../../assets/msgBg2.png");
-		background-size: 100% 100%;
-		background-repeat: no-repeat;
-	}
-	/*正常作业渔船星状图*/
-	#normalShipRadar{
-		position: absolute;
-		width: 36%;
-		height: 48%;
-		left: 12%;
-		top: 52%;
-		/* background-color 测试用 */
-		/*background-color: #FFFFFF;*/
-		background-image:url("../../assets/msgBg2.png");
-		background-size: 100% 100%;
-		background-repeat: no-repeat;
-	}
-	/*非法作业渔船星状图*/
-	#illegalShipRadar{
-		position: absolute;
-		width: 36%;
-		height: 48%;
-		left: 52%;
-		top: 52%;
-		/* background-color 测试用 */
-		/*background-color: #FFFFFF;*/
-		background-image:url("../../assets/msgBg2.png");
-		background-size: 100% 100%;
-		background-repeat: no-repeat;
-	}
-	.GraphTitle{
-		position: absolute;
-		top: 0%;
-		left: 20%;
-		width: 60%;
-		height: 10%;
-		margin-top: 1.15%;
-		font-size: 2.8vh;
-		letter-spacing: 0.1vw;
-		color: #5bb1ff;
-		/* background-color 测试用 */
-		/*background-color: #FFFFFF;*/
-	}
-	.GraphEcharts{
-		top: 15%;
-		left: 6%;
-		height: 75%;
-		width: 88%;
-		position: absolute;
-		/* background-color 测试用 */
-		/*background-color: #FFFFFF;*/
-	}
+  /*2.5 结果显示区域格式*/
+  /*磨砂背景*/
+  #showResult{
+    position: absolute;
+    width: 85vw;
+    height: 78vh;
+    left: 12vw;
+    top: 18vh;
+    margin-top: 0vh;
+    margin-bottom: 0vh;
+    background-color: rgba(0, 0, 0, 0.14);
+    border-radius: 2rem;
+  }
+  /*正常作业柱状图格式*/
+  #normalBar{
+    position: absolute;
+    width: 32%;
+    height: 48%;
+    top: 2%;
+    left: 1%;
+    /* background-color 测试用 */
+    /*background-color: #FFFFFF;*/
+    background-image:url("../../assets/msgBg2.png");
+    background-size: 100% 100%;
+    background-repeat: no-repeat;
+  }
+  /*非法作业折线图模块格式*/
+  #illegalOSBroken {
+    position: absolute;
+    width: 32%;
+    height: 48%;
+    top: 2%;
+    left: 34%;
+    /* background-color 测试用 */
+    /*background-color: #FFFFFF;*/
+    background-image:url("../../assets/msgBg2.png");
+    background-size: 100% 100%;
+    background-repeat: no-repeat;
+  }
+  /*非法作业占比图*/
+  #illegalOSPercentage {
+    position: absolute;
+    width: 32%;
+    height: 48%;
+    top: 2%;
+    left: 67%;
+    /* background-color 测试用 */
+    /*background-color: #FFFFFF;*/
+    background-image:url("../../assets/msgBg2.png");
+    background-size: 100% 100%;
+    background-repeat: no-repeat;
+  }
+  /*正常作业渔船星状图*/
+  #normalShipRadar{
+    position: absolute;
+    width: 36%;
+    height: 48%;
+    left: 12%;
+    top: 52%;
+    /* background-color 测试用 */
+    /*background-color: #FFFFFF;*/
+    background-image:url("../../assets/msgBg2.png");
+    background-size: 100% 100%;
+    background-repeat: no-repeat;
+  }
+  /*非法作业渔船星状图*/
+  #illegalShipRadar{
+    position: absolute;
+    width: 36%;
+    height: 48%;
+    left: 52%;
+    top: 52%;
+    /* background-color 测试用 */
+    /*background-color: #FFFFFF;*/
+    background-image:url("../../assets/msgBg2.png");
+    background-size: 100% 100%;
+    background-repeat: no-repeat;
+  }
+  .GraphTitle{
+    position: absolute;
+    top: 0%;
+    left: 20%;
+    width: 60%;
+    height: 10%;
+    margin-top: 1.15%;
+    font-size: 2.8vh;
+    letter-spacing: 0.1vw;
+    color: #5bb1ff;
+    /* background-color 测试用 */
+    /*background-color: #FFFFFF;*/
+  }
+  .GraphEcharts{
+    top: 15%;
+    left: 6%;
+    height: 75%;
+    width: 88%;
+    position: absolute;
+    /* background-color 测试用 */
+    /*background-color: #FFFFFF;*/
+  }
 </style>

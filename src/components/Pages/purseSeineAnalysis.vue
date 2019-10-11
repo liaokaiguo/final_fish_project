@@ -105,7 +105,7 @@
 						left: "13%",
 						top: "10%",
 						width: "75%",
-						height: "70%",
+						height: "78%",
 					},//使得图表覆盖整个div
 					tooltip: {
 						trigger: "axis",
@@ -132,11 +132,12 @@
 								}
 							},
 							axisLabel: {
-								fontSize: 14,
+								fontSize: 16,
 								color: "#5bb1ff",
 								//rotate: 10,
 								//margin:18,
 								align:'center',
+                fontFamily:"Times New Roman"
 							}
 						}
 					],
@@ -157,8 +158,9 @@
 							},
 							scale: false,
 							axisLabel: {
-								fontSize: 14,
-								color: "#5bb1ff"
+								fontSize: 16,
+								color: "#5bb1ff",
+				        fontFamily:"Times New Roman"
 							},
 							splitLine: {
 								show: true,
@@ -189,7 +191,7 @@
 						left: "13%",
 						top: "10%",
 						width: "75%",
-						height: "70%",
+						height: "78%",
 					},//使得图表覆盖整个div
 					tooltip: {
 						trigger: "axis",
@@ -216,11 +218,12 @@
 								}
 							},
 							axisLabel: {
-								fontSize: 14,
+								fontSize: 16,
 								color: "#5bb1ff",
 								//rotate: 10,
 								//margin:18,
 								align:'center',
+				        fontFamily:"Times New Roman"
 							}
 						}
 					],
@@ -241,8 +244,9 @@
 							},
 							scale: false,
 							axisLabel: {
-								fontSize: 14,
-								color: "#5bb1ff"
+								fontSize: 16,
+								color: "#5bb1ff",
+				        fontFamily:"Times New Roman"
 							},
 							splitLine: {
 								show: true,
@@ -327,14 +331,14 @@
 					},
 					radar:
 						{
-							center:["45%","49%"],
-							radius:"68%",
+							center:["45%","51%"],
+							radius:"72%",
 							name:{
 								color:"#5bb1ff",
 								fontStyle:'normal',
 								fontSize:14,
 							},
-							nameGap:12,
+							nameGap:10,
 							shape:"circle",
 							axisLine:{
 								show:true,
@@ -348,7 +352,7 @@
 							splitLine:{
 								lineStyle:{
 									color:"#CCC",
-									opacity:0.4,
+									opacity:0.6,
 								}
 							},
 							splitArea:{
@@ -386,14 +390,14 @@
 					tooltip:{},
 					radar:
 						{
-							center:["45%","50%"],
-							radius:"68%",
+							center:["45%","51%"],
+							radius:"72%",
 							name:{
 								color:"#5bb1ff",
 								fontStyle:'normal',
 								fontSize:14,
 							},
-							nameGap:12,
+							nameGap:10,
 							shape:"circle",
 							axisLine:{
 								show:true,
@@ -407,7 +411,7 @@
 							splitLine:{
 								lineStyle:{
 									color:"#CCC",
-									opacity:0.4,
+									opacity:0.6,
 								}
 							},
 							splitArea:{
@@ -484,6 +488,7 @@
 			},
 			//画Echarts图
 			drawCharts() {
+				var _this=this;
 				var brokenEChart = this.$echarts.init(
 					document.getElementById("BrokenEchartsId")
 				);
@@ -512,9 +517,17 @@
 					}]
 				});
 				normalBarEcharts.setOption(this.NormalBarOption);
+				console.log(this.saveData);
 				normalBarEcharts.setOption({
 					xAxis:[{
 						data:this.saveData.time,
+              axisLabel: {
+                  interval: function (idx, val) {
+                      if (idx == 0 || idx == Math.floor((_this.saveData.time.length - 1) / 2) || idx == _this.saveData.time.length  - 1) {
+                          return true;
+                      }
+                  },
+              },
 					}],
 					series:[{
 						data:this.saveData.normal,
@@ -524,6 +537,13 @@
 				brokenEChart.setOption({
 					xAxis:[{
 						data:this.saveData.time,
+			      axisLabel: {
+				      interval: function (idx, val) {
+					      if (idx == 0 || idx == Math.floor((_this.saveData.time.length - 1) / 2) || idx == _this.saveData.time.length  - 1) {
+						     return true;
+					    }
+				   },
+			  },
 					}],
 					series:[{
 						data:this.saveData.illegal,
