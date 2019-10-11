@@ -77,9 +77,9 @@
           <li>
             <span class="leftbottombackgroundTitle">围网统计</span>
             <span class="leftbottommoreText">更多</span>
-            <a href="/purseSeineAnalysis">
+            <router-link to="/purseSeineAnalysis">
               <img class="leftmoreICO" src="../assets/moreICO.png">
-            </a>
+            </router-link>
           </li>
           <!--换行后有利于布局，相互之间不影响 -->
           <br>
