@@ -33,7 +33,7 @@
 
             <el-submenu index="2">
               <template slot="title">
-                <span>违规作业分布图</span>
+                <span>渔船作业分布图</span>
                 <i class="el-icon-picture-outline"></i>
               </template>
               <el-submenu index="2-1">
