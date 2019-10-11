@@ -70,6 +70,8 @@
           <div class="dataBox">
             <el-table
             :data="tableData.slice((currentPage-1)*pageSize,currentPage*pageSize)"
+            v-loading="tableDataLoading"
+            element-loading-text="数据量较大，玩命加载中"
             style="width: 100%"
             border
             :header-cell-style="{color:'#333',fontFamily:'MicrosoftYaHeiUI',fontSize:'14px',fontWeight:900}">
@@ -173,96 +175,8 @@ export default {
               workMode:'',
           },
 
-          // tableData: [{
-          //     legal: '正常作业',
-          //     boatid: 'MESS3377373',
-          //     workmode: '拖网',
-          //     starttime: '2019-08-08 12:22:33',
-          //     endtime: '2019-08-08 19:22:33',
-          //     duration:'7h'
-          // },
-          //     {
-          //     legal: '正常作业',
-          //     boatid: 'MSDS33567',
-          //     workmode: '拖网',
-          //     starttime: '2019-08-18 10:22:33',
-          //     endtime: '2019-08-18 14:22:33',
-          //     duration:'4h'
-          // },
-          //     {
-          //     legal: '正常作业',
-          //     boatid: 'WWDSQ1233473',
-          //     workmode: '张网',
-          //     starttime: '2019-08-12 08:22:33',
-          //     endtime: '2019-08-12 18:22:33',
-          //     duration:'10h'
-          // },
-          //     {
-          //     legal: '违规作业',
-          //     boatid: 'WSDW987876',
-          //     workmode: '刺网',
-          //     starttime: '2019-08-31 20:22:33',
-          //     endtime: '2019-08-31 23:22:33',
-          //     duration:'3h'
-          // },
-          //     {
-          //     legal: '违规作业',
-          //     boatid: 'WSDW987876',
-          //     workmode: '刺网',
-          //     starttime: '2019-08-31 20:22:33',
-          //     endtime: '2019-08-31 23:22:33',
-          //     duration:'3h'
-          // },
-          //     {
-          //     legal: '违规作业',
-          //     boatid: 'WSDW987876',
-          //     workmode: '刺网',
-          //     starttime: '2019-08-31 20:22:33',
-          //     endtime: '2019-08-31 23:22:33',
-          //     duration:'3h'
-          // },
-          //     {
-          //     legal: '违规作业',
-          //     boatid: 'WSDW987876',
-          //     workmode: '刺网',
-          //     starttime: '2019-08-31 20:22:33',
-          //     endtime: '2019-08-31 23:22:33',
-          //     duration:'3h'
-          // },
-          //     {
-          //     legal: '违规作业',
-          //     boatid: 'WSDW987876',
-          //     workmode: '刺网',
-          //     starttime: '2019-08-31 20:22:33',
-          //     endtime: '2019-08-31 23:22:33',
-          //     duration:'3h'
-          // },
-          //     {
-          //     legal: '违规作业',
-          //     boatid: 'WSDW987876',
-          //     workmode: '刺网',
-          //     starttime: '2019-08-31 20:22:33',
-          //     endtime: '2019-08-31 23:22:33',
-          //     duration:'3h'
-          // },
-          //     {
-          //     legal: '违规作业',
-          //     boatid: 'WSDW987876',
-          //     workmode: '刺网',
-          //     starttime: '2019-08-31 20:22:33',
-          //     endtime: '2019-08-31 23:22:33',
-          //     duration:'3h'
-          // },
-          //     {
-          //     legal: '违规作业',
-          //     boatid: 'WSDW987876',
-          //     workmode: '刺网',
-          //     starttime: '2019-08-31 20:22:33',
-          //     endtime: '2019-08-31 23:22:33',
-          //     duration:'3h'
-          // }],
-
            tableData:[],
+          tableDataLoading:true,
           workModeEchartsOption: {
               tooltip: {
                   trigger: "item",
@@ -376,6 +290,7 @@ export default {
 
         /*列表数据初始加载*/
         initWorkModeStatistic(){
+            this.tableDataLoading =true; //先loading动画
             this.axios({
                 method:"post",
                 url:"/queryShipJob",
@@ -385,7 +300,7 @@ export default {
                     idtfyFlag: "",
                 }
             }).then((response)=>{
-                 // console.log(response.data)
+                this.tableDataLoading = false;// loading动画去掉
                 this.tableData= response.data;
             }).catch((response)=>{
                 console.log(response);
@@ -398,6 +313,7 @@ export default {
             console.log(this.select.startDate)
             console.log(this.select.workMode)
             console.log(this.select.legal)
+            this.tableDataLoading =true; //先loading动画
             this.axios({
                 method:"post",
                 url:"/queryShipJob",
@@ -407,7 +323,7 @@ export default {
                     idtfyFlag :  this.select.legal,
                 }
             }).then((response)=>{
-
+                this.tableDataLoading = false;// loading动画去掉
                 this.tableData= response.data;
 
             }).catch((response)=>{
