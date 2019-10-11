@@ -1458,7 +1458,7 @@
   .el-table__body td, .el-table__body th{
     background-color: transparent !important;
     color: black !important;
-    padding:2px !important;
+    /*padding:2px !important;*/
     text-align: center !important;
   }
 
