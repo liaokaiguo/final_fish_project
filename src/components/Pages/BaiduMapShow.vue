@@ -94,7 +94,7 @@
     <!--左侧工具栏 -->
     <div class="middle-tool-content">
       <div class="location-content">
-        <el-tooltip effect="dark" content="坐标定位" placement="right" hide-after="2000">
+        <el-tooltip effect="dark" content="坐标定位" placement="right" :hide-after="2000">
           <img src="../../assets/mapShowImg/location32.png" height="32" width="32" @click="locationVisible = !locationVisible" />
         </el-tooltip>
         <el-popover
@@ -119,17 +119,17 @@
       </div>
 
       <div class="distance-content">
-        <el-tooltip effect="dark" content="测距" placement="right" hide-after="2000">
+        <el-tooltip effect="dark" content="测距" placement="right" :hide-after="2000">
           <img src="../../assets/mapShowImg/distance32.png" height="32" width="32" @click="openDistanceTool"/>
         </el-tooltip>
       </div>
       <div class="feedback-content">
-        <el-tooltip effect="dark" content="意见反馈" placement="right" hide-after="2000">
+        <el-tooltip effect="dark" content="意见反馈" placement="right" :hide-after="2000">
           <img src="../../assets/mapShowImg/feedback32.png" height="32" width="32"/>
         </el-tooltip>
       </div>
       <div class="online-content">
-        <el-tooltip effect="dark" content="在线客服" placement="right" hide-after="2000">
+        <el-tooltip effect="dark" content="在线客服" placement="right" :hide-after = "2000">
           <img src="../../assets/mapShowImg/online32.png" height="32" width="32"/>
         </el-tooltip>
       </div>
@@ -144,11 +144,14 @@
 
 
     <!--右下角 渔船信息 -->
-    <el-row class="right-bottom-content">
-      <el-col>
+    <el-row class="bottom-content">
+      <el-col :span="12" >
+        <div id="bottomLeftEchartId" class="bottomleftEchart"></div>
+      </el-col>
+      <el-col class="bottom-right-class" :span="12" >
         <div >
-          <el-table style="left:2%; width: 96%; top:5%;"
-                    height="260"
+          <el-table style="left:2%; width: 96%;  "
+                    height="270"
                     :data=shipArr>
             <el-table-column
               prop="shipId"
@@ -158,11 +161,16 @@
             <el-table-column
               prop="ship.shipName"
               label="渔船名"
-              width="150">
+              width="130">
             </el-table-column>
             <el-table-column
               prop="ship.jobType"
               label="作业方式"
+              width="100">
+            </el-table-column>
+            <el-table-column
+              prop="acqTime"
+              label="定位时间"
               width="100">
             </el-table-column>
           </el-table>
@@ -383,6 +391,95 @@
                     lat: '',
                 },
 
+                /*Echarts 相关*/
+                jobTypeCount:[], //各作业类型的数量
+                bottomLeftOption : {
+                    tooltip: {
+                        trigger: 'axis',
+                        axisPointer: {
+                            type: 'shadow'
+                        }
+                    },
+                    grid: {
+                        left: '3%',
+                        right: '4%',
+                        bottom: '3%',
+                        containLabel: true
+                    },
+                    xAxis: {
+                        type: 'value',
+                        inverse:'true', //反向
+                        axisLine: {
+                            show: false
+                        },
+                        axisTick: {
+                            show: false
+                        }
+                    },
+                    yAxis: {
+                        type: 'category',
+                        position:'right',//靠右
+                        data: ['围网', '拖网', '张网', '刺网', '钓具', '杂渔具', '笼壶'],
+                        splitLine: {show: false},
+                        axisLine: {
+                            show: false
+                        },
+                        axisTick: {
+                            show: false
+                        },
+                        offset: 10,
+                        nameTextStyle: {
+                            fontSize: 15
+                        }
+                    },
+                    series: [
+                        {
+                            name: '数量',
+                            type: 'bar',
+                            data: [3100, 2142, 1218, 581, 431, 383, 163],
+                            barWidth: 14,
+                            barGap: 10,
+                            smooth: true,
+                            label: {
+                                normal: {
+                                    show: true,
+                                    position: 'left',
+                                    offset: [5, -2],
+                                    textStyle: {
+                                        color: '#F68300',
+                                        fontSize: 13
+                                    }
+                                }
+                            },
+                            itemStyle: {
+                                emphasis: {
+                                    barBorderRadius:5,
+                                },
+                                normal:{
+                                    barBorderRadius:5,
+//每根柱子颜色设置
+                                    color: function(params) {
+                                        let colorList = [
+                                            "#de97ee",
+                                            "#59deee",
+                                            "#2aee9f",
+                                            "#a9ed58",
+                                            "#FFDE76",
+                                            "#ff8614",
+                                            "#E43C59",
+                                        ];
+                                        return colorList[params.dataIndex];
+                                    },
+                                    opacity: 0.8,
+                                },
+
+
+                            },
+
+                        }
+                    ]
+                },
+
             }
 
         },
@@ -536,7 +633,11 @@
                     }
                 }).then(res => {
                     shipLocationLoading.close();
+                    this.jobTypeCount = res.data.jobtypeCount;
                     this.shipArr = res.data.tAcqDatas;
+                    //画底部左半边echarts
+                    this.drawBottomLeftCharts();
+
                     this.addShipMarker();
                 }).catch((response) => {
                     console.log(response)
@@ -692,6 +793,7 @@
                             }
                         }).then(res => {
                             selectShipLocationLoading.close();
+                            this.jobTypeCount = res.data.jobtypeCount;
                             this.shipArr = res.data.tAcqDatas;
                             console.log("选择后的渔船数量" + this.shipArr.length)
                             if (this.shipArr.length === 0) {
@@ -702,6 +804,8 @@
                                     duration: 4000,
                                 })
                             } else {
+                                //画底部左半边echarts
+                                this.drawBottomLeftCharts();
                                 this.addShipMarker();
                             }
 
@@ -1126,6 +1230,7 @@
             *左侧小工具栏 相关
             *
             * */
+            /*坐标定位*/
             reLocation() {
 
                 if(this.reLocationForm.lng !='' && this.reLocationForm.lat !=''){
@@ -1147,11 +1252,54 @@
 
             },
 
+            /*打开测距工具*/
             openDistanceTool(){
                 var myDis = new BMapLib.DistanceTool(map);
                 myDis.open();
-            }
+            },
 
+            /*画底部左边Echarts*/
+            drawBottomLeftCharts() {
+                var bottomLeftCharts = this.$echarts.init(
+                    document.getElementById("bottomLeftEchartId")
+                );
+                bottomLeftCharts.setOption(this.bottomLeftOption);
+                bottomLeftCharts.setOption({ //数据添加
+                    series: [{
+                        data: [
+                            {
+                                value: this.jobTypeCount.围网,
+                                name: "围网"
+                            },
+                            {
+                                value: this.jobTypeCount.拖网,
+                                name: "拖网"
+                            },
+                            {
+                                value: this.jobTypeCount.张网,
+                                name: "张网"
+                            },
+                            {
+                                value: this.jobTypeCount.刺网,
+                                name: "刺网"
+                            },
+                            {
+                                value: this.jobTypeCount.钓具,
+                                name: "钓具"
+                            },
+                            {
+                                value:this.jobTypeCount.杂渔具,
+                                name: "杂渔具"
+                            },
+                            {
+                                value: this.jobTypeCount.笼壶,
+                                name: "笼壶"
+                            }
+                        ]
+                    }]
+                })
+
+            },
 
         }
 
@@ -1252,13 +1400,20 @@
     margin-top: 5px;
   }
 
-  .right-bottom-content {
+  .bottom-content {
     position: absolute;
     bottom: 2%;
-    right: 1%;
+    left: 50%;
     height: 25%;
-    width: 23%;
-    float: right;
+    width: 50%;
+    float: left;
+
+  }
+  .bottomleftEchart{
+    width: 22vw;
+    height: 25vh;
+  }
+  .bottom-right-class{
     background-image: url("../../assets/mapInfo.gif");
     background-size: 100% 100%;
     opacity: 0.8;
