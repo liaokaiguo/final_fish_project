@@ -79,9 +79,9 @@
                 BrokenOption: {
                     color: ["#f44"],
                     grid:{
-                        left: "10%",
+                        left: "13%",
                         top: "10%",
-                        width: "72%",
+                        width: "75%",
                         height: "70%",
                     },//使得图表覆盖整个div
                     tooltip: {
@@ -98,20 +98,22 @@
                             type: "category",
                             data: [],
                             axisTick: {
-                                show: true,
+                                show: false,
                                 inside: true,
                                 alignWithLabel: true
                             },
                             axisLine: {
                                 lineStyle: {
-                                    color: "#5bbdff",
+                                    color: "#5bb1ff",
                                     width: 2,
                                 }
                             },
                             axisLabel: {
                                 fontSize: 14,
-                                color: "#5b9bd5",
-                                rotate: 0,
+                                color: "#5bb1ff",
+                                //rotate: 10,
+                                //margin:18,
+                                align:'center',
                             }
                         }
                     ],
@@ -126,14 +128,14 @@
                             },
                             axisLine: {
                                 lineStyle: {
-                                    color: "#5bbdff",
+                                    color: "#5bb1ff",
                                     width: 2,
                                 },
                             },
                             scale: false,
                             axisLabel: {
                                 fontSize: 14,
-                                color: "#5b9bd5"
+                                color: "#5bb1ff"
                             },
                             splitLine: {
                                 show: true,
@@ -164,10 +166,10 @@
                 //非法作业占比图选项
                 PercentageOption: {
                     grid: {
-                        left: "10%",
-                        top: "0%",
-                        width: "80%",
-                        height: "100%",
+                        left: "13%",
+                        top: "10%",
+                        width: "75%",
+                        height: "70%",
                     },
                     tooltip: {
                         trigger: "item",
@@ -175,7 +177,7 @@
                     },
                     legend: {
                         orient: "vertical",
-                        left: "4%",
+                        left: "7%",
                         top: "middle",
                         data: ["正常作业", "非法作业"],
                         textStyle: {
@@ -188,7 +190,7 @@
                             name: "占比情况",
                             type: "pie",
                             radius: "75%",
-                            center: ["50%", "50%"],
+                            center: ["55%", "50%"],
                             labelLine: {
                                 show: false,
                             },
@@ -209,14 +211,14 @@
                             }
                         }
                     ],
-                    color: ["rgb(20,182,249)", "#ed7d31",]
+                    color: ["rgb(145,249,184)", "#ed7d31",]
                 },
                 //正常作业柱状图选项
                 NormalBarOption:{
                     grid:{
-                        left: "10%",
+                        left: "13%",
                         top: "10%",
-                        width: "72%",
+                        width: "75%",
                         height: "70%",
                     },//使得图表覆盖整个div
                     tooltip: {
@@ -233,20 +235,22 @@
                             type: "category",
                             data: [],
                             axisTick: {
-                                show: true,
+                                show: false,
                                 inside: false,
                                 alignWithLabel: true
                             },
                             axisLine: {
                                 lineStyle: {
-                                    color: "#5b9bd5",
+                                    color: "#5bb1ff",
                                     width: 2,
                                 }
                             },
                             axisLabel: {
                                 fontSize: 14,
-                                color: "#5b9bd5",
-                                rotate: 0,
+                                color: "#5bb1ff",
+                                //rotate: 10,
+                                //margin:18,
+                                align:'center',
                             }
                         }
                     ],
@@ -261,14 +265,14 @@
                             },
                             axisLine: {
                                 lineStyle: {
-                                    color: "#5b9bd5",
+                                    color: "#5bb1ff",
                                     width: 2,
                                 },
                             },
                             scale: false,
                             axisLabel: {
                                 fontSize: 14,
-                                color: "#5b9bd5"
+                                color: "#5bb1ff"
                             },
                             splitLine: {
                                 show: true,
@@ -290,7 +294,7 @@
                             }
                         }
                     ],
-                    color:"rgb(20,182,249)",
+                    color:"rgb(145,249,184)",
                 },
                 //正常作业渔船类型星状图选项
                 NormalShipOption:{
@@ -299,10 +303,10 @@
                     },
                     radar:
                         {
-                            center:["43%","46%"],
+                            center:["45%","49%"],
                             radius:"60%",
                             name:{
-                                color:"#58a0ee",
+                                color:"#5bb1ff",
                                 fontStyle:'normal',
                                 fontSize:14,
                             },
@@ -311,7 +315,7 @@
                             axisLine:{
                                 show:true,
                                 lineStyle:{
-                                    color:"#58a0ee",
+                                    color:"#5bb1ff",
                                     width:1,
                                     opacity:1,
                                     type:"dashed",
@@ -320,7 +324,7 @@
                             splitLine:{
                               lineStyle:{
                                   color:"#CCC",
-                                  opacity:0.1,
+                                  opacity:0.4,
                               }
                             },
                             splitArea:{
@@ -341,13 +345,13 @@
                             type:"radar",
                             symbol:"none",
                             lineStyle:{
-                                color:"rgb(20,182,249)",
+                                color:"rgb(145,249,184)",
                                 width:2,
                                 opacity:1,
                             },
                             areaStyle:{
-                                color:'rgb(20,182,249)',
-                                opacity:0.4,
+                                color:'rgb(145,249,184)',
+                                opacity:0.3,
                             },
                             data:[],
                         }
@@ -358,10 +362,10 @@
                     tooltip:{},
                     radar:
                         {
-                            center:["43%","46%"],
+                            center:["45%","49%"],
                             radius:"60%",
                             name:{
-                                color:"#58a0ee",
+                                color:"#5bb1ff",
                                 fontStyle:'normal',
                                 fontSize:14,
                             },
@@ -370,7 +374,7 @@
                             axisLine:{
                                 show:true,
                                 lineStyle:{
-                                    color:"#58a0ee",
+                                    color:"#5bb1ff",
                                     width:1,
                                     opacity:1,
                                     type:"dashed",
@@ -379,7 +383,7 @@
                             splitLine:{
                                 lineStyle:{
                                     color:"#CCC",
-                                    opacity:0.1,
+                                    opacity:0.4,
                                 }
                             },
                             splitArea:{
@@ -406,7 +410,7 @@
                             },
                             areaStyle:{
                                 color:'#ed7d31',
-                                opacity:0.6,
+                                opacity:0.3,
                             },
                             data:[],
                         }
@@ -829,9 +833,9 @@
   .showResult{
     position: absolute;
     width: 90vw;
-    height: 85vh;
+    height: 78vh;
     left: 10vw;
-    top: 15vh;
+    top: 18vh;
     margin-top: 0vh;
     margin-bottom: 0vh;
     /*background-color: #FFFFFF;*/
@@ -839,11 +843,12 @@
   /*正常作业柱状图格式*/
   .normalBar{
     position: absolute;
-    width: 30%;
-    height: 40%;
+    width: 33%;
+    height: 43%;
     top: 5%;
     left:1%;
     background-image:url("../../assets/msgBg.png");
+    background-size: 100% 100%;
   }
   .GraphTitle{
     width: 60%;
@@ -852,54 +857,58 @@
     font-size: 2.8vh;
     letter-spacing: 0.1vw;
     color: #58a0ee;
-    top: 3.5%;
+    top: 1%;
     left: 20%;
     position: absolute;
   }
   .GraphEcharts{
-    top:15%;
-    width: 100%;
-    height: 94%;
+    top:12%;
+    width: 90%;
+    height: 80%;
     position: absolute;
-    left:8%;
+    left:5%;
   }
   /*正常作业渔船星状图*/
   .normalShipRadar{
     position: absolute;
     width: 35%;
     height: 45%;
-    left: 12%;
+    left: 15%;
     top: 50%;
     background-image:url("../../assets/msgBg.png");
+    background-size: 100% 100%;
   }
   /*非法作业渔船星状图*/
   .illegalShipRadar{
     position: absolute;
     width: 35%;
     height: 45%;
-    left: 52%;
+    left: 50%;
     top: 50%;
     background-image:url("../../assets/msgBg.png");
+    background-size: 100% 100%;
   }
   /*非法作业折线图模块格式*/
   .illegalOSBroken {
     position: absolute;
-    width: 30%;
-    height: 40%;
+    width: 33%;
+    height: 43%;
     top: 5%;
     left:33%;
     /* background-color 测试用 */
     background-image:url("../../assets/msgBg.png");
+    background-size: 100% 100%;
   }
   /*非法作业占比图*/
   .illegalOSPercentage {
     position: absolute;
-    width: 30%;
-    height: 40%;
+    width: 33%;
+    height: 43%;
     top: 5%;
     left:65%;
     /* background-color 测试用 */
     background-image:url("../../assets/msgBg.png");
+    background-size: 100% 100%;
   }
   input[type=date] {
     -moz-appearance:textfield;/*火狐浏览器*/
