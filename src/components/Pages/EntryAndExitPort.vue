@@ -331,6 +331,7 @@ table {
   margin-left: 340px;
   margin-top: 20px;
   float: left;
+  background-color: white;
 }
 .pagingBox{
   float: right;

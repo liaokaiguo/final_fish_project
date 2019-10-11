@@ -496,6 +496,7 @@ table {
   margin-left: 100px;
   margin-top: 20px;
   float: left;
+  background-color: white;
 }
 .wmEchartsBox{
   margin-left: 0px;
