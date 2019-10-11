@@ -81,10 +81,10 @@
         </a></div>
         <div class="rightleftIcon">
             <span v-on:click="$router.back(-1)">
-              <img src="../../assets/rebackLastIcon.png" style="cursor:pointer" alt="返回">
+              <img src="../../assets/backico.png" style="cursor:pointer" alt="返回">
             </span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
           <router-link to="/welcome">
-            <img src="../../assets/rebackMainIcon.png">
+            <img src="../../assets/homeico.png">
           </router-link>
         </div>
       </el-col>
@@ -1355,7 +1355,7 @@
   .rightleftIcon {
     position: absolute;
     left: 90%;
-    margin-top: 10px;
+    margin-top: 20px;
     float: left;
     opacity: 0.8; /*透明度 -*/
   }
