@@ -401,14 +401,15 @@
                         }
                     },
                     grid: {
-                        left: '3%',
-                        right: '4%',
+                        left: '2%',
+                        right: '2%',
                         bottom: '3%',
                         containLabel: true
                     },
                     xAxis: {
                         type: 'value',
                         inverse:'true', //反向
+                        splitLine: {show: false},
                         axisLine: {
                             show: false
                         },
@@ -430,13 +431,20 @@
                         offset: 10,
                         nameTextStyle: {
                             fontSize: 15
+                        },
+                        axisLabel: {
+                            show: true,
+                            textStyle: {
+                                fontSize:16
+                            }
                         }
-                    },
+
+                        },
                     series: [
                         {
                             name: '数量',
                             type: 'bar',
-                            data: [3100, 2142, 1218, 581, 431, 383, 163],
+                            data: [100, 100, 100, 100, 100, 100, 100],
                             barWidth: 14,
                             barGap: 10,
                             smooth: true,
@@ -447,7 +455,7 @@
                                     offset: [5, -2],
                                     textStyle: {
                                         color: '#F68300',
-                                        fontSize: 13
+                                        fontSize: 16
                                     }
                                 }
                             },
@@ -473,9 +481,7 @@
                                     opacity: 0.8,
                                 },
 
-
                             },
-
                         }
                     ]
                 },
@@ -1364,29 +1370,6 @@
     /*background-color: #e5e9f2;*/
   }
 
-  .mutipleSelectBox {
-    position: absolute;
-    margin-top: 60px;
-    /*margin-left: 50px;*/
-    left: 12%;
-    text-align: left;
-    font-size: 24px;
-    color: #ffffff;
-    float: left;
-    opacity: 0.7; /*透明度 -*/
-
-  }
-
-  .boat-id-class {
-    font-size: 23px;
-  }
-
-  .input-date-class {
-    float: left;
-    width: 300px;
-    font-size: 23px;
-  }
-
   .select-input-data {
     text-align: left;
     float: left;
@@ -1410,8 +1393,8 @@
 
   }
   .bottomleftEchart{
-    width: 22vw;
-    height: 25vh;
+    width: 480px;
+    height: 270px;
   }
   .bottom-right-class{
     background-image: url("../../assets/mapInfo.gif");
@@ -1427,6 +1410,7 @@
     height: 20%;
     float: left;
     background-color: white;
+    opacity: 0.8;
     border-radius: 10px;
 
   }
