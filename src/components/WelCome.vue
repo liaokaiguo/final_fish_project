@@ -14,10 +14,12 @@
         <ul>
           <li>
             <span class="leftbackgroundTitle">渔船出入港</span>
-            <span class="leftmoreText">更多</span>
             <router-link to="/passPort">
-              <img class="leftmoreICO" src="../assets/moreICO.png">
+              <span class="leftmoreText">更多</span>
             </router-link>
+            <!--<router-link to="/passPort">
+              <img class="leftmoreICO" src="../assets/moreICO.png">
+            </router-link>-->
           </li>
           <!--换行后有利于布局，相互之间不影响-->
           <br>
@@ -49,10 +51,12 @@
         <ul>
           <li>
             <span class="leftbackgroundTitle">作业占比</span>
+            <router-link to="#">
             <span class="leftmoreText">更多</span>
-            <a href="#">
+            </router-link>
+            <!--<a href="#">
               <img class="leftmoreICO" src="../assets/moreICO.png">
-            </a>
+            </a>-->
           </li>
           <!--换行后有利于布局，相互之间不影响-->
           <br>
@@ -76,10 +80,12 @@
         <ul>
           <li>
             <span class="leftbottombackgroundTitle">围网统计</span>
-            <span class="leftbottommoreText">更多</span>
             <router-link to="/purseSeineAnalysis">
-              <img class="leftmoreICO" src="../assets/moreICO.png">
+            <span class="leftmoreText">更多</span>
             </router-link>
+            <!--<router-link to="/purseSeineAnalysis">
+              <img class="leftmoreICO" src="../assets/moreICO.png">
+            </router-link>-->
           </li>
           <!--换行后有利于布局，相互之间不影响 -->
           <br>
@@ -104,10 +110,12 @@
           <ul>
             <li>
               <span class="leftbackgroundTitle">拖网统计</span>
-              <span class="leftmoreText">更多</span>
               <router-link to="/trawlSA">
-                <img class="leftmoreICO" src="../assets/moreICO.png">
+                <span class="leftmoreText">更多</span>
               </router-link>
+              <!--<router-link to="/trawlSA">
+                <img class="leftmoreICO" src="../assets/moreICO.png">
+              </router-link>-->
             </li>
             <!--换行后有利于布局，相互之间不影响-->
             <br>
@@ -124,16 +132,14 @@
         <div class="middlebottomrightbackground">
           <ul>
             <li>
-              <router-link to="/stowSA">
-                <span class="leftbackgroundTitle">张网统计</span>
-              </router-link>
+              <span class="leftbackgroundTitle">张网统计</span>
               <router-link to="/stowSA">
                 <span class="leftmoreText">更多</span>
               </router-link>
 
-              <router-link to="/stowSA">
+              <!--<router-link to="/stowSA">
                 <img class="leftmoreICO" src="../assets/moreICO.png">
-              </router-link>
+              </router-link>-->
             </li>
             <!--换行后有利于布局，相互之间不影响-->
             <br>
@@ -169,10 +175,12 @@
         <ul>
           <li>
             <span class="rightbackgroundTitle">渔船作业统计</span>
-            <span class="rightmoreleftText">更多</span>
-            <a href="#">
+            <router-link to="#">
+              <span class="leftmoreText">更多</span>
+            </router-link>
+            <!--<a href="#">
               <img class="rightmoreleftICO" src="../assets/moreICO.png">
-            </a>
+            </a>-->
           </li>
           <!--换行后有利于布局，相互之间不影响-->
           <br>
@@ -190,10 +198,12 @@
         <ul>
           <li>
             <span class="rightbackgroundTitle">非法作业统计</span>
-            <span class="rightmoreleftText">更多</span>
-            <a href="#">
+            <router-link to="#">
+              <span class="leftmoreText">更多</span>
+            </router-link>
+            <!--<a href="#">
               <img class="rightmoreleftICO" src="../assets/moreICO.png">
-            </a>
+            </a>-->
           </li>
           <!--换行后有利于布局，相互之间不影响-->
           <br>
@@ -211,10 +221,12 @@
         <ul>
           <li>
             <span class="rightbackgroundTitle">刺网统计</span>
-            <span class="rightmoreleftText">更多</span>
-            <router-link to="/gillNetStAnalysis">
-              <img class="rightmoreleftICO" src="../assets/moreICO.png">
+            <router-link to="gillNetStAnalysis">
+              <span class="leftmoreText">更多</span>
             </router-link>
+            <!--<router-link to="/gillNetStAnalysis">
+              <img class="rightmoreleftICO" src="../assets/moreICO.png">
+            </router-link>-->
           </li>
           <!--换行后有利于布局，相互之间不影响-->
           <br>
