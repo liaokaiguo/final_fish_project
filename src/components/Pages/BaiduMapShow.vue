@@ -130,15 +130,20 @@
       </div>
       <div class="online-content">
         <el-tooltip effect="dark" content="在线客服" placement="right" :hide-after = "2000">
-          <img src="../../assets/mapShowImg/online32.png" height="32" width="32"/>
+          <img src="../../assets/mapShowImg/online32.png" height="32" width="32" @click="onlineVisible =!onlineVisible"/>
         </el-tooltip>
+        <el-popover
+          placement="bottom"
+          title="客服"
+          width="300"
+          trigger="manual"
+          v-model="onlineVisible">
+          <span>客服1:</span><el-button></el-button><br>
+          <span>客服2:</span><el-button></el-button><br>
+          <span>客服热线:  0571-87651234</span>
+        </el-popover>
       </div>
 
-
-      <div >
-        xixix
-
-      </div>
     </div>
 
 
@@ -305,10 +310,16 @@
                     type="textarea" :rows="5" style="width: 80%"
                     autocomplete="off" placeholder="谢谢"></el-input>
         </el-form-item>
+        <el-form-item label="评分:" prop="star" label-width="120px">
+          <el-rate class="select-input-data" style="margin-left: 10px"
+                   v-model="feedBackForm.star"
+                   :colors="['#99A9BF', '#F7BA2A', '#FF9900']">
+          </el-rate>
+        </el-form-item>
       </el-form>
       <div slot="footer" style="text-align: center;">
         <el-button @click="feedBackDialog = false">取 消</el-button>
-        <el-button type="primary" @click="submitAdvice">提交</el-button>
+        <el-button type="primary" @click="submitAdvice('feedBackForm')">提交</el-button>
       </div>
     </el-dialog>
 
@@ -417,8 +428,9 @@
                 existGrid: false,//是否存在网格
 
                 /*左侧小工具栏 相关*/
-                feedBackDialog:false,
-                locationVisible:false,
+                feedBackDialog:false, // 意见反馈对话框
+                locationVisible:false,//定位
+                onlineVisible:false,//客服
                 reLocationMarker:'',
                 reLocationForm: {
                     lng: '',
@@ -427,7 +439,8 @@
                 feedBackForm: {
                     phone: '',
                     email: '',
-                    suggest: ''
+                    suggest: '',
+                    star:null,
                 },
                 feedBackFormRules: {
                     phone: [
@@ -458,6 +471,14 @@
                     ],
                     suggest: [
                         {required: true, message: '金玉良言', trigger: 'blur'},
+                    ],
+                    star: [
+                        {required: true, message: '比星', trigger: 'blur'},
+                        {validator:function(rule,value,callback){
+                                if (value === '' || value == undefined || value == 0) {
+                                    callback(new Error('请点击选择评分'));
+                                }
+                                callback();}, trigger: 'blur'}
                     ],
 
                 }, //意见反馈表单规则
@@ -1336,9 +1357,18 @@
             },
 
             /*意见反馈 提交*/
-            submitAdvice(){
-                this.feedBackDialog = false;
-                console.log("emailTo后台")
+            submitAdvice(formName){
+                this.$refs[formName].validate((valid) => {
+                    if (valid) {
+                        this.feedBackDialog = false;
+                        console.log(this.feedBackForm.star)
+                        console.log("emailTo后台")
+                    } else {
+                        console.log('error submit!!');
+                        return false;
+                    }
+                });
+
             },
 
             /*底部部件
