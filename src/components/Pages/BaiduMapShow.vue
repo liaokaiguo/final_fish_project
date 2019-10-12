@@ -95,58 +95,63 @@
     <div class="middle-tool-content">
       <div class="location-content">
         <el-tooltip effect="dark" content="坐标定位" placement="right" :hide-after="2000">
-          <img src="../../assets/mapShowImg/location32.png" height="32" width="32" @click="locationVisible = !locationVisible" />
+          <el-popover
+            placement="top"
+            title="坐标定位"
+            width="300"
+            trigger="click">
+            <el-form ref="reLocationForm" :model="reLocationForm" label-width="60px">
+              <el-form-item label="经度:" prop="lng">
+                <el-input oninput="value=value.replace(/[^0-9.]/g,'')" v-model="reLocationForm.lng"></el-input>
+              </el-form-item>
+              <el-form-item label="纬度:" prop="lat">
+                <el-input oninput="value=value.replace(/[^0-9.]/g,'')" v-model="reLocationForm.lat"></el-input>
+              </el-form-item>
+            </el-form>
+            <div style="text-align: right; margin: 0">
+              <el-button type="primary" size="mini" @click="reLocation">确定</el-button>
+            </div>
+            <img class="img-class1" src="../../assets/mapShowImg/location32.png" height="32" width="32"
+                 slot="reference"/>
+          </el-popover>
         </el-tooltip>
-        <el-popover
-          placement="right"
-          title="坐标定位"
-          width="300"
-          trigger="manual"
-          v-model="locationVisible">
-          <el-form ref="reLocationForm" :model="reLocationForm" label-width="60px" >
-            <el-form-item label="经度:" prop="lng">
-              <el-input oninput ="value=value.replace(/[^0-9.]/g,'')" v-model="reLocationForm.lng"></el-input>
-            </el-form-item>
-            <el-form-item label="纬度:" prop="lat">
-              <el-input oninput ="value=value.replace(/[^0-9.]/g,'')" v-model="reLocationForm.lat"></el-input>
-            </el-form-item>
-          </el-form>
-          <div  style="text-align: right; margin: 0">
-            <el-button size="mini" type="text" @click="locationVisible = false">取消</el-button>
-            <el-button type="primary" size="mini" @click="reLocation">确定</el-button>
-          </div>
-        </el-popover>
       </div>
 
       <div class="distance-content">
         <el-tooltip effect="dark" content="测距" placement="right" :hide-after="2000">
-          <img src="../../assets/mapShowImg/distance32.png" height="32" width="32" @click="openDistanceTool"/>
+          <img class="img-class1" src="../../assets/mapShowImg/distance32.png" height="32" width="32" @click="openDistanceTool"/>
         </el-tooltip>
       </div>
       <div class="feedback-content">
         <el-tooltip effect="dark" content="意见反馈" placement="right" :hide-after="2000">
-          <img src="../../assets/mapShowImg/feedback32.png" height="32" width="32" @click="feedBackDialog=true"/>
+          <img class="img-class1" src="../../assets/mapShowImg/feedback32.png" height="32" width="32" @click="feedBackDialog=true"/>
         </el-tooltip>
       </div>
       <div class="online-content">
-        <el-tooltip effect="dark" content="在线客服" placement="right" :hide-after = "2000">
-          <img src="../../assets/mapShowImg/online32.png" height="32" width="32" @click="onlineVisible =!onlineVisible"/>
+        <el-tooltip effect="dark" content="在线客服" placement="right" :hide-after="2000">
+          <el-popover
+            placement="bottom"
+            title="客服专栏"
+            width="260"
+            trigger="click">
+            <div>
+              <div><span>客服1:</span>
+                <img src="../../assets/mapShowImg/QQ.png" height="32" width="32"/>
+                <el-button size="small" type="primary">QQ交谈</el-button>
+              </div>
+              <br>
+              <div><span>客服2:</span>
+                <img src="../../assets/mapShowImg/QQ.png" height="32" width="32"/>
+                <el-button size="small" type="primary">QQ交谈</el-button>
+              </div>
+              <br>
+              <strong>客服热线: 0571-87651234</strong>
+            </div>
+            <img class="img-class1" src="../../assets/mapShowImg/online32.png" height="32" width="32" slot="reference"/>
+          </el-popover>
         </el-tooltip>
-        <el-popover
-          placement="bottom"
-          title="客服"
-          width="300"
-          trigger="manual"
-          v-model="onlineVisible">
-          <span>客服1:</span><el-button></el-button><br>
-          <span>客服2:</span><el-button></el-button><br>
-          <span>客服热线:  0571-87651234</span>
-        </el-popover>
       </div>
-
     </div>
-
-
 
     <!--右下角 渔船信息 -->
     <el-row class="bottom-content">
@@ -156,27 +161,23 @@
       <el-col class="bottom-right-class" :span="12" >
         <div >
           <el-table style="left:2%; width: 96%;  "
-                    height="270"
+                    height="280"
                     :data=shipArr>
             <el-table-column
               prop="shipId"
-              label="渔船编号"
-              width="100">
+              label="渔船编号">
             </el-table-column>
             <el-table-column
               prop="ship.shipName"
-              label="渔船名"
-              width="130">
+              label="渔船名">
             </el-table-column>
             <el-table-column
               prop="ship.jobType"
-              label="作业方式"
-              width="100">
+              label="作业方式">
             </el-table-column>
             <el-table-column
               prop="acqTime"
-              label="定位时间"
-              width="100">
+              label="定位时间">
             </el-table-column>
           </el-table>
         </div>
@@ -429,8 +430,6 @@
 
                 /*左侧小工具栏 相关*/
                 feedBackDialog:false, // 意见反馈对话框
-                locationVisible:false,//定位
-                onlineVisible:false,//客服
                 reLocationMarker:'',
                 reLocationForm: {
                     lng: '',
@@ -522,12 +521,12 @@
                         },
                         offset: 10,
                         nameTextStyle: {
-                            fontSize: 15
+                            fontSize: 18
                         },
                         axisLabel: {
                             show: true,
                             textStyle: {
-                                fontSize:16
+                                fontSize:18
                             }
                         }
 
@@ -1502,9 +1501,10 @@
   }
   .bottomleftEchart{
     width: 480px;
-    height: 270px;
+    height: 280px;
   }
   .bottom-right-class{
+    height: 290px;
     background-image: url("../../assets/mapInfo.gif");
     background-size: 100% 100%;
     opacity: 0.8;
@@ -1539,12 +1539,12 @@
     width: 100%;
     height: 28%;
   }
-  .middle-tool-content img {
+  .middle-tool-content .img-class1 {
     filter: grayscale(100%);
     opacity: 0.66;
   }
 
-  .middle-tool-content img:hover {
+  .middle-tool-content .img-class1:hover {
     filter: none;
     opacity: 1;
     cursor: pointer;
