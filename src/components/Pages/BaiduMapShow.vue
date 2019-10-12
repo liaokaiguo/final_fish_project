@@ -179,8 +179,11 @@
     </el-row>
 
     <!--渔船位置信息选择弹出框-->
-    <el-dialog title="渔船位置信息选择" :visible.sync="shipLocationDialog"
+    <el-dialog :modal="false" :visible.sync="shipLocationDialog"
                @close="resetForm('shipLocationForm')">
+      <div slot="title" style="text-align: center;font-size: 24px;">
+        <span>渔船位置信息选择</span>
+      </div>
       <el-form ref="shipLocationForm" :model="selectLocation" :label-width="formLabelWidth">
         <el-form-item label="渔船编号:" prop="boatId">
           <el-input v-model="selectLocation.boatId" class="select-input-data"
@@ -233,7 +236,10 @@
     </el-dialog>
 
     <!--轨迹回放选择弹出框-->
-    <el-dialog title="渔船航行信息选择" :visible.sync="shipTrackDialog" @close="resetForm('shipTrackForm')">
+    <el-dialog :modal="false" :visible.sync="shipTrackDialog" @close="resetForm('shipTrackForm')">
+      <div slot="title" style="text-align: center;font-size: 24px;">
+        <span>渔船航行信息选择</span>
+      </div>
       <el-form ref="shipTrackForm" :model="selectTrack" :label-width="formLabelWidth" :rules="shipTrackFormRules">
         <el-form-item label="渔船编号:" prop="boatId">
           <el-input class="select-input-data" v-model="selectTrack.boatId"
@@ -1367,7 +1373,6 @@
     height: 1080px;
     width: 100%;
     float: left;
-    /*background-color: #e5e9f2;*/
   }
 
   .select-input-data {
@@ -1461,5 +1466,6 @@
     /*padding:2px !important;*/
     text-align: center !important;
   }
+
 
 </style>
