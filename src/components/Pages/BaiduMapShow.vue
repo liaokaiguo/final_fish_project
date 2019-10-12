@@ -125,7 +125,7 @@
       </div>
       <div class="feedback-content">
         <el-tooltip effect="dark" content="意见反馈" placement="right" :hide-after="2000">
-          <img src="../../assets/mapShowImg/feedback32.png" height="32" width="32"/>
+          <img src="../../assets/mapShowImg/feedback32.png" height="32" width="32" @click="feedBackDialog=true"/>
         </el-tooltip>
       </div>
       <div class="online-content">
@@ -285,6 +285,33 @@
       </div>
     </el-dialog>
 
+    <!--左侧工具栏 意见反馈弹窗-->
+    <el-dialog :modal="false" :visible.sync="feedBackDialog" @close="resetForm('feedBackForm')"
+                width="30%">
+      <div slot="title" style="text-align: center;font-size: 24px;">
+        <span>意见反馈</span>
+      </div>
+      <el-form ref="feedBackForm" :model="feedBackForm"  :rules="feedBackFormRules">
+        <el-form-item label="手机号码:" prop="phone" label-width="120px">
+          <el-input class="select-input-data" v-model="feedBackForm.phone"
+                    autocomplete="off" placeholder="您的联系电话"></el-input>
+        </el-form-item>
+        <el-form-item label="电子邮箱:" prop="email" label-width="120px">
+          <el-input class="select-input-data" v-model="feedBackForm.email "
+                    autocomplete="off" placeholder="您的邮箱地址"></el-input>
+        </el-form-item>
+        <el-form-item label="建议内容:" prop="suggest" label-width="120px">
+          <el-input class="select-input-data" v-model="feedBackForm.suggest "
+                    type="textarea" :rows="5" style="width: 80%"
+                    autocomplete="off" placeholder="谢谢"></el-input>
+        </el-form-item>
+      </el-form>
+      <div slot="footer" style="text-align: center;">
+        <el-button @click="feedBackDialog = false">取 消</el-button>
+        <el-button type="primary" @click="submitAdvice">提交</el-button>
+      </div>
+    </el-dialog>
+
   </div>
 
 
@@ -390,12 +417,50 @@
                 existGrid: false,//是否存在网格
 
                 /*左侧小工具栏 相关*/
+                feedBackDialog:false,
                 locationVisible:false,
                 reLocationMarker:'',
                 reLocationForm: {
                     lng: '',
                     lat: '',
                 },
+                feedBackForm: {
+                    phone: '',
+                    email: '',
+                    suggest: ''
+                },
+                feedBackFormRules: {
+                    phone: [
+                        {required: true, message: '请输入手机号码', trigger: 'blur'},
+                        {validator:function(rule,value,callback){
+                                if(/^1[34578]\d{9}$/.test(value) == false){
+                                    callback(new Error("请输入正确的手机号"));
+                                }else{
+                                    callback();
+                                }
+                            }, trigger: 'blur'}
+                    ],
+                    email: [
+                        {required: true, message: '请输入邮箱地址', trigger: 'blur'},
+                        {validator:function(rule,value,callback){
+                                if (value === '') {
+                                    callback(new Error('请正确填写邮箱'));
+                                } else {
+                                    if (value !== '') {
+                                        var reg=/^[A-Za-z0-9\u4e00-\u9fa5]+@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+$/;
+                                        if(!reg.test(value)){
+                                            callback(new Error('请输入有效的邮箱'));
+                                        }
+                                    }else{
+                                        callback();
+                                    }
+                                }}, trigger: 'blur'}
+                    ],
+                    suggest: [
+                        {required: true, message: '金玉良言', trigger: 'blur'},
+                    ],
+
+                }, //意见反馈表单规则
 
                 /*Echarts 相关*/
                 jobTypeCount:[], //各作业类型的数量
@@ -471,7 +536,7 @@
                                 },
                                 normal:{
                                     barBorderRadius:5,
-//每根柱子颜色设置
+                                  //每根柱子颜色设置
                                     color: function(params) {
                                         let colorList = [
                                             "#de97ee",
@@ -1270,7 +1335,15 @@
                 myDis.open();
             },
 
-            /*画底部左边Echarts*/
+            /*意见反馈 提交*/
+            submitAdvice(){
+                this.feedBackDialog = false;
+                console.log("emailTo后台")
+            },
+
+            /*底部部件
+            *
+            * 画底部左边Echarts*/
             drawBottomLeftCharts() {
                 var bottomLeftCharts = this.$echarts.init(
                     document.getElementById("bottomLeftEchartId")
