@@ -815,8 +815,8 @@
                         var targetPoint = new BMap.Point(e.point.lng, e.point.lat);
 
                         var opts = {
-                            width: 300, // 信息窗口宽度
-                            height: 70, // 信息窗口高度
+                            // width: 300, // 信息窗口宽度
+                            // height: 300, // 信息窗口高度
                             title: "渔船信息", // 信息窗口标题
                         }
                         var Content = "<div style='width:300px;'>"
@@ -830,7 +830,7 @@
                             + "<p>地址经度：" + _this.shipArr[i].longitude + "</p>"
                             + "<p>地址纬度：" + _this.shipArr[i].latitude + "</p>"
                             + "</div>";
-                        var infoWindow = new BMap.InfoWindow(Content);  // 创建信息窗口对象
+                        var infoWindow = new BMap.InfoWindow(Content,opts);  // 创建信息窗口对象
                         map.openInfoWindow(infoWindow, targetPoint); //开启信息窗口
                     });
                     map.addOverlay(pointCollection);  // 添加Overlay
@@ -1570,5 +1570,43 @@
     text-align: center !important;
   }
 
+  /*地图标题*/
+  .BMap_bubble_title {
+    color:white;
+    font-size:13px;
+    font-weight:bold;
+    text-align:center;
+    padding-left:5px;
+    padding-top:5px;
+    border-bottom:1px solid #16ddff;
+    background-color: #3ebde4;
+    border-radius:12px 12px 0 0;
+  }
+  /* 消息内容 */
+  .BMap_bubble_content {
+    background-color:white;
+    padding-left:5px;
+    padding-top:5px;
+    padding-bottom:10px;
+  }
+  /* 右上角删除按键 */
+  .BMap_pop img {
+    top: 26px !important;
+    left: 290px !important;
+  }
+
+  /* 边框圆角 */
+  .BMap_pop div:nth-child(1) div{
+    border-radius:12px 0 0 0;
+  }
+  .BMap_pop div:nth-child(3) div{
+    border-radius:0 12px 0 0 ;
+  }
+  .BMap_pop div:nth-child(5) div{
+    border-radius:0 0 0 12px;
+  }
+  .BMap_pop div:nth-child(7) div {
+    border-radius:0 0 12px 0;
+  }
 
 </style>
