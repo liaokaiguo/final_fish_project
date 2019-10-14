@@ -1571,7 +1571,7 @@
   }
 
   /*地图标题*/
-  .BMap_bubble_title {
+  .mapContext .BMap_bubble_title {
     color:white;
     font-size:13px;
     font-weight:bold;
@@ -1583,29 +1583,29 @@
     border-radius:12px 12px 0 0;
   }
   /* 消息内容 */
-  .BMap_bubble_content {
+  .mapContext .BMap_bubble_content {
     background-color:white;
     padding-left:5px;
     padding-top:5px;
     padding-bottom:10px;
   }
   /* 右上角删除按键 */
-  .BMap_pop img {
+  .mapContext .BMap_pop img {
     top: 26px !important;
     left: 290px !important;
   }
 
   /* 边框圆角 */
-  .BMap_pop div:nth-child(1) div{
+  .mapContext .BMap_pop div:nth-child(1) div{
     border-radius:12px 0 0 0;
   }
-  .BMap_pop div:nth-child(3) div{
+  .mapContext .BMap_pop div:nth-child(3) div{
     border-radius:0 12px 0 0 ;
   }
-  .BMap_pop div:nth-child(5) div{
+  .mapContext .BMap_pop div:nth-child(5) div{
     border-radius:0 0 0 12px;
   }
-  .BMap_pop div:nth-child(7) div {
+  .mapContext .BMap_pop div:nth-child(7) div {
     border-radius:0 0 12px 0;
   }
 
