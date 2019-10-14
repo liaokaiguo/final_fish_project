@@ -36,12 +36,13 @@
                 <span>渔船作业分布图</span>
                 <i class="el-icon-picture-outline"></i>
               </template>
-              <el-submenu index="2-1">
-                <template slot="title">围网</template>
-                <el-menu-item index="2-1-1">热力图</el-menu-item>
-                <el-menu-item index="2-1-2">分布图</el-menu-item>
-                <el-menu-item index="2-1-3">卫星图</el-menu-item>
-              </el-submenu>
+<!--              <el-submenu index="2-1">-->
+<!--                <template slot="title">围网</template>-->
+<!--                <el-menu-item index="2-1-1">热力图</el-menu-item>-->
+<!--                <el-menu-item index="2-1-2">分布图</el-menu-item>-->
+<!--                <el-menu-item index="2-1-3">卫星图</el-menu-item>-->
+<!--              </el-submenu>-->
+              <el-menu-item index="2-1">围网</el-menu-item>
               <el-menu-item index="2-2">拖网</el-menu-item>
               <el-menu-item index="2-3">张网</el-menu-item>
               <el-menu-item index="2-4">刺网</el-menu-item>
@@ -643,7 +644,7 @@
                         this.shipLocationDialog = true;// 渔船位置弹窗
                         break;
 
-                    case "2-1-1":
+                    case "2-1":
                         this.getHeatMapPointsAndShow("围网");//围网热力图
                         break;
                     case "2-2":
@@ -1124,7 +1125,7 @@
                         + "<p>定位时间：" + this.shipTrackArr[i].acqTime + "</p>"
                         + "<p>地址经度：" + this.shipTrackArr[i].longitude + "</p>"
                         + "<p>地址纬度：" + this.shipTrackArr[i].latitude + "</p>"
-                        + "<p>作业方式：" + this.shipTrackArr[i].workMode + "</p>"
+                        + "<p>算法识别结果：" + this.shipTrackArr[i].idtfyShipJob.idtfyJobtype + "</p>"
                         + "</div>"
                     );//悬浮提示信息
                     this.addInfo(info[i], this.trackMarker[i])
@@ -1554,6 +1555,13 @@
 
 </style>
 <style>
+
+  .centTitle .el-submenu__title:focus, .centTitle .el-submenu__title:hover {
+    outline: 0 !important;
+    color: #409EFF !important;
+    background: none !important;
+  }
+
   /*右下角表格变透明*/
   .bottom-right-class .el-table, .bottom-right-class .el-table tr {
     background-color: transparent !important;
