@@ -103,13 +103,13 @@
             trigger="click">
             <el-form ref="reLocationForm" :model="reLocationForm" label-width="60px">
               <el-form-item label="经度:" prop="lng">
-                <el-input oninput="value=value.replace(/[^0-9.]/g,'')" v-model="reLocationForm.lng"></el-input>
+                <el-input oninput="value=value.replace(/[^0-9.]/g,'')" v-model="reLocationForm.lng" style="width: 80%"></el-input>
               </el-form-item>
               <el-form-item label="纬度:" prop="lat">
-                <el-input oninput="value=value.replace(/[^0-9.]/g,'')" v-model="reLocationForm.lat"></el-input>
+                <el-input oninput="value=value.replace(/[^0-9.]/g,'')" v-model="reLocationForm.lat" style="width: 80%"></el-input>
               </el-form-item>
             </el-form>
-            <div style="text-align: right; margin: 0">
+            <div style="text-align: right; margin-right: 10px">
               <el-button type="primary" size="mini" @click="reLocation">确定</el-button>
             </div>
             <img class="img-class1" src="../../assets/mapShowImg/location32.png" height="32" width="32"
@@ -244,7 +244,7 @@
 
     <!--轨迹回放选择弹出框-->
     <el-dialog :modal="false" :visible.sync="shipTrackDialog" @close="resetForm('shipTrackForm')">
-      <div slot="title" style="text-align: center;font-size: 24px;">
+      <div slot="title" >
         <span>渔船航行信息选择</span>
       </div>
       <el-form ref="shipTrackForm" :model="selectTrack" :label-width="formLabelWidth" :rules="shipTrackFormRules">
@@ -1552,17 +1552,17 @@
 
   }
 
-
 </style>
 <style>
 
+  /***菜单栏自定义*/
   .centTitle .el-submenu__title:focus, .centTitle .el-submenu__title:hover {
     outline: 0 !important;
     color: #409EFF !important;
     background: none !important;
   }
 
-  /*右下角表格变透明*/
+  /*** table自定义 右下角表格变透明*/
   .bottom-right-class .el-table, .bottom-right-class .el-table tr {
     background-color: transparent !important;
   }
@@ -1578,7 +1578,7 @@
     text-align: center !important;
   }
 
-  /*地图标题*/
+  /***地图infowindow自定义 标题*/
   .mapContext .BMap_bubble_title {
     color:white;
     font-size:13px;
@@ -1615,6 +1615,23 @@
   }
   .mapContext .BMap_pop div:nth-child(7) div {
     border-radius:0 0 12px 0;
+  }
+
+  /*** 对话框自定义样式 边框圆角，标题居中 透明 */
+  .background .el-dialog {
+    border-radius: 12px 12px 12px 12px;
+    /*background-color: transparent;*/
+    /*opacity: 0.8;*/
+  }
+  .background .el-dialog__header {
+    color: white;
+    text-align: center;
+    font-size: 24px;
+    background-color: #5bb1ff;
+    border-radius: 12px 12px 0px 0px;
+  }
+  .background .el-dialog__close{
+    background-color: white;
   }
 
 </style>
