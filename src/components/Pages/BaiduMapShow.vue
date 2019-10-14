@@ -1555,15 +1555,15 @@
 </style>
 <style>
   /*右下角表格变透明*/
-  .el-table,  .el-table tr {
+  .bottom-right-class .el-table, .bottom-right-class .el-table tr {
     background-color: transparent !important;
   }
-  .el-table__header th, .el-table__header tr {
+  .bottom-right-class .el-table__header th, .bottom-right-class .el-table__header tr {
     background-color: transparent !important;
     color: black !important;
     text-align: center !important;
   }
-  .el-table__body td, .el-table__body th{
+  .bottom-right-class .el-table__body td, .bottom-right-class.el-table__body th{
     background-color: transparent !important;
     color: black !important;
     /*padding:2px !important;*/
