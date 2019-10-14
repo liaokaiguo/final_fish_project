@@ -34,4 +34,20 @@ export default {
 .anchorBL {
   display: none;
 }
+/*** el-popover是和app同级，全局样式  弹出框自定义*/
+.el-popper{
+  border-radius: 10px 10px 10px 10px !important;
+  padding-top: 0px !important;
+  padding-right: 0px !important;
+  padding-left: 0px !important;
+
+}
+.el-popover__title{
+  border-radius: 10px 10px 0px 0px;
+  margin-bottom: 10px;
+  text-align: center;
+  color: white !important;
+  background-color: #5bb1ff ;
+  font-size: 22px !important;
+}
 </style>
