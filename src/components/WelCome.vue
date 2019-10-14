@@ -842,14 +842,18 @@
 
       /*出入港口后台数据 */
       initPortData() {
-        this.axios.get('/getPortTraffic').then((response) => {
-          this.LinNum = response.data.in[0];
-          this.LoutNum = response.data.out[0];
-          this.NLinNum = response.data.in[1];
-          this.NLoutNum = response.data.out[1];
-        }).catch((response) => {
-          console.log(response)
-        })
+        // this.axios.get('/getPortTraffic').then((response) => {
+        //   this.LinNum = response.data.in[0];
+        //   this.LoutNum = response.data.out[0];
+        //   this.NLinNum = response.data.in[1];
+        //   this.NLoutNum = response.data.out[1];
+        // }).catch((response) => {
+        //   console.log(response)
+        // })
+          this.LinNum = 376;
+          this.LoutNum = 547;
+          this.NLinNum = 213;
+          this.NLoutNum = 189;
       },
 
       /*围网后台数据 */
