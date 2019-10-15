@@ -238,14 +238,16 @@ export default {
       /*搜索特定船只信息*/
       search(select){
           this.tableDataLoading =true; //先loading动画
-
-          if(this.select.passDate === null){// null会引发后端请求错误
-              this.select.passDate ='';
+          var date = new Date();
+          var nowDay = this.getFormatDate(date);
+          if(this.select.passDate === null ||this.select.passDate ===''){// null会引发后端请求错误
+              this.$message({
+                  message: '日期不选，数据量较大，系统默认当前日期!!!',
+                  showClose: 'true',
+                  duration: 5000,
+              })
+              this.select.passDate = nowDay;
           }
-          // console.log(this.select.boatId);
-          // console.log(this.select.inOrOut);
-          // console.log(this.select.passDate);
-          // console.log(this.select.portName);
           this.axios({
               method:"post",
               url:"/queryPortTrafficWithoutJoin",
