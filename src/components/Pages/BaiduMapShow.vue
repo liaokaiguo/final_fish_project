@@ -160,27 +160,48 @@
         <div id="bottomLeftEchartId" class="bottomleftEchart"></div>
       </el-col>
       <el-col class="bottom-right-class" :span="12" >
-        <div >
-          <el-table style="left:2%; width: 96%;  "
-                    height="280"
-                    :data=shipArr>
-            <el-table-column
-              prop="shipId"
-              label="渔船编号">
-            </el-table-column>
-            <el-table-column
-              prop="ship.shipName"
-              label="渔船名">
-            </el-table-column>
-            <el-table-column
-              prop="ship.jobType"
-              label="作业方式">
-            </el-table-column>
-            <el-table-column
-              prop="acqTime"
-              label="定位时间">
-            </el-table-column>
-          </el-table>
+        <div class="shipInfoItem">
+<!--          <el-table style="left:2%; width: 96%;  "-->
+<!--                    height="280"-->
+<!--                    :data=shipArr>-->
+<!--            <el-table-column-->
+<!--              prop="shipId"-->
+<!--              label="渔船编号">-->
+<!--            </el-table-column>-->
+<!--            <el-table-column-->
+<!--              prop="ship.shipName"-->
+<!--              label="渔船名">-->
+<!--            </el-table-column>-->
+<!--            <el-table-column-->
+<!--              prop="ship.jobType"-->
+<!--              label="作业方式">-->
+<!--            </el-table-column>-->
+<!--            <el-table-column-->
+<!--              prop="acqTime"-->
+<!--              label="定位时间">-->
+<!--            </el-table-column>-->
+<!--          </el-table>-->
+          <!--渔船信息 自动滚动 -->
+          <ul>
+            <li>
+              <strong style="float: left;margin-left: 5%;font-size: 15px;">渔船Id</strong>
+              <strong style="float: left;margin-left: 10%;font-size: 15px;">渔船名</strong>
+              <strong style="float: left;margin-left: 12%;font-size: 15px;">作业类型</strong>
+              <strong style="font-size: 15px;">定位时间</strong>
+            </li>
+            <vue-seamless-scroll
+              :data="shipArr"
+              :class-option="seamlessOptionSetting"
+              class="seamless-warp">
+              <li v-for="(item,key) in shipArr" :key>
+                <span v-text="item.shipId"></span>
+                <span v-text="item.ship.shipName"></span>
+                <span v-text="item.ship.jobType"></span>
+                <span v-text="item.acqTime"></span>
+              </li>
+            </vue-seamless-scroll>
+          </ul>
+
         </div>
       </el-col>
     </el-row>
@@ -582,6 +603,22 @@
 
         },
 
+        computed: {
+            /*自动滚动插件配置参数*/
+            seamlessOptionSetting() {
+                return {
+                    step: 0.3, // 数值越大速度滚动越快
+                    limitMoveNum: 2, // 开始无缝滚动的数据量 this.dataList.length
+                    hoverStop: true, // 是否开启鼠标悬停stop
+                    direction: 1, // 0向下 1向上 2向左 3向右
+                    openWatch: true, // 开启数据实时监控刷新dom
+                    singleHeight: 0, // 单步运动停止的高度(默认值0是无缝不停止的滚动) direction => 0/1
+                    singleWidth: 0, // 单步运动停止的宽度(默认值0是无缝不停止的滚动) direction => 2/3
+                    waitTime: 1000 // 单步运动停止的时间(默认值1000ms)
+
+                }
+            },
+        },
         mounted() {
 
             this.mapReady(this.centerLng, this.centerLat, this.level);
@@ -1510,6 +1547,21 @@
     background-size: 100% 100%;
     opacity: 0.8;
   }
+  /** 右下角列表自动滚动*/
+  .seamless-warp {
+    height: 250px;
+    overflow: hidden;
+  }
+  .shipInfoItem ul {
+    list-style: none;
+  }
+  .seamless-warp  li {
+    height: 40px;
+    line-height: 30px;
+    display: flex;
+    justify-content: space-around;
+    font-size: 15px;
+  }/**/
 
   .middle-tool-content {
     position: absolute;
