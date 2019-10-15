@@ -12,6 +12,7 @@ import iView from 'iview';
 import 'iview/dist/styles/iview.css';
 import axios from 'axios'
 import VueAxios from 'vue-axios'
+import scroll from 'vue-seamless-scroll'
 
 Vue.use(VueAxios,axios);
 axios.defaults.baseURL = "http://36.26.4.82:9101";
@@ -20,7 +21,7 @@ Vue.prototype.$echarts = echarts
 
 Vue.use(ElementUi)
 Vue.use(iView);
-
+Vue.use(scroll)//全局使用列表自动滚动插件
 Vue.config.productionTip = false
 
 //Vue.use(ElementUI)
