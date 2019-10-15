@@ -573,7 +573,7 @@
             orient: "horizontal",
             x: "center",
             top: "5%",
-            data: ["拖网", "刺网", "围网", "其它"],
+            data: ["围网","拖网", "张网", "刺网", "其它"],
             textStyle: {
               color: "default"
             }
@@ -609,7 +609,8 @@
               // { value: 135, name: "其它" }
             ]
           }],
-          color: ["#5b9bff", "#ed7d31", "#a5a5a5", "#efab00"]
+          color: ["#6bc1ff", "#3cedbc", "#eeb110", "#ffd989",
+              "#eea5d1"]
         },
         rightMiddleOption: {
           tooltip: {
@@ -620,7 +621,7 @@
             orient: "horizontal",
             left: "center",
             top: "5%",
-            data: ["拖网", "刺网", "围网","其它" ],
+            data: ["围网","拖网", "张网","刺网", "其它" ],
             textStyle: {
               color: "default"
             }
@@ -644,7 +645,8 @@
               }
             }
           }],
-          color: ["#5b9bff", "#ed7d31", "#11d6ee","#eea5d1"]
+          color: ["#62c1ff", "#eea5d1", "#d5fdff","#8ceed9",
+              "#beb1ff"]
         },
         rightBottomOption: {
           color: ["#f44"],
@@ -966,22 +968,27 @@
           rightTopEChart.hideLoading(); //加载出来隐藏加载动画
           rightTopEChart.setOption({ //数据添加
             series: [{
-              data: [{
-                  value: res.data.tuoWang,
-                  name: "拖网"
-                },
-                {
-                  value: res.data.ciWang,
-                  name: "刺网"
-                },
-                {
-                  value: res.data.weiWang,
-                  name: "围网"
-                },
-                {
-                  value: res.data.other,
-                  name: "其它"
-                }
+              data: [
+                  {
+                      value: res.data.weiWang,
+                      name: "围网"
+                  },
+                  {
+                      value: res.data.tuoWang,
+                      name: "拖网"
+                  },
+                  {
+                      value: res.data.ciWang,
+                      name: "刺网"
+                  },
+                  {
+                      value: res.data.zhangWang,
+                      name: "张网"
+                  },
+                  {
+                      value: res.data.other,
+                      name: "其它"
+                  }
               ]
             }]
           })
@@ -1009,22 +1016,27 @@
           rightMiddleEChart.hideLoading(); //加载出来隐藏加载动画
           rightMiddleEChart.setOption({ //数据添加
             series: [{
-              data: [{
-                  value: res.data.tuoWang,
-                  name: "拖网"
-                },
-                {
-                  value: res.data.ciWang,
-                  name: "刺网"
-                },
-                {
-                  value: res.data.weiWang,
-                  name: "围网"
-                },
-                 {
-                   value: res.data.other,
-                   name: "其它"
-                 }
+              data: [
+                  {
+                      value: res.data.weiWang,
+                      name: "围网"
+                  },
+                  {
+                      value: res.data.tuoWang,
+                      name: "拖网"
+                  },
+                  {
+                      value: res.data.ciWang,
+                      name: "刺网"
+                  },
+                  {
+                      value: res.data.zhangWang,
+                      name: "张网"
+                  },
+                  {
+                      value: res.data.other,
+                      name: "其它"
+                  }
               ]
             }]
           })
