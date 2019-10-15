@@ -1661,3 +1661,21 @@
     text-align: center;
   }
 </style>
+
+<style>
+
+  /* 地图 infowindow 边框圆角 */
+  .middletopImage .BMap_pop div:nth-child(1) div{
+    border-radius:12px 0 0 0;
+  }
+  .middletopImage .BMap_pop div:nth-child(3) div{
+    border-radius:0 12px 0 0 ;
+  }
+  .middletopImage .BMap_pop div:nth-child(5) div{
+    border-radius:0 0 0 12px;
+  }
+  .middletopImage .BMap_pop div:nth-child(7) div {
+    border-radius:0 0 12px 0;
+  }
+
+</style>
