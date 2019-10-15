@@ -315,7 +315,7 @@
 
     <!--左侧工具栏 意见反馈弹窗-->
     <el-dialog :modal="false" :visible.sync="feedBackDialog" @close="resetForm('feedBackForm')"
-                width="30%">
+                width="40%">
       <div slot="title" style="text-align: center;font-size: 24px;">
         <span>意见反馈</span>
       </div>
