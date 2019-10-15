@@ -149,25 +149,27 @@ export default {
               value: '0',
               label: '违规作业'
           }],
-          workOptions: [{
-              value: '拖网',
-              label: '拖网'
-          },  {
-              value: '张网',
-              label: '张网'
-          }, {
-              value: '刺网',
-              label: '刺网'
-          }, {
-              value: '围网',
-              label: '围网'
-          }, {
-              value: '钓网',
-              label: '钓网'
-          }, {
-              value: '拉网',
-              label: '拉网'
-          }],
+          workOptions: [
+              {
+                  value: '围网',
+                  label: '围网'
+              },
+              {
+                  value: '拖网',
+                  label: '拖网'
+              },
+              {
+                  value: '张网',
+                  label: '张网'
+              },
+              {
+                  value: '刺网',
+                  label: '刺网'
+              },
+              {
+                  value: '其他',
+                  label: '其他'
+              }],
 
           select:{
               startDate:'',
@@ -186,7 +188,7 @@ export default {
                   orient: "horizontal",
                   x: "center",
                   top: "5%",
-                  data: ["拖网", "刺网", "围网", "其它"],
+                  data: ["围网","拖网", "张网","刺网",  "其它"],
                   textStyle: {
                       color: "default",
                       fontSize: "26",
@@ -218,14 +220,16 @@ export default {
                           }
                       },
                       data: [
-                          { value: 300, name: "拖网" },
-                          { value: 300, name: "刺网" },
                           { value: 300, name: "围网" },
+                          { value: 300, name: "拖网" },
+                          { value: 300, name: "张网" },
+                          { value: 300, name: "刺网" },
                           { value: 300, name: "其它" }
                       ]
                   }
               ],
-              color: ["#6bc1ff", "#3cedbc", "#eeb110", "#ef09ed"]
+              color: ["#6bc1ff", "#3cedbc", "#eeb110", "#ffd989",
+                  "#eea5d1"]
           },
 
 
@@ -266,9 +270,10 @@ export default {
                 myEcharts.setOption({  //数据添加
                     series: [{
                         data: [
-                            {value: res.data.tuoWang, name: "拖网"},
-                            {value: res.data.ciWang, name: "刺网"},
                             {value: res.data.weiWang, name: "围网"},
+                            {value: res.data.tuoWang, name: "拖网"},
+                            {value: res.data.zhangWang, name: "张网"},
+                            {value: res.data.ciWang, name: "刺网"},
                             {value: res.data.other, name: "其它"}]
                     }]
                 })
@@ -345,9 +350,10 @@ export default {
                 myEcharts.setOption({  //数据添加
                     series: [{
                         data: [
-                            {value: res.data.tuoWang, name: "拖网"},
-                            {value: res.data.ciWang, name: "刺网"},
                             {value: res.data.weiWang, name: "围网"},
+                            {value: res.data.tuoWang, name: "拖网"},
+                            {value: res.data.zhangWang, name: "张网"},
+                            {value: res.data.ciWang, name: "刺网"},
                             {value: res.data.other, name: "其它"}]
                     }]
                 })
