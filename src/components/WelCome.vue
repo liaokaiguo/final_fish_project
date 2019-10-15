@@ -1171,7 +1171,7 @@
               "<p>渔船名：" + _this.shipLocationArr[i].ship.shipName + "</p>" +
               "<p>渔船作业类型：" + _this.shipLocationArr[i].ship.jobType + "</p>" +
               "<p>渔船业务类型：" + _this.shipLocationArr[i].ship.businessType + "</p>" +
-              "<p>航行时速(m/s)：" + _this.shipLocationArr[i].speed + "</p>" +
+              "<p>航行时速(节)：" + _this.shipLocationArr[i].speed + "</p>" +
               "<p>定位时间：" + _this.shipLocationArr[i].acqTime + "</p>" +
               "<p>地址经度：" + _this.shipLocationArr[i].longitude + "</p>" +
               "<p>地址纬度：" + _this.shipLocationArr[i].latitude + "</p>" +
