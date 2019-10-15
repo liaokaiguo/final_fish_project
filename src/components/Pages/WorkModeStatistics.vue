@@ -105,7 +105,7 @@
               </el-table-column>
               <el-table-column
                 prop="jobTime"
-                label="作业持续时间"
+                label="持续时间(h)"
                 width="140">
               </el-table-column>
             </el-table>
@@ -167,8 +167,16 @@ export default {
                   label: '刺网'
               },
               {
-                  value: '其他',
-                  label: '其他'
+                  value: '钓具',
+                  label: '钓具'
+              },
+              {
+                  value: '杂渔具',
+                  label: '杂渔具'
+              },
+              {
+                  value: '笼壶',
+                  label: '笼壶'
               }],
 
           select:{
