@@ -796,8 +796,8 @@
 		position: absolute;
 		right: 2vw;
 		width: 15vw;
-		height: 5.5vh;
-		margin-top: 5vh;
+		height: 5vh;
+		margin-top: 3.3vh;
 		margin-bottom: 0.1vh;
 		/* background-color 测试用 */
 		/* background-color: #FFFFFF; */
@@ -807,36 +807,36 @@
 		cursor: pointer;
 		position: absolute;
 		right: 50%;
-		height: 80%;
+		height: 90%;
 	}
 
 	#main-content .navigaIcon .goHome {
 		cursor: pointer;
 		position: absolute;
-		right: 25%;
-		height: 80%;
+		right: 28%;
+		height: 90%;
 	}
   /*右上角个人信息中心*/
   #main-content .userInfo{
     position:absolute;
-    right:2.3vw;
-    width:5vw;
-    margin-top: 5vh;
+    right:2.8vw;
+    width:5vh;
+    margin-top: 3vh;
     height: 5vh;
     /*background-color: #a2cdff;*/
   }
   #main-content .el-dropdown-link {
     display: inline-block;
-    width:5vw;
+    width:5vh;
     height:5vh;
     cursor: pointer;
     color: #fbffa4;
   }
   #main-content .user_logo{
     position: absolute;
-    left:3vw;
-    width: 1.8vw;
-    height: 4.4vh;
+    left:0vw;
+    width: 4.6vh;
+    height: 4.6vh;
     top:0.6vh;
     border-radius: 10%;
   }
