@@ -5,20 +5,6 @@
 		<div id="backGround"></div>
 		<!-- 主要内容 -->
 		<div id="main-content">
-      <!--个人信息中心-->
-      <div class="userInfo">
-        <el-dropdown trigger="click" @command="handleCommand">
-            <span class="el-dropdown-link">
-              <img class="user_logo" src="../../assets/img/海天.jpg">
-              <span class="username">{{username}}</span>
-            </span>
-          <el-dropdown-menu slot="dropdown">
-            <el-dropdown-item command="userCenter">个人中心</el-dropdown-item>
-            <el-dropdown-item command="loginOut">退出</el-dropdown-item>
-          </el-dropdown-menu>
-        </el-dropdown>
-
-      </div>
 			<!-- 主标题 -->
 			<div class="mainTitle">
 				<p class="title" @click="refreshPage" v-bind:title="tipMsg.thisPageName">刺网作业方式统计分析</p>
@@ -30,6 +16,19 @@
 				<img class="goHome" src="../../assets/homeico.png" alt="主页" v-on:click="goHome"
 				     v-bind:title="tipMsg.goHome">
 			</div>
+      <!--个人信息中心-->
+      <div class="userInfo">
+        <el-dropdown trigger="click" @command="handleCommand">
+            <span class="el-dropdown-link">
+              <img class="user_logo" src="../../assets/img/海天.jpg">
+            </span>
+          <el-dropdown-menu slot="dropdown">
+            <el-dropdown-item command="userCenter">个人中心</el-dropdown-item>
+            <el-dropdown-item command="loginOut">退出</el-dropdown-item>
+          </el-dropdown-menu>
+        </el-dropdown>
+
+      </div>
 			<!-- 菜单栏 -->
 			<div class="setMenu">
 				<!-- 选择时间菜单 -->
@@ -818,7 +817,7 @@
   /*右上角个人信息中心*/
   #main-content .userInfo{
     position:absolute;
-    left:2.3vw;
+    right:2.3vw;
     width:5vw;
     margin-top: 5vh;
     height: 5vh;
@@ -833,20 +832,11 @@
   }
   #main-content .user_logo{
     position: absolute;
-    left:-1vw;
+    left:3vw;
     width: 1.8vw;
     height: 4.4vh;
     top:0.6vh;
     border-radius: 10%;
-  }
-  #main-content .username{
-    position: absolute;
-    left:1.2vw;
-    width:2vw;
-    height:4.4vh;
-    font-size: 2.5vh;
-    top:1.4vh;
-    color: #5bb1ff;
   }
 
 	/* #2.3 中上方菜单栏 */
