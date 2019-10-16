@@ -1,38 +1,31 @@
 <template>
   <div class="background">
     <div>
-      <el-row>
-        <el-col :span="6">
+
           <div class="lefttext">渔船出入港查询</div>
-        </el-col>
-        <el-col :span="12">
           <div class="centTitle">渔船作业方式智能识别系统</div>
-        </el-col>
-        <el-col :span="6">
           <div class="rightleftIcon">
             <span v-on:click="$router.back(-1)">
-              <img src="../../assets/rebackLastIcon.png" style="cursor:pointer" alt="返回">
-            </span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+              <img class= "backico-class " src="../../assets/backico.png" style="cursor:pointer" alt="返回">
+            </span>
             <router-link to="/welcome">
-              <img src="../../assets/rebackMainIcon.png">
+              <img src="../../assets/homeico.png" class="homeico-class">
             </router-link>
           </div>
-        </el-col>
-      </el-row>
     </div>
     <div>
-      <el-row>
-         <el-col :span="24" class="searchBox">
-          <div >
-            <el-form ref="selectForm" :model="select" :inline="true">
+          <div class="searchBox">
+            <el-form ref="selectForm" :model="select" :inline="true"
+                     size="small"
+                     class="select-form-class">
               <el-form-item prop="boatId" >
-                <el-input v-model="select.boatId"
+                <el-input v-model="select.boatId" style="width: 12vw;"
                           placeholder="渔船编号">
                 </el-input>
               </el-form-item>
 
               <el-form-item prop="inOrOut" >
-                <el-select v-model="select.inOrOut" placeholder="出港/入港">
+                <el-select v-model="select.inOrOut" placeholder="出港/入港" style="width: 12vw">
                   <el-option
                     v-for="item in options"
                     :key="item.value"
@@ -43,7 +36,7 @@
               </el-form-item>
 
               <el-form-item  prop="passDate"  >
-                <el-date-picker style="width: 230px"
+                <el-date-picker style="width: 12vw"
                                 v-model="select.passDate"
                                 type="date"
                                 placeholder="日期时间"
@@ -55,63 +48,55 @@
               </el-form-item>
 
               <el-form-item prop="portName" >
-                <el-input v-model="select.portName"
+                <el-input v-model="select.portName" style="width: 12vw"
                           placeholder="港口名">
                 </el-input>
               </el-form-item>
 
               <el-form-item align="center">
-                <el-button type="primary" @click="search(select)">搜索</el-button>
-                <el-button  @click="resetForm('selectForm')">重置</el-button>
+                <el-button type="primary" @click="search(select)" style="width: 8vw">搜索</el-button>
+                <el-button  @click="resetForm('selectForm')" style="width: 8vw">重置</el-button>
               </el-form-item>
             </el-form>
           </div>
-        </el-col>
-      </el-row>
 
-      <el-row>
-        <el-col :span="24" >
           <div class="dataBox">
             <el-table
+              height="98%"
+              class="table-data-class"
+              size="small"
             :data="tableData.slice((currentPage-1)*pageSize,currentPage*pageSize)"
             v-loading="tableDataLoading"
             element-loading-text="数据量较大，玩命加载中"
-            style="width: 100%"
             border
             :header-cell-style="{color:'#333',fontFamily:'MicrosoftYaHeiUI',fontSize:'14px',fontWeight:900}">
               <el-table-column
                 prop="shipId"
-                label="渔船编号"
-                width="260">
+                label="渔船编号">
               </el-table-column>
               <el-table-column
                 prop="iof"
-                label="出港/入港"
-                width="260">
+                label="出港/入港">
                 <template slot-scope="scope">
                   <span>{{scope.row.iof===-1?'出港':'入港'}}</span>
                 </template>
               </el-table-column>
               <el-table-column
                 prop="acqTime"
-                label="时间"
-                width="300">
+                label="时间">
               </el-table-column>
               <el-table-column
                 prop="ship.portName"
-                label="港口名"
-                width="300">
+                label="港口名">
               </el-table-column>
             </el-table>
           </div>
-        </el-col>
-      </el-row>
 
-      <el-row>
-        <el-col :span="12" :offset="6">
           <!-- 分页器 -->
-          <div class="pagingBox" style="margin-top:15px;">
-            <el-pagination align='cneter' @size-change="handleSizeChange"
+          <div class="pagingBox" >
+            <el-pagination align='cneter' @size-change="handleSizeChange" class="paging-info-class"
+                           small
+                           background
                            @current-change="handleCurrentChange"
                            :current-page="currentPage"
                            :page-sizes="[1,5,10,20]"
@@ -120,8 +105,6 @@
                            :total="tableData.length">
             </el-pagination>
           </div>
-        </el-col>
-      </el-row>
 
     </div>
 
@@ -292,55 +275,118 @@ table {
 
 /*the whole web background style*/
 .background {
-  background-image: url("../../assets/bg.png");
+  background-image: url("../../assets/background_high.png");
   background-size: 100% 100%;
-  height: 1080px;
+  height: 100%;
   position: absolute;
-  width: 1920px;
+  width: 100%;
   background-repeat: no-repeat;
 }
 /*the center title sytle*/
 .centTitle {
-  width: 586px;
-  height: 43px;
+  position: absolute;
+  float: left;
+  left: 35vw;
+  width: 30vw;
   font-family: FZDHTJW--GB1-0;
-  font-size: 43px;
+  font-size: 4.2vh;
   font-weight: normal;
   font-stretch: normal;
-  letter-spacing: 5px;
+  letter-spacing: 0.2vw;
   color: #58a0ee;
-  margin-top: 20px;
-  margin-left: 200px;
-  float: left;
 }
 .lefttext {
-  margin-left: 70px;
-  margin-top: 40px;
+  position: absolute;
   float: left;
-  font-size: 32px;
+  left: 3%;
+  top: 5vh;
+  font-size: 3.5vh;
   color: #ffffff;
 }
 .rightleftIcon {
-  margin-left: 300px;
-  margin-top: 50px;
-  float: left;
+  position: absolute;
+  width: 10%;
+  height: 10%;
+  left: 20vw;
+  top: 5vh;
+
+}
+.backico-class{
+  position: absolute;
+  left: 10%;
+  width: 18%;
+}
+.homeico-class{
+  position: absolute;
+  left: 50%;
+  width: 18%;
 }
 .searchBox{
-  margin-top: 50px;
-  float: left;
+  position: absolute;
+  width: 80%;
+  height: 10%;
+  top: 12vh;
+  left: 10vw;
   }
+.select-form-class{
+  position: absolute;
+  top: 10%;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
 .dataBox{
-  margin-left: 340px;
-  margin-top: 20px;
-  float: left;
-  background-color: white;
+  position: absolute;
+  width: 80%;
+  height: 72%;
+  top: 20vh;
+  left: 10vw;
+}
+.table-data-class{
+  position: absolute;
+  left: 2%;
+  width: 95%;
+  height: 95%;
 }
 .pagingBox{
-  float: right;
-  background-color: white;
+  position: absolute;
+  width: 50%;
+  height: 6%;
+  left: 20vw;
+  bottom: 1vh;
 }
+  .paging-info-class{
+    width: auto;
+  }
 
+</style>
 
+<style>
+  .table-data-class .el-table__header th, .table-data-class .el-table__header tr {
+    color: black !important;
+    text-align: center !important;
+  }
+  .table-data-class .el-table__body td, .table-data-class.el-table__body th{
+    color: black !important;
+    text-align: center !important;
+  }
+  /*滚动条小方块*/
+  .table-data-class .el-table__body-wrapper::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+
+  .table-data-class .el-table__body-wrapper::-webkit-scrollbar-thumb {
+    background-color: #58a0ee;
+    border-radius: 3px;
+  }
+
+  .pagingBox .el-pagination__total{
+    color: white !important;
+  }
+  .pagingBox .el-pagination__jump{
+    color: white !important;
+  }
 
 
 
