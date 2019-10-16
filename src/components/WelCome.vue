@@ -263,7 +263,8 @@
 						top: "10%",
 						data: ["非法作业", "正常作业"],
 						textStyle: {
-							color: "default"
+							color: "default",
+              fontSize:"90%"
 						}
 					},
 					series: [{
@@ -271,6 +272,9 @@
 						type: "pie",
 						radius: "65%",
 						center: ["40%", "45%"],
+            label:{
+							fontSize:"90%",
+            },
             labelLine:{
 							length:8,
               length2:6
@@ -291,6 +295,12 @@
 				},
 				leftBottomOption: {
 					color: ["#f44"],
+          grid: {
+            left: "15%",
+            top: "10%",
+            width: "75%",
+            height: "75%",
+          },
 					tooltip: {
 						trigger: "axis",
 						axisPointer: {
@@ -381,6 +391,12 @@
 				},
 				middleBottomLOption: {
 					color: ["#5b9bff", "#ed7d31"],
+          grid: {
+            left: "15%",
+            top: "10%",
+            width: "75%",
+            height: "75%",
+          },
 					tooltip: {
 						trigger: "axis",
 						axisPointer: {
@@ -453,6 +469,12 @@
 				},
 				middleBottomROption: {
 					color: ["#f44"],
+          grid: {
+            left: "15%",
+            top: "10%",
+            width: "75%",
+            height: "75%",
+          },
 					tooltip: {
 						trigger: "axis",
 						axisPointer: {
@@ -529,18 +551,21 @@
 					},
 					legend: {
 						orient: "vertical",
-						right: "1%",
-						top: "5%",
+						left: "53%",
+						top: "20%",
+            width: "10%",
+            height:"70%",
 						data: ["围网","拖网", "张网", "刺网", "其它"],
 						textStyle: {
-							color: "default"
+							color: "default",
+              fontSize:12
 						}
 					},
 					series: [{
 						name: "统计分析",
 						type: "pie",
-						center: ["30%", "30%"],
-						radius: ["30%", "50%"],
+						center: ["30%", "55%"],
+						radius: ["35%", "70%"],
 						avoidLabelOverlap: false,
 						label: {
 							normal: {
@@ -550,7 +575,7 @@
 							emphasis: {
 								show: true,
 								textStyle: {
-									fontSize: "30",
+									fontSize: "14",
 									fontWeight: "bold"
 								}
 							}
@@ -583,18 +608,21 @@
 					},
 					legend: {
 						orient: "vertical",
-						right: "1%",
-						top: "5%",
+            left: "53%",
+            top: "20%",
+            width: "10%",
+            height:"70%",
 						data: ["围网","拖网", "张网","刺网", "其它" ],
 						textStyle: {
-							color: "default"
+							color: "default",
+              fontSize:12
 						}
 					},
 					series: [{
 						name: "占比情况",
 						type: "pie",
-						radius: "40%",
-						center: ["35%", "30%"],
+						radius: "70%",
+						center: ["28%", "55%"],
 						data: [
 							// { value: 890, name: "拖网" },
 							// { value: 123, name: "张网" },
@@ -602,7 +630,7 @@
 						],
             labelLine:{
               length:8,
-              length2:6
+              length2:6,
             },
 						itemStyle: {
 							emphasis: {
@@ -618,6 +646,12 @@
 				},
 				rightBottomOption: {
 					color: ["#f44"],
+          grid: {
+            left: "15%",
+            top: "10%",
+            width: "75%",
+            height: "75%",
+          },
 					tooltip: {
 						trigger: "axis",
 						axisPointer: {
@@ -1370,6 +1404,7 @@
 		left: 4%;
 		top: 5%;
 		padding: 0;
+    position: absolute;
 	}
 
 	table {
