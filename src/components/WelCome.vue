@@ -141,37 +141,29 @@
 				<div id="righttopBox">
 					<div class="msgTitle">
 						<span class="MainTitle">渔船作业统计</span>
-						<router-link to="#">
+						<router-link to="/workModeSta">
 							<span class="moreText">详情</span>
 						</router-link>
-						<router-link to="#">
+						<router-link to="/workModeSta">
 							<img class="moreIco" src="../assets/moreICO.png" alt="更多">
 						</router-link>
 					</div>
 					<div class="msgContent">
-						<el-row>
-							<el-col :span="24">
-								<rightBottomEcharts v-bind:echartId="'rightTopEchartsId'" :OptionData="rightTopOption"></rightBottomEcharts>
-							</el-col>
-						</el-row>
+            <rightBottomEcharts v-bind:echartId="'rightTopEchartsId'" :OptionData="rightTopOption"></rightBottomEcharts>
 					</div>
 				</div>
 				<div id="rightmidBox">
 					<div class="msgTitle">
 						<span class="MainTitle">非法作业统计</span>
-						<router-link to="#">
+						<router-link to="/workModeSta">
 							<span class="moreText">详情</span>
 						</router-link>
-						<router-link to="#">
+						<router-link to="/workModeSta">
 							<img class="moreIco" src="../assets/moreICO.png" alt="更多">
 						</router-link>
 					</div>
 					<div class="msgContent">
-						<el-row>
-							<el-col :span="24">
-								<rightBottomEcharts v-bind:echartId="'rightMiddleEchartsId'" :OptionData="rightMiddleOption"></rightBottomEcharts>
-							</el-col>
-						</el-row>
+            <rightBottomEcharts v-bind:echartId="'rightMiddleEchartsId'" :OptionData="rightMiddleOption"></rightBottomEcharts>
 					</div>
 				</div>
 				<div id="rightbotBox">
@@ -255,14 +247,20 @@
 				shipLocationArr: [], //渔船位置数组
 				//define
 				leftMiddleOption: {
+          grid: {
+            left: "1%",
+            top: "10%",
+            width: "75%",
+            height: "100%",
+          },
 					tooltip: {
 						trigger: "item",
 						formatter: "{a} <br/>{b} : {c} ({d}%)"
 					},
 					legend: {
-						orient: "horizontal",
-						left: "center",
-						top: "5%",
+						orient: "vertical",
+						right: "1%",
+						top: "10%",
 						data: ["非法作业", "正常作业"],
 						textStyle: {
 							color: "default"
@@ -271,8 +269,12 @@
 					series: [{
 						name: "占比情况",
 						type: "pie",
-						radius: "55%",
-						center: ["50%", "60%"],
+						radius: "65%",
+						center: ["40%", "45%"],
+            labelLine:{
+							length:8,
+              length2:6
+            },
 						data: [
 							// { value: 890, name: "正常作业" },
 							// { value: 200, name: "非法作业" }// 请求后台
@@ -526,8 +528,8 @@
 						formatter: "{a} <br/>{b}: {c} ({d}%)"
 					},
 					legend: {
-						orient: "horizontal",
-						x: "center",
+						orient: "vertical",
+						right: "1%",
 						top: "5%",
 						data: ["围网","拖网", "张网", "刺网", "其它"],
 						textStyle: {
@@ -537,8 +539,8 @@
 					series: [{
 						name: "统计分析",
 						type: "pie",
-						center: ["50%", "60%"],
-						radius: ["40%", "70%"],
+						center: ["30%", "30%"],
+						radius: ["30%", "50%"],
 						avoidLabelOverlap: false,
 						label: {
 							normal: {
@@ -569,13 +571,19 @@
 						"#eea5d1"]
 				},
 				rightMiddleOption: {
+          grid: {
+            left: "1%",
+            top: "10%",
+            width: "75%",
+            height: "100%",
+          },
 					tooltip: {
 						trigger: "item",
 						formatter: "{a} <br/>{b} : {c} ({d}%)"
 					},
 					legend: {
-						orient: "horizontal",
-						left: "center",
+						orient: "vertical",
+						right: "1%",
 						top: "5%",
 						data: ["围网","拖网", "张网","刺网", "其它" ],
 						textStyle: {
@@ -585,13 +593,17 @@
 					series: [{
 						name: "占比情况",
 						type: "pie",
-						radius: "55%",
-						center: ["50%", "60%"],
+						radius: "40%",
+						center: ["35%", "30%"],
 						data: [
 							// { value: 890, name: "拖网" },
 							// { value: 123, name: "张网" },
 							// { value: 200, name: "围网" }
 						],
+            labelLine:{
+              length:8,
+              length2:6
+            },
 						itemStyle: {
 							emphasis: {
 								shadowBlur: 10,
@@ -1352,11 +1364,11 @@
 
 	.leftmiddleEchart {
 		/*width: 350px;*/
-		width: 80%;
-		height: 240px;
+		width: 90%;
+		height: 100%;
 		opacity: 1;
-		margin-left: 39px;
-		margin-top: 10px;
+		left: 4%;
+		top: 5%;
 		padding: 0;
 	}
 
