@@ -123,7 +123,19 @@
 					</div>
 				</div>
 			</div>
+      <!--个人信息中心-->
+      <div class="userInfo">
+        <el-dropdown trigger="click" @command="handleCommand">
+            <span class="el-dropdown-link">
+              <img class="user_logo" src="../assets/img/海天.jpg">
+            </span>
+          <el-dropdown-menu slot="dropdown">
+            <el-dropdown-item command="userCenter">个人中心</el-dropdown-item>
+            <el-dropdown-item command="loginOut">退出</el-dropdown-item>
+          </el-dropdown-menu>
+        </el-dropdown>
 
+      </div>
 			<!--the whole right model-->
 			<div class="wholeright">
 				<div id="righttopBox">
@@ -1466,7 +1478,32 @@
 		background-repeat: no-repeat;
 	}
 
-	/* #2.5 底部栏目 */
+  /* #2.5 右上角个人信息中心栏目 */
+  #main-content .userInfo{
+    position:absolute;
+    right:2.8vw;
+    width:5vh;
+    margin-top: 3vh;
+    height: 5vh;
+    /*background-color: #a2cdff;*/
+  }
+  #main-content .el-dropdown-link {
+    display: inline-block;
+    width:5vh;
+    height:5vh;
+    cursor: pointer;
+    color: #fbffa4;
+  }
+  #main-content .user_logo{
+    position: absolute;
+    left:0vw;
+    width: 4.6vh;
+    height: 4.6vh;
+    top:0.6vh;
+    border-radius: 10%;
+  }
+
+	/* #2.6 底部栏目 */
 	/*the last bottom image and text style*/
 	.lastbottom {
 		align-content: center;
