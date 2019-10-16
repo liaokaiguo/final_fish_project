@@ -162,7 +162,7 @@
           <span class="el-dropdown-link">
             <img class="user-logo" src="../assets/img/dog.jpg">
             {{username}}
-            <i class="el-icon-arrow-down el-icon--right"></i>
+            <!--<i class="el-icon-arrow-down el-icon--right"></i>-->
           </span>
           <el-dropdown-menu slot="dropdown">
             <el-dropdown-item command="userCenter">个人中心</el-dropdown-item>

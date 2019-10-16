@@ -16,6 +16,20 @@
 				<img class="goHome" src="../../assets/homeico.png" alt="主页" v-on:click="goHome"
 				     v-bind:title="tipMsg.goHome">
 			</div>
+      <!--个人信息中心-->
+      <div class="userInfo">
+        <el-dropdown trigger="click" @command="handleCommand">
+            <span class="el-dropdown-link">
+              <img class="user_logo" src="../../assets/img/海天.jpg">
+              <span class="username">{{username}}</span>
+            </span>
+          <el-dropdown-menu slot="dropdown">
+            <el-dropdown-item command="userCenter">个人中心</el-dropdown-item>
+            <el-dropdown-item command="loginOut">退出</el-dropdown-item>
+          </el-dropdown-menu>
+        </el-dropdown>
+
+      </div>
 			<!-- 菜单栏 -->
 			<div class="setMenu">
 				<!-- 选择时间菜单 -->
@@ -95,6 +109,7 @@
 					checkTips: '查询结果',
 					resetTips: '重置条件',
 					saveTips: '保存结果',
+          name:"夹克",
 				},
 				// 默认时间设置
 				startDate: '2019-07-15',
@@ -464,7 +479,12 @@
 		mounted() {
 			this.initCharts();
 		},
-
+	  computed: {
+		  username() {
+			  let username = sessionStorage.getItem('ms_username');
+			  return username ? username : this.tipMsg.name;
+		  }
+	  },
 		methods: {
 			refreshPage() {
 				this.$router.go(0);
@@ -688,6 +708,18 @@
 				this.endDate = '2019-08-31';
 				this.dataAskDeal();
 			},
+      //个人中心选择功能
+      handleCommand(command) {
+        if (command == 'loginOut') {
+          sessionStorage.removeItem('ms_username')
+          this.$router.push('/');
+        } else if (command == 'userCenter') {
+          this.$message({
+            message: '啊哈，用户中心还没实现',
+            type: 'warning'
+          });
+        }
+      }
 		},
 
 	};
@@ -760,7 +792,7 @@
 	/* #2.2 右上角导航按钮 */
 	#main-content .navigaIcon {
 		position: absolute;
-		right: 2vw;
+    right: 3.5vw;
 		width: 15vw;
 		height: 5.5vh;
 		margin-top: 5vh;
@@ -773,15 +805,48 @@
 		cursor: pointer;
 		position: absolute;
 		right: 50%;
-		height: 80%;
+		height: 75%;
 	}
 
 	#main-content .navigaIcon .goHome {
 		cursor: pointer;
 		position: absolute;
 		right: 25%;
-		height: 80%;
+		height: 75%;
 	}
+
+  /*右上角个人信息中心*/
+  #main-content .userInfo{
+    position:absolute;
+    right:0vw;
+    width:5vw;
+    margin-top: 5vh;
+    height: 5vh;
+    /*background-color: #a2cdff;*/
+  }
+  #main-content .el-dropdown-link {
+    display: inline-block;
+    width:5vw;
+    height:5vh;
+    cursor: pointer;
+    color: #fbffa4;
+  }
+  #main-content .user_logo{
+    position: absolute;
+    left:-1vw;
+    width: 1.8vw;
+    height: 4.4vh;
+    border-radius: 50%;
+  }
+  #main-content .username{
+    position: absolute;
+    left:1vw;
+    width:2vw;
+    height:4.4vh;
+    font-size: 2vh;
+    top:1vh;
+    color: #5bb1ff;
+  }
 
 	/* #2.3 中上方菜单栏 */
 	#main-content .setMenu {
