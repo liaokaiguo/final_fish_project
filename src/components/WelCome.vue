@@ -1653,7 +1653,7 @@
     top: -10px;
     width: 40px;
     height: 40px;
-    border-radius: 50%;
+    border-radius: 10%;
   }
 
   .el-dropdown-menu__item {

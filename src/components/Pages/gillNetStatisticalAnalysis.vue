@@ -5,17 +5,6 @@
 		<div id="backGround"></div>
 		<!-- 主要内容 -->
 		<div id="main-content">
-			<!-- 主标题 -->
-			<div class="mainTitle">
-				<p class="title" @click="refreshPage" v-bind:title="tipMsg.thisPageName">刺网作业方式统计分析</p>
-			</div>
-			<!-- 右上角导航按钮 -->
-			<div class="navigaIcon" id="navigaIcon">
-				<img class="goBack" src="../../assets/backico.png" alt="后退" v-on:click="goBack"
-				     v-bind:title="tipMsg.goBack">
-				<img class="goHome" src="../../assets/homeico.png" alt="主页" v-on:click="goHome"
-				     v-bind:title="tipMsg.goHome">
-			</div>
       <!--个人信息中心-->
       <div class="userInfo">
         <el-dropdown trigger="click" @command="handleCommand">
@@ -30,6 +19,17 @@
         </el-dropdown>
 
       </div>
+			<!-- 主标题 -->
+			<div class="mainTitle">
+				<p class="title" @click="refreshPage" v-bind:title="tipMsg.thisPageName">刺网作业方式统计分析</p>
+			</div>
+			<!-- 右上角导航按钮 -->
+			<div class="navigaIcon" id="navigaIcon">
+				<img class="goBack" src="../../assets/backico.png" alt="后退" v-on:click="goBack"
+				     v-bind:title="tipMsg.goBack">
+				<img class="goHome" src="../../assets/homeico.png" alt="主页" v-on:click="goHome"
+				     v-bind:title="tipMsg.goHome">
+			</div>
 			<!-- 菜单栏 -->
 			<div class="setMenu">
 				<!-- 选择时间菜单 -->
@@ -792,7 +792,7 @@
 	/* #2.2 右上角导航按钮 */
 	#main-content .navigaIcon {
 		position: absolute;
-    right: 3.5vw;
+    right: 2vw;
 		width: 15vw;
 		height: 5.5vh;
 		margin-top: 5vh;
@@ -805,20 +805,20 @@
 		cursor: pointer;
 		position: absolute;
 		right: 50%;
-		height: 75%;
+		height: 80%;
 	}
 
 	#main-content .navigaIcon .goHome {
 		cursor: pointer;
 		position: absolute;
 		right: 25%;
-		height: 75%;
+		height: 80%;
 	}
 
   /*右上角个人信息中心*/
   #main-content .userInfo{
     position:absolute;
-    right:0vw;
+    left:2.3vw;
     width:5vw;
     margin-top: 5vh;
     height: 5vh;
@@ -836,15 +836,16 @@
     left:-1vw;
     width: 1.8vw;
     height: 4.4vh;
-    border-radius: 50%;
+    top:0.6vh;
+    border-radius: 10%;
   }
   #main-content .username{
     position: absolute;
-    left:1vw;
+    left:1.2vw;
     width:2vw;
     height:4.4vh;
-    font-size: 2vh;
-    top:1vh;
+    font-size: 2.5vh;
+    top:1.4vh;
     color: #5bb1ff;
   }
 
