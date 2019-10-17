@@ -552,20 +552,20 @@
 					},
 					legend: {
 						orient: "vertical",
-						left: "53%",
-						top: "20%",
-						width: "10%",
-						height:"70%",
+						left: "60%",
+						top: "10%",
 						data: ["围网","拖网", "张网", "刺网", "其它"],
+            itemWidth:20,
+            itemHeight:12,
 						textStyle: {
 							color: "default",
-							fontSize:12
+							fontSize:"100%",
 						}
 					},
 					series: [{
 						name: "统计分析",
 						type: "pie",
-						center: ["30%", "55%"],
+						center: ["30%", "50%"],
 						radius: ["35%", "70%"],
 						avoidLabelOverlap: false,
 						label: {
@@ -576,7 +576,7 @@
 							emphasis: {
 								show: true,
 								textStyle: {
-									fontSize: "14",
+									fontSize: "100%",
 									fontWeight: "bold"
 								}
 							}
@@ -609,21 +609,19 @@
 					},
 					legend: {
 						orient: "vertical",
-						left: "53%",
-						top: "20%",
-						width: "10%",
-						height:"70%",
+						left: "60%",
+						top: "10%",
 						data: ["围网","拖网", "张网","刺网", "其它" ],
 						textStyle: {
 							color: "default",
-							fontSize:12
+							fontSize:"100%"
 						}
 					},
 					series: [{
 						name: "占比情况",
 						type: "pie",
-						radius: "70%",
-						center: ["28%", "55%"],
+						radius: "65%",
+						center: ["34%", "52%"],
 						data: [
 							// { value: 890, name: "拖网" },
 							// { value: 123, name: "张网" },
@@ -1216,7 +1214,6 @@
 		}
 	};
 </script>
-
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
 	/* #1 底层背景样式，窗口自适应 */
