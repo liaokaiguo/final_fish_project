@@ -1,41 +1,35 @@
 <template>
   <div class="background">
     <div>
-      <el-row>
-        <el-col :span="6">
           <div class="lefttext">渔船作业方式统计及查询</div>
-        </el-col>
-        <el-col :span="12">
           <div class="centTitle">渔船作业方式智能识别系统</div>
-        </el-col>
-        <el-col :span="6">
           <div class="rightleftIcon">
             <span v-on:click="$router.back(-1)">
-              <img src="../../assets/rebackLastIcon.png" style="cursor:pointer" alt="返回">
+              <img class="backico-class" src="../../assets/backico.png" style="cursor:pointer" alt="返回">
             </span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
             <router-link to="/welcome">
-              <img src="../../assets/rebackMainIcon.png">
+              <img class="homeico-class" src="../../assets/homeico.png">
             </router-link>
           </div>
-        </el-col>
-      </el-row>
+
     </div>
     <div>
-      <el-row>
-         <el-col :span="24" >
-          <div >
-            <el-form ref="selectForm" :model="select" :inline="true" class="searchBox">
+
+          <div class="searchBox">
+            <el-form ref="selectForm"
+                     size="small"
+                     :model="select" :inline="true" class="select-form-Box">
               <el-form-item prop="startDate" >
                 <el-date-picker
                   v-model="select.startDate"
                   type="date"
-                  placeholder="作业开始日期"
-                value-format="yyyy-MM-dd">
+                  placeholder="作业日期"
+                value-format="yyyy-MM-dd" style="width: 10vw;">
                 </el-date-picker>
               </el-form-item>
 
               <el-form-item prop="legal" >
-                <el-select v-model="select.legal" placeholder="是否合规">
+                <el-select v-model="select.legal" placeholder="是否合规" style="width: 10vw;">
                   <el-option
                     v-for="item in options"
                     :key="item.value"
@@ -46,7 +40,7 @@
               </el-form-item>
 
               <el-form-item prop="workMode" >
-                <el-select v-model="select.workMode" placeholder="作业方式">
+                <el-select v-model="select.workMode" placeholder="作业方式" style="width: 10vw;">
                   <el-option
                     v-for="item in workOptions"
                     :key="item.value"
@@ -57,62 +51,56 @@
               </el-form-item>
 
               <el-form-item align="center">
-                <el-button type="primary" @click="search(select)">查询</el-button>
-                <el-button  @click="resetForm('selectForm')">重置</el-button>
+                <el-button type="primary" @click="search(select)" style="width: 10vw;">查询</el-button>
+                <el-button  @click="resetForm('selectForm')" style="width: 10vw;">重置</el-button>
               </el-form-item>
             </el-form>
           </div>
-        </el-col>
-      </el-row>
 
-      <el-row>
-        <el-col :span="16" >
           <div class="dataBox">
             <el-table
+              class="table-data-class"
+              height="98%"
+              size="small"
             :data="tableData.slice((currentPage-1)*pageSize,currentPage*pageSize)"
             v-loading="tableDataLoading"
             element-loading-text="数据量较大，玩命加载中"
-            style="width: 100%"
             border
             :header-cell-style="{color:'#333',fontFamily:'MicrosoftYaHeiUI',fontSize:'14px',fontWeight:900}">
               <el-table-column
                 prop="legal"
-                label="是否合规"
-                width="120">
+                label="是否合规">
                 <template slot-scope="scope">
                   <span>{{scope.row.idtfyFlag=== 1?'正常作业':'违规作业'}}</span>
                 </template>
               </el-table-column>
               <el-table-column
                 prop="ship.shipNo"
-                label="渔船编号"
-                width="200">
+                label="渔船编号">
               </el-table-column>
               <el-table-column
                 prop="idtfyJobtype"
-                label="作业方式"
-                width="120">
+                label="作业方式">
               </el-table-column>
               <el-table-column
                 prop="startTime"
-                label="开始时间"
-                width="200">
+                label="开始时间">
               </el-table-column>
               <el-table-column
                 prop="endTime"
-                label="结束时间"
-                width="200">
+                label="结束时间">
               </el-table-column>
               <el-table-column
                 prop="jobTime"
-                label="持续时间(h)"
-                width="140">
+                label="持续时间(h)">
               </el-table-column>
             </el-table>
           </div>
           <!-- 分页器 -->
           <div class="pagingBox" >
-            <el-pagination align='cneter' @size-change="handleSizeChange"
+            <el-pagination align='cneter' @size-change="handleSizeChange" class="paging-info-class"
+                           small
+                           background
                            @current-change="handleCurrentChange"
                            :current-page="currentPage"
                            :page-sizes="[1,5,10,20]"
@@ -121,13 +109,12 @@
                            :total="tableData.length">
             </el-pagination>
           </div>
-        </el-col>
 
-        <el-col :span="8">
-          <div class="wmEchartsBox" id="workModeEcharts" >
-          </div>
-        </el-col>
-      </el-row>
+      <div class="wmEchartsBox">
+        <div  id="workModeEcharts" class="work-mode-class">
+        </div>
+      </div>
+
 
     </div>
 
@@ -188,6 +175,12 @@ export default {
            tableData:[],
           tableDataLoading:true,
           workModeEchartsOption: {
+              grid: {
+                  left: "10%",
+                  top: "5%",
+                  width:"80%",
+                  height:"80%"
+              },
               tooltip: {
                   trigger: "item",
                   formatter: "{a} <br/>{b}: {c} ({d}%)"
@@ -199,7 +192,7 @@ export default {
                   data: ["围网","拖网", "张网","刺网",  "其它"],
                   textStyle: {
                       color: "default",
-                      fontSize: "26",
+                      fontSize: "90%",
                   }
               },
               series: [
@@ -217,7 +210,7 @@ export default {
                           emphasis: {
                               show: true,
                               textStyle: {
-                                  fontSize: "40",
+                                  fontSize: "90%",
                                   fontWeight: "bold"
                               }
                           }
@@ -286,7 +279,9 @@ export default {
                     }]
                 })
             })
-
+            window.addEventListener("resize", function() {
+                myEcharts.resize();
+            });
         },
         beforeDestroy() {
             if (this.myEcharts) {
@@ -384,66 +379,134 @@ table {
 
 /*the whole web background style*/
 .background {
-  background-image: url("../../assets/bg.png");
+  background-image: url("../../assets/background_high.png");
   background-size: 100% 100%;
-  height: 1080px;
+  height: 100%;
   position: absolute;
-  width: 1920px;
+  width: 100%;
   background-repeat: no-repeat;
 }
 /*the center title sytle*/
 .centTitle {
-  width: 586px;
-  height: 43px;
+  position: absolute;
+  float: left;
+  left: 35vw;
+  width: 30vw;
   font-family: FZDHTJW--GB1-0;
-  font-size: 43px;
+  font-size: 4.2vh;
   font-weight: normal;
   font-stretch: normal;
-  letter-spacing: 5px;
+  letter-spacing: 0.2vw;
   color: #58a0ee;
-  margin-top: 20px;
-  margin-left: 200px;
-  float: left;
 }
 .lefttext {
-  margin-left: 70px;
-  margin-top: 40px;
+  position: absolute;
   float: left;
-  font-size: 32px;
+  left: 3%;
+  top: 5vh;
+  font-size: 3.5vh;
   color: #ffffff;
 }
 .rightleftIcon {
-  margin-left: 300px;
-  margin-top: 50px;
-  float: left;
+  position: absolute;
+  width: 10%;
+  height: 10%;
+  left: 23vw;
+  top: 5vh;
+}
+.backico-class{
+  position: absolute;
+  left: 10%;
+  width: 18%;
+}
+.homeico-class{
+  position: absolute;
+  left: 50%;
+  width: 18%;
 }
 .searchBox{
-  margin-left: 100px;
-  margin-top: 50px;
-  float: left;
+  position: absolute;
+  width: 60%;
+  height: 10%;
+  top: 10vh;
+  left: 3vw;
+  overflow: hidden;
   }
+.select-form-Box{
+  position: absolute;
+  top: 10%;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
 .dataBox{
-  margin-left: 100px;
-  margin-top: 20px;
-  float: left;
-  background-color: white;
+  position: absolute;
+  width: 60%;
+  height: 75%;
+  top: 18vh;
+  left: 3vw;
+}
+.table-data-class{
+  position: absolute;
+  left: 1%;
+  width: 98%;
+  height: 95%;
+}
+
+.pagingBox{
+  position: absolute;
+  width: 50%;
+  height: 6%;
+  left: 2vw;
+  bottom: 1vh;
+}
+.paging-info-class{
+  width: auto;
 }
 .wmEchartsBox{
-  margin-left: 0px;
-  width: 400px;
-  height: 400px;
-  float: left;
+  position: absolute;
+  width: 30%;
+  height: 45%;
+  top: 30vh;
+  right: 5vw;
 }
-.pagingBox{
-  position: relative;
-  right: 16%;
-  float: right;
-  background-color: white;
-  margin-top: 15px;
-}
+.work-mode-class{
+  position: absolute;
+  top: 5%;
+  left: 5%;
+  width: 90%;
+  height:90%;
+  }
 
 
 
 
+</style>
+<style>
+  .table-data-class .el-table__header th, .table-data-class .el-table__header tr {
+    color: black !important;
+    text-align: center !important;
+  }
+  .table-data-class .el-table__body td, .table-data-class.el-table__body th{
+    color: black !important;
+    text-align: center !important;
+  }
+  /*滚动条小方块*/
+  .table-data-class .el-table__body-wrapper::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+
+  .table-data-class .el-table__body-wrapper::-webkit-scrollbar-thumb {
+    background-color: #58a0ee;
+    border-radius: 3px;
+  }
+
+  .pagingBox .el-pagination__total{
+    color: white !important;
+  }
+  .pagingBox .el-pagination__jump{
+    color: white !important;
+  }
 
 </style>

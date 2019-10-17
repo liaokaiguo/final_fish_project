@@ -24,7 +24,7 @@
 						</router-link>
 					</div>
 					<div class="msgContent">
-						<table class="leftTopTable" border="2">
+						<table class="leftTopTable">
 							<tr>
 								<td>
 									<span></span>
@@ -231,9 +231,8 @@
 					thisPageName: '渔船作业方式智能识别系统',
 					goBack: '后退',
 					goHome: '主页',
-
 				},
-				name: '夹克', //默认登录用户名
+				userName: '中电36所', //默认登录用户名
 
 				//fishing number out or in the harbour
 				LoutNum: "",
@@ -249,9 +248,9 @@
 				//define
 				leftMiddleOption: {
 					grid: {
-						left: "1%",
-						top: "10%",
-						width: "75%",
+						left: "0%",
+						top: "0%",
+						width: "100%",
 						height: "100%",
 					},
 					tooltip: {
@@ -757,7 +756,7 @@
 		computed: {
 			username() {
 				let username = sessionStorage.getItem('ms_username');
-				return username ? username : this.name;
+				return username ? username : this.userName;
 			}
 		},
 		mounted() {
@@ -1371,44 +1370,39 @@
 
 	.msgContent{
 		position: absolute;
-		height: 85%;
+		height: 78%;
 		width: 94%;
 		top: 15%;
 		left: 2.5%;
 		/* background-color 测试用 */
-		/*background-color: #FFFFFF;*/
+		background-color: rgba(255, 36, 24, 0.4);
 	}
 
 	/*左上表格的样式*/
 	.leftTopTable {
 		position: absolute;
 		left: 4%;
-		top: 4%;
+		top: 2.5%;
 		width: 92%;
-		height: 85%;
+		height: 95%;
 		opacity: 1;
+		border: #55a6ee solid 0.1em;
 	}
 
 	.leftTopTable td {
+		border: #55a6ee solid 0.1em;
 		color: #f7f7f7;
 	}
 
 	.leftmiddleEchart {
-		/*width: 350px;*/
-		width: 90%;
-		height: 100%;
-		opacity: 1;
-		left: 4%;
-		top: 5%;
-		padding: 0;
 		position: absolute;
-	}
-
-	table {
-		margin: 0;
-		font-weight: normal;
+		width: 100%;
+		height: 100%;
+		left: 0%;
+		top: 0%;
 		padding: 0;
-		list-style: none;
+		/* background-color 测试用 */
+		background-color: #FFFFFF;
 	}
 
 	/* #2.3 中部栏目 */
@@ -1563,7 +1557,7 @@
 
 	.lastbottomtext {
 		height: 100%;
-		font-size: 2.2vh;
+		font-size: 1vw;
 		color: #f7f7f7;
 		text-decoration: none;
 	}

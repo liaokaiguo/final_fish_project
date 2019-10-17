@@ -859,7 +859,7 @@
 		left: 10%;
 		width: 50%;
 		height: 100%;
-		font-size: 2.8vh;
+		font-size: 2.5vh;
 		/* background-color 测试用 */
 		/* background-color: #FFFFFF;*/
 	}
@@ -887,7 +887,7 @@
 	/*这是控制年月日之间的斜线或短横线的*/
 	input[type="date"]::-webkit-datetime-edit-text {
 		color: #5bb1ff;
-		padding: 0.5em;
+		padding: 0.2em;
 	}
 
 	/*控制年文字, 如2019四个字母占据的那片地方*/
@@ -970,7 +970,7 @@
 		width: 100%;
 		margin: 0;
 		padding: 0;
-		font-size: 2.2vh;
+		font-size: 1vw;
 		list-style-type: none;
 		display: block;
 		/*background-color: #3f72c5;*/
@@ -982,7 +982,7 @@
 		color: #62dbff;
 		text-align: center;
 		padding: 1vh 1vh;
-		font-size: 2.4vh;
+		font-size: 1vw;
 		font-weight: bold;
 		border-bottom: #55a6ee 1px solid;
 	}
@@ -1100,8 +1100,8 @@
 	.GraphTitle{
 		position: absolute;
 		top: 0%;
-		left: 20%;
-		width: 60%;
+		left: 10%;
+		width: 80%;
 		height: 10%;
 		margin-top: 1.15%;
 		font-size: 2.8vh;
