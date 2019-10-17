@@ -16,19 +16,19 @@
 				<img class="goHome" src="../../assets/homeico.png" alt="主页" v-on:click="goHome"
 				     v-bind:title="tipMsg.goHome">
 			</div>
-      <!--个人信息中心-->
-      <div class="userInfo">
-        <el-dropdown trigger="click" @command="handleCommand">
+			<!--个人信息中心-->
+			<div class="userInfo">
+				<el-dropdown trigger="click" @command="handleCommand">
             <span class="el-dropdown-link">
               <img class="user_logo" src="../../assets/img/海天.jpg">
             </span>
-          <el-dropdown-menu slot="dropdown">
-            <el-dropdown-item command="userCenter">个人中心</el-dropdown-item>
-            <el-dropdown-item command="loginOut">退出</el-dropdown-item>
-          </el-dropdown-menu>
-        </el-dropdown>
+					<el-dropdown-menu slot="dropdown">
+						<el-dropdown-item command="userCenter">个人中心</el-dropdown-item>
+						<el-dropdown-item command="loginOut">退出</el-dropdown-item>
+					</el-dropdown-menu>
+				</el-dropdown>
 
-      </div>
+			</div>
 			<!-- 菜单栏 -->
 			<div class="setMenu">
 				<!-- 选择时间菜单 -->
@@ -57,9 +57,9 @@
 					<li><router-link to="/passPort" >渔船出入港</router-link></li>
 					<li><router-link to="/workModeSta" >渔船作业方式<br>统计及查询</router-link></li>
 					<li><router-link to="#" >船舶明细</router-link></li>
-					<li><router-link to="/purseSeineAnalysis" >围网作业方式<br>统计及分析</router-link></li>
+					<li><router-link to="/seineSA" >围网作业方式<br>统计及分析</router-link></li>
 					<li><router-link to="/trawlSA" >拖网作业方式<br>统计及分析</router-link></li>
-					<li><router-link to="/gillNetStAnalysis" >刺网作业方式<br>统计及分析</router-link></li>
+					<li><router-link to="/gillSA" >刺网作业方式<br>统计及分析</router-link></li>
 					<li><router-link to="/stowSA" >张网作业方式<br>统计及分析</router-link></li>
 				</ul>
 			</div>
@@ -478,12 +478,12 @@
 		mounted() {
 			this.initCharts();
 		},
-	  computed: {
-		  username() {
-			  let username = sessionStorage.getItem('ms_username');
-			  return username ? username : this.userName;
-		  }
-	  },
+		computed: {
+			username() {
+				let username = sessionStorage.getItem('ms_username');
+				return username ? username : this.userName;
+			}
+		},
 		methods: {
 			refreshPage() {
 				this.$router.go(0);
@@ -707,18 +707,18 @@
 				this.endDate = '2019-08-31';
 				this.dataAskDeal();
 			},
-      //个人中心选择功能
-      handleCommand(command) {
-        if (command == 'loginOut') {
-          sessionStorage.removeItem('ms_username')
-          this.$router.push('/');
-        } else if (command == 'userCenter') {
-          this.$message({
-            message: '啊哈，用户中心还没实现',
-            type: 'warning'
-          });
-        }
-      }
+			//个人中心选择功能
+			handleCommand(command) {
+				if (command == 'loginOut') {
+					sessionStorage.removeItem('ms_username')
+					this.$router.push('/');
+				} else if (command == 'userCenter') {
+					this.$message({
+						message: '啊哈，用户中心还没实现',
+						type: 'warning'
+					});
+				}
+			}
 		},
 
 	};
@@ -789,54 +789,54 @@
 	}
 
 	/* #2.2 右上角导航按钮 */
-  #main-content .navigaIcon {
-    position: absolute;
-    right: 2vw;
-    width: 15vw;
-    height: 5vh;
-    margin-top: 3.3vh;
-    margin-bottom: 0.1vh;
-    /* background-color 测试用 */
-    /* background-color: #FFFFFF; */
-  }
+	#main-content .navigaIcon {
+		position: absolute;
+		right: 2vw;
+		width: 15vw;
+		height: 5vh;
+		margin-top: 3.3vh;
+		margin-bottom: 0.1vh;
+		/* background-color 测试用 */
+		/* background-color: #FFFFFF; */
+	}
 
-  #main-content .navigaIcon .goBack {
-    cursor: pointer;
-    position: absolute;
-    right: 50%;
-    height: 90%;
-  }
+	#main-content .navigaIcon .goBack {
+		cursor: pointer;
+		position: absolute;
+		right: 50%;
+		height: 90%;
+	}
 
-  #main-content .navigaIcon .goHome {
-    cursor: pointer;
-    position: absolute;
-    right: 28%;
-    height: 90%;
-  }
-  /*右上角个人信息中心*/
-  #main-content .userInfo{
-    position:absolute;
-    right:2.8vw;
-    width:5vh;
-    margin-top: 3vh;
-    height: 5vh;
-    /*background-color: #a2cdff;*/
-  }
-  #main-content .el-dropdown-link {
-    display: inline-block;
-    width:5vh;
-    height:5vh;
-    cursor: pointer;
-    color: #fbffa4;
-  }
-  #main-content .user_logo{
-    position: absolute;
-    left:0vw;
-    width: 4.6vh;
-    height: 4.6vh;
-    top:0.6vh;
-    border-radius: 10%;
-  }
+	#main-content .navigaIcon .goHome {
+		cursor: pointer;
+		position: absolute;
+		right: 28%;
+		height: 90%;
+	}
+	/*右上角个人信息中心*/
+	#main-content .userInfo{
+		position:absolute;
+		right:2.8vw;
+		width:5vh;
+		margin-top: 3vh;
+		height: 5vh;
+		/*background-color: #a2cdff;*/
+	}
+	#main-content .el-dropdown-link {
+		display: inline-block;
+		width:5vh;
+		height:5vh;
+		cursor: pointer;
+		color: #fbffa4;
+	}
+	#main-content .user_logo{
+		position: absolute;
+		left:0vw;
+		width: 4.6vh;
+		height: 4.6vh;
+		top:0.6vh;
+		border-radius: 10%;
+	}
 
 	/* #2.3 中上方菜单栏 */
 	#main-content .setMenu {

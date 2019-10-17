@@ -58,9 +58,9 @@
 					<li><router-link to="/passPort" >渔船出入港</router-link></li>
 					<li><router-link to="/workModeSta" >渔船作业方式<br>统计及查询</router-link></li>
 					<li><router-link to="#" >船舶明细</router-link></li>
-					<li><router-link to="/purseSeineAnalysis" >围网作业方式<br>统计及分析</router-link></li>
+					<li><router-link to="/seineSA" >围网作业方式<br>统计及分析</router-link></li>
 					<li><router-link to="/trawlSA" >拖网作业方式<br>统计及分析</router-link></li>
-					<li><router-link to="/gillNetStAnalysis" >刺网作业方式<br>统计及分析</router-link></li>
+					<li><router-link to="/gillSA" >刺网作业方式<br>统计及分析</router-link></li>
 					<li><router-link to="/stowSA" >张网作业方式<br>统计及分析</router-link></li>
 				</ul>
 			</div>
