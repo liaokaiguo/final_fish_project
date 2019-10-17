@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import Router from 'vue-router'
+// 主页
 import WelCome from '@/components/WelCome'
-import wel from '@/components/testpage'
 // 刺网
 import gillSA from '@/components/Pages/gillStatisticalAnalysis'
 // 拖网
@@ -33,12 +33,6 @@ export default new Router({
 			path: '/welcome',
 			name: 'WelCome',
 			component: WelCome
-		},
-
-		{
-			path: '/he',
-			name: 'he',
-			component: wel
 		},
 		//四种作业方式
 		{

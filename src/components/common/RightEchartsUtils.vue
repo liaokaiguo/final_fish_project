@@ -1,8 +1,6 @@
 <template>
-  <div>
-    <!--<div v-bind:id="echartId" :data="OptionData" class="middleBottomLREcharts"></div>-->
     <div v-bind:id="echartId" :data="OptionData" class="rightBottomEcharts"></div>
-  </div>
+
 </template>
 
 <script>
@@ -10,7 +8,7 @@
 export default {
   data() {
     return {
-      LinerEcharts: null
+      //LinerEcharts: null
     };
   },
   props: ["echartId", "OptionData"],
@@ -29,18 +27,18 @@ export default {
     drawGraph(id, data) {
       /*var myChart = this.$echarts.init(document.getElementById(id));
       myChart.setOption(data);*/
-      this.LinerEcharts = this.$echarts.init(document.getElementById(id));
-      this.LinerEcharts.setOption(data);
-      /*window.addEventListener("resize", function() {
-        this.LinerEcharts.resize();
-      });*/
+      var LinerEcharts = this.$echarts.init(document.getElementById(id));
+      LinerEcharts.setOption(data);
+      window.addEventListener("resize", function() {
+        LinerEcharts.resize();
+      });
     }
   },
-  beforeDestroy() {
-    if (this.LinerEcharts) {
-      this.LinerEcharts.clear();
-    }
-  }
+  // beforeDestroy() {
+  //   if (this.LinerEcharts) {
+  //     this.LinerEcharts.clear();
+  //   }
+  // }
 };
 </script>
 
@@ -67,12 +65,11 @@ table {
   list-style: none;
 }
 .rightBottomEcharts {
-  width: 25em;
-  height: 10em;
+  width: 100%;
+  height: 100%;
   opacity: 1;
-  left:-2%;
-  top: 2%;
-  padding: 0;
+  left:0%;
+  top: 0%;
   position: absolute;
 }
 </style>
