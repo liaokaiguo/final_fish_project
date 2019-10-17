@@ -1375,7 +1375,7 @@
 		top: 15%;
 		left: 2.5%;
 		/* background-color 测试用 */
-		background-color: rgba(255, 36, 24, 0.4);
+		/*background-color: rgba(255, 36, 24, 0.4);*/
 	}
 
 	/*左上表格的样式*/
@@ -1402,7 +1402,7 @@
 		top: 0%;
 		padding: 0;
 		/* background-color 测试用 */
-		background-color: #FFFFFF;
+		/*background-color: #FFFFFF;*/
 	}
 
 	/* #2.3 中部栏目 */
