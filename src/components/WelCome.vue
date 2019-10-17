@@ -232,13 +232,13 @@
 						name: "占比情况",
 						type: "pie",
 						radius: "65%",
-						center: ["42%", "55%"],
+						center: ["45%", "55%"],
 						label:{
 							fontSize:"120%",
 						},
 						labelLine:{
 							length:18,
-							length2:12
+							length2:10
 						},
 						data: [
 							// { value: 890, name: "正常作业" },
