@@ -15,7 +15,7 @@
 				<!--the left-top model code-->
 				<div id="lefttopBox">
 					<div class="msgTitle">
-						<span class="MainTitle">渔船出入港</span>
+						<span class="msgMainTitle">渔船出入港</span>
 						<router-link to="/passPort">
 							<span class="moreText">详情</span>
 						</router-link>
@@ -48,7 +48,7 @@
 				<!--the left-middle model code-->
 				<div id="leftmidBox">
 					<div class="msgTitle">
-						<span class="MainTitle">作业占比</span>
+						<span class="msgMainTitle">作业占比</span>
 						<router-link to="#">
 							<span class="moreText">详情</span>
 						</router-link>
@@ -63,7 +63,7 @@
 				<!--the left-bottom model code-->
 				<div id="leftbotBox">
 					<div class="msgTitle">
-						<span class="MainTitle">围网统计</span>
+						<span class="msgMainTitle">围网统计</span>
 						<router-link to="/seineSA">
 							<span class="moreText">详情</span>
 						</router-link>
@@ -86,7 +86,7 @@
 				<div class="middletopImage" id="MiddleTopMainMap"></div>
 				<div id="midbotleftBox">
 					<div class="msgTitle">
-						<span class="MainTitle">拖网统计</span>
+						<span class="msgMainTitle">拖网统计</span>
 						<router-link to="/trawlSA">
 							<span class="moreText">详情</span>
 						</router-link>
@@ -106,7 +106,7 @@
 
 
 					<div class="msgTitle">
-						<span class="MainTitle">张网统计</span>
+						<span class="msgMainTitle">张网统计</span>
 						<router-link to="/stowSA">
 							<span class="moreText">详情</span>
 						</router-link>
@@ -139,7 +139,7 @@
 			<div class="wholeright">
 				<div id="righttopBox">
 					<div class="msgTitle">
-						<span class="MainTitle">渔船作业统计</span>
+						<span class="msgMainTitle">渔船作业统计</span>
 						<router-link to="/workModeSta">
 							<span class="moreText">详情</span>
 						</router-link>
@@ -153,7 +153,7 @@
 				</div>
 				<div id="rightmidBox">
 					<div class="msgTitle">
-						<span class="MainTitle">非法作业统计</span>
+						<span class="msgMainTitle">非法作业统计</span>
 						<router-link to="/workModeSta">
 							<span class="moreText">详情</span>
 						</router-link>
@@ -167,7 +167,7 @@
 				</div>
 				<div id="rightbotBox">
 					<div class="msgTitle">
-						<span class="MainTitle">刺网统计</span>
+						<span class="msgMainTitle">刺网统计</span>
 						<router-link to="gillSA">
 							<span class="moreText">详情</span>
 						</router-link>
@@ -1244,8 +1244,8 @@
 		position: absolute;
 		left: 35vw;
 		width: 30vw;
-		top: 0;
-		height: 5.4vh;
+		top: 1vh;
+		height: 5vh;
 		text-align:center;
 		/* background-color 测试用 */
 		/*background-color: #FFFFFF;*/
@@ -1255,7 +1255,7 @@
 		color: #5bb1ff;
 		cursor: pointer;
 		letter-spacing: 0.2vw;
-		font-size: 4.3vh;
+		font-size: 2.2vw;
 		display: inline-block;
 		/* background-color 测试用 */
 		/*background-color: #ff5234;*/
@@ -1323,13 +1323,13 @@
 		/*background-color: #FFFFFF;*/
 	}
 
-	.MainTitle {
+	.msgMainTitle {
 		position: absolute;
 		left: 0%;
 		width: 60%;
-		top: 0;
-		height: 100%;
-		font-size: 1.8vh;
+		top: 6%;
+		height: 94%;
+		font-size: 1vw;
 		color: #f7f7f7;
 		text-align: left;
 		/* background-color 测试用 */
@@ -1343,11 +1343,11 @@
 	/*the "more" and the ICON style.same with other title*/
 	.moreText {
 		position: absolute;
-		left: 75%;
-		width: 10%;
-		top: 0;
-		height: 100%;
-		font-size: 1.8vh;
+		left: 73%;
+		width: 20%;
+		top: 6%;
+		height: 94%;
+		font-size: 1vw;
 		color: #f7f7f7;
 		text-align: left;
 		/* background-color 测试用 */
@@ -1358,7 +1358,7 @@
 		position: absolute;
 		left: 85%;
 		width: 4%;
-		top: 10%;
+		top: 18%;
 		height: 45%;
 		text-align: left;
 		background-image: url("../assets/moreICO.png");
