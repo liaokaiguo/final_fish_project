@@ -169,21 +169,8 @@
 				</div>
 			</div>
 
-			<!-- the last bottom Nav-->
-			<div class="lastbottom">
-				<ul>
-					<li>
-						<router-link to="/mapShow" class="lastbottomtext">地图显示</router-link>&nbsp;&nbsp;
-						<router-link to="/passPort" class="lastbottomtext">渔船出入港</router-link>&nbsp;&nbsp;
-						<router-link to="/workModeSta" class="lastbottomtext">渔船作业方式统计及查询</router-link>&nbsp;&nbsp;
-						<router-link to="#" class="lastbottomtext">船舶明细</router-link>&nbsp;&nbsp;
-						<router-link to="/seineSA" class="lastbottomtext">围网作业方式统计及分析</router-link>&nbsp;&nbsp;
-						<router-link to="/trawlSA" class="lastbottomtext">拖网作业方式统计及分析</router-link>&nbsp;&nbsp;
-						<router-link to="/gillSA" class="lastbottomtext">刺网作业方式统计及分析</router-link>&nbsp;&nbsp;
-						<router-link to="/stowSA" class="lastbottomtext">张网作业方式统计及分析</router-link>&nbsp;&nbsp;
-					</li>
-				</ul>
-			</div>
+			<!--底部导航栏-->
+			<BottomNav></BottomNav>
 		</div>
 	</div>
 
@@ -734,7 +721,6 @@
 			});*/
 
 			/* 向后台请求数据 */
-
 			this.initPortData() // 出港入港数量
 			this.initLeftBottomEchartsOption(); //围网
 			this.initMiddleBottomLEchartsOption(); //拖网
@@ -1505,23 +1491,5 @@
 	}
 
 	/* #2.6 底部栏目 */
-	/*the last bottom image and text style*/
-	.lastbottom {
-		align-content: center;
-		background-image: url("../assets/lastbottomBg.png");
-		background-size: 100% 100%;
-		position: absolute;
-		top:94%;
-		left: 10%;
-		width: 80%;
-		height: 3%;
-		opacity: 0.66;
-	}
 
-	.lastbottomtext {
-		height: 100%;
-		font-size: 1vw;
-		color: #f7f7f7;
-		text-decoration: none;
-	}
 </style>
