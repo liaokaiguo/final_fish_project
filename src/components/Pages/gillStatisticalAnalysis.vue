@@ -1,5 +1,5 @@
 <template>
-	<!-- 围网作业方式统计分析 stow net statistic and analysis -->
+	<!-- 刺网作业方式统计分析 stow net statistic and analysis -->
 	<div>
 		<!-- 背景 -->
 		<div id="backGround"></div>
@@ -7,7 +7,7 @@
 		<div id="main-content">
 			<!-- 主标题 -->
 			<div class="mainTitle">
-				<p class="title" @click="refreshPage" v-bind:title="tipMsg.thisPageName">围网作业方式统计分析</p>
+				<p class="title" @click="refreshPage" v-bind:title="tipMsg.thisPageName">刺网作业方式统计分析</p>
 			</div>
 			<!-- 右上角导航按钮 -->
 			<div class="navigaIcon" id="navigaIcon">
@@ -16,19 +16,19 @@
 				<img class="goHome" src="../../assets/homeico.png" alt="主页" v-on:click="goHome"
 				     v-bind:title="tipMsg.goHome">
 			</div>
-      <!--个人信息中心-->
-      <div class="userInfo">
-        <el-dropdown trigger="click" @command="handleCommand">
+			<!--个人信息中心-->
+			<div class="userInfo">
+				<el-dropdown trigger="click" @command="handleCommand">
             <span class="el-dropdown-link">
               <img class="user_logo" src="../../assets/img/海天.jpg">
             </span>
-          <el-dropdown-menu slot="dropdown">
-            <el-dropdown-item command="userCenter">个人中心</el-dropdown-item>
-            <el-dropdown-item command="loginOut">退出</el-dropdown-item>
-          </el-dropdown-menu>
-        </el-dropdown>
+					<el-dropdown-menu slot="dropdown">
+						<el-dropdown-item command="userCenter">个人中心</el-dropdown-item>
+						<el-dropdown-item command="loginOut">退出</el-dropdown-item>
+					</el-dropdown-menu>
+				</el-dropdown>
 
-      </div>
+			</div>
 			<!-- 菜单栏 -->
 			<div class="setMenu">
 				<!-- 选择时间菜单 -->
@@ -58,9 +58,9 @@
 					<li><router-link to="/passPort" >渔船出入港</router-link></li>
 					<li><router-link to="/workModeSta" >渔船作业方式<br>统计及查询</router-link></li>
 					<li><router-link to="#" >船舶明细</router-link></li>
-					<li><router-link to="/purseSeineAnalysis" >围网作业方式<br>统计及分析</router-link></li>
+					<li><router-link to="/seineSA" >围网作业方式<br>统计及分析</router-link></li>
 					<li><router-link to="/trawlSA" >拖网作业方式<br>统计及分析</router-link></li>
-					<li><router-link to="/gillNetStAnalysis" >刺网作业方式<br>统计及分析</router-link></li>
+					<li><router-link to="/gillSA" >刺网作业方式<br>统计及分析</router-link></li>
 					<li><router-link to="/stowSA" >张网作业方式<br>统计及分析</router-link></li>
 				</ul>
 			</div>
@@ -94,13 +94,15 @@
 
 
 <script>
-	//围网 stow net statistic and analysis
+	//刺网 stow net statistic and analysis
 	export default {
 		data() {
 			return {
+				// 用户名
+				userName:"中电36所",
 				// Tips提示
 				tipMsg:{
-					thisPageName: '围网作业方式统计分析',
+					thisPageName: '刺网作业方式统计分析',
 					goBack: '后退',
 					goHome: '主页',
 					startDateTips: '请选择起始日期',
@@ -108,7 +110,6 @@
 					checkTips: '查询结果',
 					resetTips: '重置条件',
 					saveTips: '保存结果',
-          name:"夹克"
 				},
 				// 默认时间设置
 				startDate: '2019-07-15',
@@ -151,7 +152,7 @@
 								//rotate: 10,
 								//margin:18,
 								align:'center',
-                fontFamily:"Times New Roman"
+								fontFamily:"Times New Roman"
 							}
 						}
 					],
@@ -174,7 +175,7 @@
 							axisLabel: {
 								fontSize: 16,
 								color: "#5bb1ff",
-				        fontFamily:"Times New Roman"
+								fontFamily:"Times New Roman"
 							},
 							splitLine: {
 								show: true,
@@ -237,7 +238,7 @@
 								//rotate: 10,
 								//margin:18,
 								align:'center',
-				        fontFamily:"Times New Roman"
+								fontFamily:"Times New Roman"
 							}
 						}
 					],
@@ -260,7 +261,7 @@
 							axisLabel: {
 								fontSize: 16,
 								color: "#5bb1ff",
-				        fontFamily:"Times New Roman"
+								fontFamily:"Times New Roman"
 							},
 							splitLine: {
 								show: true,
@@ -466,7 +467,6 @@
 					normal: {value: 0, name: '正常作业'},
 					illegal: {value: 0, name: '非法作业'},
 				},
-          //渔船类型
 				shipType:['养殖船','国内捕捞船','捕捞辅助船','其他辅助船','专业远洋渔船','非专业远洋渔船'],
 				/*存储返回的数据以及时间序列*/
 				saveData:{},
@@ -479,251 +479,249 @@
 		mounted() {
 			this.initCharts();
 		},
-	  computed: {
-		  username() {
-			  let username = sessionStorage.getItem('ms_username');
-			  return username ? username : this.tipMsg.name;
-		  }
-	  },
-		methods: {
-		refreshPage() {
-			this.$router.go(0);
-		},
-
-		goBack() {
-			this.$router.back(-1);
-		},
-
-		goHome() {
-			this.$router.push('/welcome')
-		},
-
-		//初始化图表
-		initCharts() {
-			var myDate = new Date();
-			console.log("----------" + myDate.toLocaleString() + "----------");
-			console.log("正在执行init()...");
-			//初始化图表
-			this.dataAskDeal();
-		},
-		//画Echarts图
-		drawCharts() {
-			var _this = this;
-			var brokenEChart = this.$echarts.init(
-				document.getElementById("BrokenEchartsId")
-			);
-			var percentageEChart = this.$echarts.init(
-				document.getElementById("PerIOSEchartsId")
-			);
-			var normalBarEcharts = this.$echarts.init(
-				document.getElementById("normalBarEchartsId")
-			);
-			var normalSEcharts = this.$echarts.init(
-				document.getElementById("normalSREchartsId")
-			);
-			var illegalSEcharts = this.$echarts.init(
-				document.getElementById("illegalSREchartsId")
-			);
-			illegalSEcharts.setOption(this.IllegalShipOption);
-			illegalSEcharts.setOption({
-				series: [{
-					data: [this.radarData.illegal],
-				}]
-			});
-			normalSEcharts.setOption(this.NormalShipOption);
-			normalSEcharts.setOption({
-				series: [{
-					data: [this.radarData.normal],
-				}]
-			});
-			normalBarEcharts.setOption(this.NormalBarOption);
-			console.log(this.saveData);
-			normalBarEcharts.setOption({
-				xAxis: [{
-					data: this.saveData.time,
-					axisLabel: {
-						interval: function (idx, val) {
-							if (idx == 0 || idx == Math.floor((_this.saveData.time.length - 1) / 2) || idx == _this.saveData.time.length - 1) {
-								return true;
-							}
-						},
-					},
-				}],
-				series: [{
-					data: this.saveData.normal,
-				}]
-			});
-			brokenEChart.setOption(this.BrokenOption);
-			brokenEChart.setOption({
-				xAxis: [{
-					data: this.saveData.time,
-					axisLabel: {
-						//坐标轴显示3个标签
-						interval: function (idx, val) {
-							if (idx == 0 || idx == Math.floor((_this.saveData.time.length - 1) / 2) || idx == _this.saveData.time.length - 1) {
-								return true;
-							}
-						},
-					},
-				}],
-				series: [{
-					data: this.saveData.illegal,
-				}]
-			});
-			percentageEChart.setOption(this.PercentageOption);
-			percentageEChart.setOption({
-				series: [{
-					data: [this.data.normal, this.data.illegal],
-				}]
-			});
-			//percentageEChart.showLoading();
-			window.addEventListener("resize", function () {
-				brokenEChart.resize();
-			});
-			window.addEventListener("resize", function () {
-				percentageEChart.resize();
-			});
-			window.addEventListener("resize", function () {
-				normalBarEcharts.resize();
-			});
-			window.addEventListener("resize", function () {
-				normalSEcharts.resize();
-			});
-			window.addEventListener("resize", function () {
-				illegalSEcharts.resize();
-			});
-		},
-
-		//数据请求及返回数据处理
-		dataAskDeal() {
-			this.saveData.time = [];
-			var i = 0; //i作为time数组的索引
-			var startTime = this.getDate(this.startDate);
-			var endTime = this.getDate(this.endDate);
-			while ((endTime.getTime() - startTime.getTime()) >= 0) {
-				var year = startTime.getFullYear();
-				var x = startTime.getMonth() + 1;//JS中的月份是0-11
-				var month = x.toString().length == 1 ? "0" + x.toString() : x;
-
-				var day = startTime.getDate().toString().length == 1 ? "0" + startTime.getDate() : startTime.getDate();
-				//保存时间序列
-				this.saveData.time[i] = year + '-' + month + '-' + day;
-				i++;
-				startTime.setDate(startTime.getDate() + 1);
+		computed: {
+			username() {
+				let username = sessionStorage.getItem('ms_username');
+				return username ? username : this.userName;
 			}
-			console.log("开始提取数据/getDataByMonthOrDay");
-			this.axios({
-				method: "post",
-				url: "/getDataByMonthOrDay",
-				data: {
-					jobType: '围网',
-					startTime: this.startDate + ' 00:00:00',
-					endTime: this.endDate + ' 23:59:59',
-					byDay: 1,
+		},
+		methods: {
+			refreshPage() {
+				this.$router.go(0);
+			},
+
+			goBack() {
+				this.$router.back(-1);
+			},
+
+			goHome() {
+				this.$router.push('/welcome')
+			},
+
+			//初始化图表
+			initCharts(){
+				var myDate = new Date();
+				console.log("----------" + myDate.toLocaleString() + "----------");
+				console.log("正在执行init()...");
+				//初始化图表
+				this.dataAskDeal();
+			},
+			//画Echarts图
+			drawCharts() {
+				var _this=this;
+				var brokenEChart = this.$echarts.init(
+					document.getElementById("BrokenEchartsId")
+				);
+				var percentageEChart = this.$echarts.init(
+					document.getElementById("PerIOSEchartsId")
+				);
+				var normalBarEcharts = this.$echarts.init(
+					document.getElementById("normalBarEchartsId")
+				);
+				var normalSEcharts = this.$echarts.init(
+					document.getElementById("normalSREchartsId")
+				);
+				var illegalSEcharts = this.$echarts.init(
+					document.getElementById("illegalSREchartsId")
+				);
+				illegalSEcharts.setOption(this.IllegalShipOption);
+				illegalSEcharts.setOption({
+					series:[{
+						data:[this.radarData.illegal],
+					}]
+				});
+				normalSEcharts.setOption(this.NormalShipOption);
+				normalSEcharts.setOption({
+					series:[{
+						data:[this.radarData.normal],
+					}]
+				});
+				normalBarEcharts.setOption(this.NormalBarOption);
+				console.log(this.saveData);
+				normalBarEcharts.setOption({
+					xAxis:[{
+						data:this.saveData.time,
+						axisLabel: {
+							interval: function (idx, val) {
+								if (idx == 0 || idx == Math.floor((_this.saveData.time.length - 1) / 2) || idx == _this.saveData.time.length  - 1) {
+									return true;
+								}
+							},
+						},
+					}],
+					series:[{
+						data:this.saveData.normal,
+					}]
+				});
+				brokenEChart.setOption(this.BrokenOption);
+				brokenEChart.setOption({
+					xAxis:[{
+						data:this.saveData.time,
+						axisLabel: {
+							interval: function (idx, val) {
+								if (idx == 0 || idx == Math.floor((_this.saveData.time.length - 1) / 2) || idx == _this.saveData.time.length  - 1) {
+									return true;
+								}
+							},
+						},
+					}],
+					series:[{
+						data:this.saveData.illegal,
+					}]
+				});
+				percentageEChart.setOption(this.PercentageOption);
+				percentageEChart.setOption({
+					series:[{
+						data:[this.data.normal,this.data.illegal],
+					}]
+				});
+				//percentageEChart.showLoading();
+				window.addEventListener("resize", function() {
+					brokenEChart.resize();
+				});
+				window.addEventListener("resize", function() {
+					percentageEChart.resize();
+				});
+				window.addEventListener("resize", function() {
+					normalBarEcharts.resize();
+				});
+				window.addEventListener("resize", function() {
+					normalSEcharts.resize();
+				});
+				window.addEventListener("resize", function() {
+					illegalSEcharts.resize();
+				});
+			},
+
+			//数据请求及返回数据处理
+			dataAskDeal () {
+				this.saveData.time=[];
+				var i=0; //i作为time数组的索引
+				var startTime = this.getDate(this.startDate);
+				var endTime = this.getDate(this.endDate);
+				while((endTime.getTime()-startTime.getTime())>=0) {
+					var year = startTime.getFullYear();
+					var x = startTime.getMonth() + 1;//JS中的月份是0-11
+					var month = x.toString().length == 1 ? "0" + x.toString() : x;
+
+					var day = startTime.getDate().toString().length == 1 ? "0" + startTime.getDate() : startTime.getDate();
+					//保存时间序列
+					this.saveData.time[i]=year + '-' + month + '-' + day;
+					i++;
+					startTime.setDate(startTime.getDate() + 1);
 				}
-			}).then((response) => {
-				var sumlegal = 0;
-				var sumillegal = 0;
-				for (var j = 0; j < response.data.normal.length; j++) {
-					sumlegal += response.data.normal[j];
-				}
-				;
-				for (var j = 0; j < response.data.illegal.length; j++) {
-					sumillegal += response.data.illegal[j];
-				}
-				;
-				this.saveData.normal = (response).data.normal;
-				this.saveData.illegal = (response).data.illegal;
-				this.data.normal.value = sumlegal;
-				this.data.illegal.value = sumillegal;
-				console.log("开始提取数据/countBstype");
+				console.log("开始提取数据/getDataByMonthOrDay");
 				this.axios({
 					method: "post",
-					url: "/countBstype",
+					url: "/getDataByMonthOrDay",
 					data: {
-						startTime: this.startDate + ' 00:00:00',
-						endTime: this.endDate + ' 23:59:59',
-						jobType: "围网",
+						jobType :'刺网',
+						startTime : this.startDate + ' 00:00:00',
+						endTime : this.endDate + ' 23:59:59',
+						byDay:1,
 					}
-				}).then((res) => {
-					var normalNum = [];
-					var illegalNum = [];
-					for (var j = 0; j < 6; j++) {
-						normalNum[j] = (res).data.normal[this.shipType[j]];
-						illegalNum[j] = (res).data.illegal[this.shipType[j]];
-					}
-					this.radarData.normal = normalNum;
-					this.radarData.illegal = illegalNum;
-					this.drawCharts()
-				}).catch((response) => {
+				}).then((response)=>{
+					var sumlegal=0;
+					var sumillegal=0;
+					for(var j=0;j<response.data.normal.length;j++){
+						sumlegal += response.data.normal[j];
+					};
+					for(var j=0;j<response.data.illegal.length;j++){
+						sumillegal += response.data.illegal[j];
+					};
+					this.saveData.normal = (response).data.normal;
+					this.saveData.illegal = (response).data.illegal;
+					this.data.normal.value=sumlegal;
+					this.data.illegal.value=sumillegal;
+					console.log("开始提取数据/countBstype");
+					this.axios({
+						method:"post",
+						url:"/countBstype",
+						data:{
+							startTime : this.startDate + ' 00:00:00',
+							endTime : this.endDate + ' 23:59:59',
+							jobType :"刺网",
+						}
+					}).then((res)=>{
+						var normalNum=[];
+						var illegalNum=[];
+						for(var j=0;j<6;j++){
+							normalNum[j]=(res).data.normal[this.shipType[j]];
+							illegalNum[j]=(res).data.illegal[this.shipType[j]];
+						}
+						this.radarData.normal=normalNum;
+						this.radarData.illegal=illegalNum;
+						this.drawCharts()
+					}).catch((response)=>{
+						console.log(response);
+					});
+				}).catch((response)=>{
 					console.log(response);
 				});
-			}).catch((response) => {
-				console.log(response);
-			});
+			},
+
+			//String to Date 时间调整函数 月份-1，适配Date类型
+			getDate(datestr) {
+				var temp = datestr.split("-");
+				var date = new Date(temp[0], temp[1] - 1, temp[2]);
+				return date;
+			},
+			// 查询方法
+			search() {
+				var startTime = this.getDate(this.startDate);
+				var endTime = this.getDate(this.endDate);
+				if (endTime.getTime() - startTime.getTime() < 0) {
+					alert("终止时间不得早于起始时间！");
+				} else {
+					this.dataAskDeal();
+				}
+			},
+			//保存报告
+			save() {
+				this.axios({
+					method: "post",
+					url: "/downloadExcel",
+					data: {
+						jobType :'刺网',
+						startTime : this.startDate + ' 00:00:00',
+						endTime : this.endDate + ' 23:59:59',
+						byDay:1
+					},
+					responseType:'blob'
+				}).then((response)=>{
+					console.log(response);
+					const link = document.createElement('a');
+					let blob = new Blob([response.data],{type:'application/vnd.ms-excel'});
+					link.style.display = 'none';
+					link.href = URL.createObjectURL(blob);
+					link.setAttribute('download','刺网分析报告('+this.startDate+'至'+this.endDate+').xlsx');
+					document.body.appendChild(link);
+					link.click();
+					document.body.removeChild(link);
+				}).catch((response)=> {
+					console.log(response);
+				})
+			},
+			//重置方法 恢复到默认渔场、默认时间
+			reset() {
+				this.startDate = '2019-07-15';
+				this.endDate = '2019-08-31';
+				this.dataAskDeal();
+			},
+			//个人中心选择功能
+			handleCommand(command) {
+				if (command == 'loginOut') {
+					sessionStorage.removeItem('ms_username')
+					this.$router.push('/');
+				} else if (command == 'userCenter') {
+					this.$message({
+						message: '啊哈，用户中心还没实现',
+						type: 'warning'
+					});
+				}
+			}
 		},
 
-		//String to Date 时间调整函数 月份-1，适配Date类型
-		getDate(datestr) {
-			var temp = datestr.split("-");
-			var date = new Date(temp[0], temp[1] - 1, temp[2]);
-			return date;
-		},
-		// 查询方法
-		search() {
-			var startTime = this.getDate(this.startDate);
-			var endTime = this.getDate(this.endDate);
-			if (endTime.getTime() - startTime.getTime() < 0) {
-				alert("终止时间不得早于起始时间！");
-			} else {
-				this.dataAskDeal();
-			}
-		},
-		//保存报告
-		save() {
-			this.axios({
-				method: "post",
-				url: "/downloadExcel",
-				data: {
-					jobType: '围网',
-					startTime: this.startDate + ' 00:00:00',
-					endTime: this.endDate + ' 23:59:59',
-					byDay: 1
-				},
-				responseType: 'blob'
-			}).then((response) => {
-				console.log(response);
-				const link = document.createElement('a');
-				let blob = new Blob([response.data], {type: 'application/vnd.ms-excel'});
-				link.style.display = 'none';
-				link.href = URL.createObjectURL(blob);
-				link.setAttribute('download', '围网分析报告(' + this.startDate + '至' + this.endDate + ').xlsx');
-				document.body.appendChild(link);
-				link.click();
-				document.body.removeChild(link);
-			}).catch((response) => {
-				console.log(response);
-			})
-		},
-		//重置方法 恢复到默认渔场、默认时间
-		reset() {
-			this.startDate = '2019-07-15';
-			this.endDate = '2019-08-31';
-			this.dataAskDeal();
-		},
-    //个人中心选择功能
-		handleCommand(command) {
-			if (command == 'loginOut') {
-				sessionStorage.removeItem('ms_username')
-				this.$router.push('/');
-			} else if (command == 'userCenter') {
-				this.$message({
-					message: '啊哈，用户中心还没实现',
-					type: 'warning'
-				});
-			}
-		}
-	},
 	};
 </script>
 
@@ -816,30 +814,31 @@
 		right: 28%;
 		height: 90%;
 	}
-  /*右上角个人信息中心*/
-  #main-content .userInfo{
-    position:absolute;
-    right:2.8vw;
-    width:5vh;
-    margin-top: 3vh;
-    height: 5vh;
-    /*background-color: #a2cdff;*/
-  }
-  #main-content .el-dropdown-link {
-    display: inline-block;
-    width:5vh;
-    height:5vh;
-    cursor: pointer;
-    color: #fbffa4;
-  }
-  #main-content .user_logo{
-    position: absolute;
-    left:0vw;
-    width: 4.6vh;
-    height: 4.6vh;
-    top:0.6vh;
-    border-radius: 10%;
-  }
+	/*右上角个人信息中心*/
+	#main-content .userInfo{
+		position:absolute;
+		right:2.8vw;
+		width:5vh;
+		margin-top: 3vh;
+		height: 5vh;
+		/*background-color: #a2cdff;*/
+	}
+	#main-content .el-dropdown-link {
+		display: inline-block;
+		width:5vh;
+		height:5vh;
+		cursor: pointer;
+		color: #fbffa4;
+	}
+	#main-content .user_logo{
+		position: absolute;
+		left:0vw;
+		width: 4.6vh;
+		height: 4.6vh;
+		top:0.6vh;
+		border-radius: 10%;
+	}
+
 	/* #2.3 中上方菜单栏 */
 	#main-content .setMenu {
 		position: absolute;
@@ -860,7 +859,7 @@
 		left: 10%;
 		width: 50%;
 		height: 100%;
-		font-size: 2.8vh;
+		font-size: 2.5vh;
 		/* background-color 测试用 */
 		/* background-color: #FFFFFF;*/
 	}
@@ -888,7 +887,7 @@
 	/*这是控制年月日之间的斜线或短横线的*/
 	input[type="date"]::-webkit-datetime-edit-text {
 		color: #5bb1ff;
-		padding: 0.5em;
+		padding: 0.2em;
 	}
 
 	/*控制年文字, 如2019四个字母占据的那片地方*/
@@ -971,7 +970,7 @@
 		width: 100%;
 		margin: 0;
 		padding: 0;
-		font-size: 2.2vh;
+		font-size: 1vw;
 		list-style-type: none;
 		display: block;
 		/*background-color: #3f72c5;*/
@@ -983,7 +982,7 @@
 		color: #62dbff;
 		text-align: center;
 		padding: 1vh 1vh;
-		font-size: 2.4vh;
+		font-size: 1vw;
 		font-weight: bold;
 		border-bottom: #55a6ee 1px solid;
 	}
@@ -1101,8 +1100,8 @@
 	.GraphTitle{
 		position: absolute;
 		top: 0%;
-		left: 20%;
-		width: 60%;
+		left: 10%;
+		width: 80%;
 		height: 10%;
 		margin-top: 1.15%;
 		font-size: 2.8vh;

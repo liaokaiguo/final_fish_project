@@ -16,19 +16,19 @@
 				<img class="goHome" src="../../assets/homeico.png" alt="主页" v-on:click="goHome"
 				     v-bind:title="tipMsg.goHome">
 			</div>
-      <!--个人信息中心-->
-      <div class="userInfo">
-        <el-dropdown trigger="click" @command="handleCommand">
+			<!--个人信息中心-->
+			<div class="userInfo">
+				<el-dropdown trigger="click" @command="handleCommand">
             <span class="el-dropdown-link">
               <img class="user_logo" src="../../assets/img/海天.jpg">
             </span>
-          <el-dropdown-menu slot="dropdown">
-            <el-dropdown-item command="userCenter">个人中心</el-dropdown-item>
-            <el-dropdown-item command="loginOut">退出</el-dropdown-item>
-          </el-dropdown-menu>
-        </el-dropdown>
+					<el-dropdown-menu slot="dropdown">
+						<el-dropdown-item command="userCenter">个人中心</el-dropdown-item>
+						<el-dropdown-item command="loginOut">退出</el-dropdown-item>
+					</el-dropdown-menu>
+				</el-dropdown>
 
-      </div>
+			</div>
 			<!-- 菜单栏 -->
 			<div class="setMenu">
 				<!-- 选择时间菜单 -->
@@ -57,9 +57,9 @@
 					<li><router-link to="/passPort" >渔船出入港</router-link></li>
 					<li><router-link to="/workModeSta" >渔船作业方式<br>统计及查询</router-link></li>
 					<li><router-link to="#" >船舶明细</router-link></li>
-					<li><router-link to="/purseSeineAnalysis" >围网作业方式<br>统计及分析</router-link></li>
+					<li><router-link to="/seineSA" >围网作业方式<br>统计及分析</router-link></li>
 					<li><router-link to="/trawlSA" >拖网作业方式<br>统计及分析</router-link></li>
-					<li><router-link to="/gillNetStAnalysis" >刺网作业方式<br>统计及分析</router-link></li>
+					<li><router-link to="/gillSA" >刺网作业方式<br>统计及分析</router-link></li>
 					<li><router-link to="/stowSA" >张网作业方式<br>统计及分析</router-link></li>
 				</ul>
 			</div>
@@ -97,6 +97,8 @@
 	export default {
 		data() {
 			return {
+				// 用户名
+				userName:"中电36所",
 				// Tips提示
 				tipMsg:{
 					thisPageName: '拖网作业方式统计分析',
@@ -107,7 +109,6 @@
 					checkTips: '查询结果',
 					resetTips: '重置条件',
 					saveTips: '保存结果',
-          name:"夹克"
 				},
 				// 默认时间设置
 				startDate: '2019-07-15',
@@ -477,12 +478,12 @@
 		mounted() {
 			this.initCharts();
 		},
-	  computed: {
-		  username() {
-			  let username = sessionStorage.getItem('ms_username');
-			  return username ? username : this.tipMsg.name;
-		  }
-	  },
+		computed: {
+			username() {
+				let username = sessionStorage.getItem('ms_username');
+				return username ? username : this.userName;
+			}
+		},
 		methods: {
 			refreshPage() {
 				this.$router.go(0);
@@ -706,18 +707,18 @@
 				this.endDate = '2019-08-31';
 				this.dataAskDeal();
 			},
-      //个人中心选择功能
-      handleCommand(command) {
-        if (command == 'loginOut') {
-          sessionStorage.removeItem('ms_username')
-          this.$router.push('/');
-        } else if (command == 'userCenter') {
-          this.$message({
-            message: '啊哈，用户中心还没实现',
-            type: 'warning'
-          });
-        }
-      }
+			//个人中心选择功能
+			handleCommand(command) {
+				if (command == 'loginOut') {
+					sessionStorage.removeItem('ms_username')
+					this.$router.push('/');
+				} else if (command == 'userCenter') {
+					this.$message({
+						message: '啊哈，用户中心还没实现',
+						type: 'warning'
+					});
+				}
+			}
 		},
 
 	};
@@ -788,54 +789,54 @@
 	}
 
 	/* #2.2 右上角导航按钮 */
-  #main-content .navigaIcon {
-    position: absolute;
-    right: 2vw;
-    width: 15vw;
-    height: 5vh;
-    margin-top: 3.3vh;
-    margin-bottom: 0.1vh;
-    /* background-color 测试用 */
-    /* background-color: #FFFFFF; */
-  }
+	#main-content .navigaIcon {
+		position: absolute;
+		right: 2vw;
+		width: 15vw;
+		height: 5vh;
+		margin-top: 3.3vh;
+		margin-bottom: 0.1vh;
+		/* background-color 测试用 */
+		/* background-color: #FFFFFF; */
+	}
 
-  #main-content .navigaIcon .goBack {
-    cursor: pointer;
-    position: absolute;
-    right: 50%;
-    height: 90%;
-  }
+	#main-content .navigaIcon .goBack {
+		cursor: pointer;
+		position: absolute;
+		right: 50%;
+		height: 90%;
+	}
 
-  #main-content .navigaIcon .goHome {
-    cursor: pointer;
-    position: absolute;
-    right: 28%;
-    height: 90%;
-  }
-  /*右上角个人信息中心*/
-  #main-content .userInfo{
-    position:absolute;
-    right:2.8vw;
-    width:5vh;
-    margin-top: 3vh;
-    height: 5vh;
-    /*background-color: #a2cdff;*/
-  }
-  #main-content .el-dropdown-link {
-    display: inline-block;
-    width:5vh;
-    height:5vh;
-    cursor: pointer;
-    color: #fbffa4;
-  }
-  #main-content .user_logo{
-    position: absolute;
-    left:0vw;
-    width: 4.6vh;
-    height: 4.6vh;
-    top:0.6vh;
-    border-radius: 10%;
-  }
+	#main-content .navigaIcon .goHome {
+		cursor: pointer;
+		position: absolute;
+		right: 28%;
+		height: 90%;
+	}
+	/*右上角个人信息中心*/
+	#main-content .userInfo{
+		position:absolute;
+		right:2.8vw;
+		width:5vh;
+		margin-top: 3vh;
+		height: 5vh;
+		/*background-color: #a2cdff;*/
+	}
+	#main-content .el-dropdown-link {
+		display: inline-block;
+		width:5vh;
+		height:5vh;
+		cursor: pointer;
+		color: #fbffa4;
+	}
+	#main-content .user_logo{
+		position: absolute;
+		left:0vw;
+		width: 4.6vh;
+		height: 4.6vh;
+		top:0.6vh;
+		border-radius: 10%;
+	}
 
 	/* #2.3 中上方菜单栏 */
 	#main-content .setMenu {
@@ -857,7 +858,7 @@
 		left: 10%;
 		width: 50%;
 		height: 100%;
-		font-size: 2.8vh;
+		font-size: 2.5vh;
 		/* background-color 测试用 */
 		/* background-color: #FFFFFF;*/
 	}
@@ -885,7 +886,7 @@
 	/*这是控制年月日之间的斜线或短横线的*/
 	input[type="date"]::-webkit-datetime-edit-text {
 		color: #5bb1ff;
-		padding: 0.5em;
+		padding: 0.2em;
 	}
 
 	/*控制年文字, 如2019四个字母占据的那片地方*/
@@ -968,7 +969,7 @@
 		width: 100%;
 		margin: 0;
 		padding: 0;
-		font-size: 2.2vh;
+		font-size: 1vw;
 		list-style-type: none;
 		display: block;
 		/*background-color: #3f72c5;*/
@@ -980,7 +981,7 @@
 		color: #62dbff;
 		text-align: center;
 		padding: 1vh 1vh;
-		font-size: 2.4vh;
+		font-size: 1vw;
 		font-weight: bold;
 		border-bottom: #55a6ee 1px solid;
 	}
@@ -1098,8 +1099,8 @@
 	.GraphTitle{
 		position: absolute;
 		top: 0%;
-		left: 20%;
-		width: 60%;
+		left: 10%;
+		width: 80%;
 		height: 10%;
 		margin-top: 1.15%;
 		font-size: 2.8vh;

@@ -67,11 +67,12 @@ table {
   list-style: none;
 }
 .rightBottomEcharts {
-  width: 80%;
-  height: 240px;
+  width: 25em;
+  height: 10em;
   opacity: 1;
-  margin-left: 45px;
-  margin-top: 0px;
+  left:-2%;
+  top: 2%;
   padding: 0;
+  position: absolute;
 }
 </style>
