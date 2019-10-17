@@ -1560,7 +1560,7 @@
 
 	.lastbottomtext {
 		height: 100%;
-		font-size: 2.2vh;
+		font-size: 1vw;
 		color: #f7f7f7;
 		text-decoration: none;
 	}
