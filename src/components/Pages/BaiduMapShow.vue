@@ -10,6 +10,7 @@
         <div class="centTitle"><a src="#">
           <el-menu
             class="el-menu-demo"
+            menu-trigger="click"
             mode="horizontal"
             @select="handleSelect"
             background-color="#ffffff"
@@ -36,12 +37,6 @@
                 <span>渔船作业分布图</span>
                 <i class="el-icon-picture-outline"></i>
               </template>
-<!--              <el-submenu index="2-1">-->
-<!--                <template slot="title">围网</template>-->
-<!--                <el-menu-item index="2-1-1">热力图</el-menu-item>-->
-<!--                <el-menu-item index="2-1-2">分布图</el-menu-item>-->
-<!--                <el-menu-item index="2-1-3">卫星图</el-menu-item>-->
-<!--              </el-submenu>-->
               <el-menu-item index="2-1">围网</el-menu-item>
               <el-menu-item index="2-2">拖网</el-menu-item>
               <el-menu-item index="2-3">张网</el-menu-item>
@@ -82,10 +77,10 @@
         </a></div>
         <div class="rightleftIcon">
             <span v-on:click="$router.back(-1)">
-              <img src="../../assets/backico.png" style="cursor:pointer" alt="返回">
+              <img class="backico-class" src="../../assets/backico.png" style="cursor:pointer" alt="返回">
             </span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
           <router-link to="/welcome">
-            <img src="../../assets/homeico.png">
+            <img class="homeico-class" src="../../assets/homeico.png">
           </router-link>
         </div>
       </el-col>
@@ -112,7 +107,7 @@
             <div style="text-align: right; margin-right: 10px">
               <el-button type="primary" size="mini" @click="reLocation">确定</el-button>
             </div>
-            <img class="img-class1" src="../../assets/mapShowImg/location32.png" height="32" width="32"
+            <img class="img-class1" src="../../assets/mapShowImg/location32.png" height="60%" width="60%"
                  slot="reference"/>
           </el-popover>
         </el-tooltip>
@@ -120,12 +115,12 @@
 
       <div class="distance-content">
         <el-tooltip effect="dark" content="测距" placement="right" :hide-after="2000">
-          <img class="img-class1" src="../../assets/mapShowImg/distance32.png" height="32" width="32" @click="openDistanceTool"/>
+          <img class="img-class1" src="../../assets/mapShowImg/distance32.png" height="60%" width="60%" @click="openDistanceTool"/>
         </el-tooltip>
       </div>
       <div class="feedback-content">
         <el-tooltip effect="dark" content="意见反馈" placement="right" :hide-after="2000">
-          <img class="img-class1" src="../../assets/mapShowImg/feedback32.png" height="32" width="32" @click="feedBackDialog=true"/>
+          <img class="img-class1" src="../../assets/mapShowImg/feedback32.png" height="60%" width="60%" @click="feedBackDialog=true"/>
         </el-tooltip>
       </div>
       <div class="online-content">
@@ -148,47 +143,48 @@
               <br>
               <strong>客服热线: 0571-87651234</strong>
             </div>
-            <img class="img-class1" src="../../assets/mapShowImg/online32.png" height="32" width="32" slot="reference"/>
+            <img class="img-class1" src="../../assets/mapShowImg/online32.png" height="60%" width="60%" slot="reference"/>
           </el-popover>
         </el-tooltip>
       </div>
     </div>
 
     <!--右下角 渔船信息 -->
-    <el-row class="bottom-content">
-      <el-col :span="12" >
+
+      <div class="bottom-left-class">
         <div id="bottomLeftEchartId" class="bottomleftEchart"></div>
-      </el-col>
-      <el-col class="bottom-right-class" :span="12" >
+      </div>
+      <div class="bottom-right-class">
         <div class="shipInfoItem">
-<!--          <el-table style="left:2%; width: 96%;  "-->
-<!--                    height="280"-->
-<!--                    :data=shipArr>-->
-<!--            <el-table-column-->
-<!--              prop="shipId"-->
-<!--              label="渔船编号">-->
-<!--            </el-table-column>-->
-<!--            <el-table-column-->
-<!--              prop="ship.shipName"-->
-<!--              label="渔船名">-->
-<!--            </el-table-column>-->
-<!--            <el-table-column-->
-<!--              prop="ship.jobType"-->
-<!--              label="作业方式">-->
-<!--            </el-table-column>-->
-<!--            <el-table-column-->
-<!--              prop="acqTime"-->
-<!--              label="定位时间">-->
-<!--            </el-table-column>-->
-<!--          </el-table>-->
+          <!--          <el-table style="left:2%; width: 96%;  "-->
+          <!--                    height="280"-->
+          <!--                    :data=shipArr>-->
+          <!--            <el-table-column-->
+          <!--              prop="shipId"-->
+          <!--              label="渔船编号">-->
+          <!--            </el-table-column>-->
+          <!--            <el-table-column-->
+          <!--              prop="ship.shipName"-->
+          <!--              label="渔船名">-->
+          <!--            </el-table-column>-->
+          <!--            <el-table-column-->
+          <!--              prop="ship.jobType"-->
+          <!--              label="作业方式">-->
+          <!--            </el-table-column>-->
+          <!--            <el-table-column-->
+          <!--              prop="acqTime"-->
+          <!--              label="定位时间">-->
+          <!--            </el-table-column>-->
+          <!--          </el-table>-->
           <!--渔船信息 自动滚动 -->
           <ul>
             <li>
-              <strong style="float: left;margin-left: 5%;font-size: 15px;">渔船Id</strong>
-              <strong style="float: left;margin-left: 10%;font-size: 15px;">渔船名</strong>
-              <strong style="float: left;margin-left: 12%;font-size: 15px;">作业类型</strong>
-              <strong style="font-size: 15px;">定位时间</strong>
+              <strong style="position: absolute; left: 5%;font-size: 2.0vh;">渔船Id</strong>
+              <strong style="position: absolute; left: 25%;font-size: 2.0vh;">渔船名</strong>
+              <strong style="position: absolute; left: 45%;font-size: 2.0vh;">作业类型</strong>
+              <strong style="position: absolute; left: 70%;font-size: 2.0vh;">定位时间</strong>
             </li>
+            <br>
             <vue-seamless-scroll
               :data="shipArr"
               :class-option="seamlessOptionSetting"
@@ -203,19 +199,19 @@
           </ul>
 
         </div>
-      </el-col>
-    </el-row>
+      </div>
+
 
     <!--渔船位置信息选择弹出框-->
     <el-dialog :modal="false" :visible.sync="shipLocationDialog"
                @close="resetForm('shipLocationForm')">
-      <div slot="title" style="text-align: center;font-size: 24px;">
+      <div slot="title" style="text-align: center;">
         <span>渔船位置信息选择</span>
       </div>
-      <el-form ref="shipLocationForm" :model="selectLocation" :label-width="formLabelWidth">
+      <el-form ref="shipLocationForm" :model="selectLocation" :label-width="formLabelWidth" size="small">
         <el-form-item label="渔船编号:" prop="boatId">
           <el-input v-model="selectLocation.boatId" class="select-input-data"
-                    autocomplete="off" placeholder="请输入编号"></el-input>
+                    autocomplete="off" placeholder="请输入编号"  ></el-input>
         </el-form-item>
 
         <el-form-item label="航行时间:" prop="sailingTime">
@@ -257,7 +253,7 @@
       <div slot="footer" class="select-footer-class">
         <el-button @click="shipLocationDialog = false">取 消</el-button>
         <el-button type="primary" @click="locationConfirm('shipLocationForm')"
-                   style="margin-left: 60px;margin-right: 60px">确定
+                   style="margin-left: 2vw;margin-right: 2vw">确定
         </el-button>
         <el-button @click="resetForm('shipLocationForm')">重置</el-button>
       </div>
@@ -271,7 +267,7 @@
       <el-form ref="shipTrackForm" :model="selectTrack" :label-width="formLabelWidth" :rules="shipTrackFormRules">
         <el-form-item label="渔船编号:" prop="boatId">
           <el-input class="select-input-data" v-model="selectTrack.boatId"
-                    autocomplete="off" placeholder="请输入编号"></el-input>
+                    autocomplete="off" placeholder="请输入编号" ></el-input>
         </el-form-item>
         <el-form-item label="航行开始时间:" prop="beginDate">
           <el-date-picker class="select-input-data"
@@ -280,7 +276,8 @@
                           placeholder="请输入时间"
                           value-format="yyyy-MM-dd HH:mm:ss"
                           align="right"
-                          :picker-options="pickerOptions">
+                          :picker-options="pickerOptions"
+                          >
           </el-date-picker>
         </el-form-item>
         <el-form-item label="航行结束时间:" prop="endDate">
@@ -290,7 +287,8 @@
                           placeholder="请输入时间"
                           value-format="yyyy-MM-dd HH:mm:ss"
                           align="right"
-                          :picker-options="pickerOptions">
+                          :picker-options="pickerOptions"
+                         >
           </el-date-picker>
         </el-form-item>
         <el-form-item class="select-input-data" label="算法库:" prop="algorithmMode">
@@ -315,25 +313,25 @@
 
     <!--左侧工具栏 意见反馈弹窗-->
     <el-dialog :modal="false" :visible.sync="feedBackDialog" @close="resetForm('feedBackForm')"
-                width="40%">
-      <div slot="title" style="text-align: center;font-size: 24px;">
+                width="40%" :label-width="formLabelWidth">
+      <div slot="title" style="text-align: center;">
         <span>意见反馈</span>
       </div>
       <el-form ref="feedBackForm" :model="feedBackForm"  :rules="feedBackFormRules">
-        <el-form-item label="手机号码:" prop="phone" label-width="120px">
+        <el-form-item label="手机号码:" prop="phone" >
           <el-input class="select-input-data" v-model="feedBackForm.phone"
-                    autocomplete="off" placeholder="您的联系电话"></el-input>
+                    autocomplete="off" placeholder="您的联系电话" ></el-input>
         </el-form-item>
-        <el-form-item label="电子邮箱:" prop="email" label-width="120px">
+        <el-form-item label="电子邮箱:" prop="email" >
           <el-input class="select-input-data" v-model="feedBackForm.email "
-                    autocomplete="off" placeholder="您的邮箱地址"></el-input>
+                    autocomplete="off" placeholder="您的邮箱地址" ></el-input>
         </el-form-item>
-        <el-form-item label="建议内容:" prop="suggest" label-width="120px">
+        <el-form-item label="建议内容:" prop="suggest" >
           <el-input class="select-input-data" v-model="feedBackForm.suggest "
                     type="textarea" :rows="5" style="width: 80%"
-                    autocomplete="off" placeholder="谢谢"></el-input>
+                    autocomplete="off" placeholder="谢谢" ></el-input>
         </el-form-item>
-        <el-form-item label="评分:" prop="star" label-width="120px">
+        <el-form-item label="评分:" prop="star" >
           <el-rate class="select-input-data" style="margin-left: 10px"
                    v-model="feedBackForm.star"
                    :colors="['#99A9BF', '#F7BA2A', '#FF9900']">
@@ -358,7 +356,7 @@
                 timer: null,//定时器
                 shipLocationDialog: false,//渔船位置信息弹窗
                 shipTrackDialog: false,//航行轨迹弹窗
-                formLabelWidth: '200px',//弹窗宽度
+                formLabelWidth: '15vw',//弹窗宽度
                 algorithmOptions: [
                     {
                         value: '1',
@@ -440,9 +438,9 @@
 
                 /*网格相关*/
                 centerPoint: '', //地图中心点
-                centerLng: "125.20",//地图中心经纬度
+                centerLng: "126.20",//地图中心经纬度
                 centerLat: "30.00",
-                level: "8",//地图级别
+                level: "7",//地图级别
                 bounds: '',//当前地图的四个顶点
                 span: '',//当前网格的跨度
                 xgrids: [],//经线
@@ -514,9 +512,10 @@
                         }
                     },
                     grid: {
-                        left: '2%',
-                        right: '2%',
-                        bottom: '3%',
+                        left: "5%",
+                        top: "2%",
+                        width:"90%",
+                        height:"95%",
                         containLabel: true
                     },
                     xAxis: {
@@ -543,12 +542,12 @@
                         },
                         offset: 10,
                         nameTextStyle: {
-                            fontSize: 18
+                            fontSize: '80%'
                         },
                         axisLabel: {
                             show: true,
                             textStyle: {
-                                fontSize:18
+                                fontSize:'90%'
                             }
                         }
 
@@ -558,7 +557,7 @@
                             name: '数量',
                             type: 'bar',
                             data: [100, 100, 100, 100, 100, 100, 100],
-                            barWidth: 14,
+                            barWidth: '8vw',
                             barGap: 10,
                             smooth: true,
                             label: {
@@ -568,7 +567,7 @@
                                     offset: [5, -2],
                                     textStyle: {
                                         color: '#F68300',
-                                        fontSize: 16
+                                        fontSize: '80%'
                                     }
                                 }
                             },
@@ -838,7 +837,7 @@
                 if (document.createElement('canvas').getContext) {  // 判断当前浏览器是否支持绘制海量点
                     var _this = this;
                     var options = {
-                        size: BMAP_POINT_SIZE_NORMAL,
+                        size: BMAP_POINT_SIZE_SMALL,
                         // shape: BMAP_POINT_SHAPE_STAR,
                         color: '#2fed19'
                     }
@@ -1450,6 +1449,9 @@
                         ]
                     }]
                 })
+                window.addEventListener("resize", function() {
+                    bottomLeftCharts.resize();
+                });
 
             },
 
@@ -1471,9 +1473,9 @@
   .background {
     background-image: url("../../assets/bg.png");
     background-size: 100% 100%;
-    height: 1080px;
+    height: 100%;
     position: absolute;
-    width: 1920px;
+    width: 100%;
     background-repeat: no-repeat;
   }
 
@@ -1482,14 +1484,13 @@
     position: absolute;
     left: 0%;
     width: 100%;
-    height: 43px;
+    height: 4vh;
     font-family: FZDHTJW--GB1-0;
-    font-size: 43px;
+    font-size:  3.2vh;;
     font-weight: normal;
     font-stretch: normal;
-    letter-spacing: 5px;
+    letter-spacing: 0.2vw;
     color: #000000;
-    float: left;
     opacity: 0.5; /*透明度 -*/
   }
 
@@ -1497,21 +1498,30 @@
     opacity: 0.8; /*透明度 -*/
   }
 
-
   .rightleftIcon {
     position: absolute;
-    left: 90%;
-    margin-top: 20px;
-    float: left;
+    right: 6%;
+    width: 10vw;
+    height: 4vh;
     opacity: 0.8; /*透明度 -*/
+  }
+  .backico-class{
+    position: absolute;
+    left: 10%;
+    width: 18%;
+  }
+  .homeico-class{
+    position: absolute;
+    left: 50%;
+    width: 18%;
   }
 
   .mapContext {
 
     margin-top: 0px;
     position: absolute;
-    height: 1080px;
-    width: 100%;
+    height: 100vh;
+    width: 100vw;
     float: left;
   }
 
@@ -1519,7 +1529,7 @@
     text-align: left;
     float: left;
     width: 60%;
-    font-size: 23px;
+    font-size: 2.0vh;
     margin-bottom: 10px;
   }
 
@@ -1530,37 +1540,50 @@
 
   .bottom-content {
     position: absolute;
-    bottom: 2%;
-    left: 50%;
+    bottom: 1%;
+    right: 1%;
     height: 25%;
     width: 50%;
-    float: left;
-
+  }
+  .bottom-left-class{
+    position: absolute;
+    width: 25%;
+    height: 25%;
+    bottom: 0vh;
+    right: 25vw;
   }
   .bottomleftEchart{
-    width: 480px;
-    height: 280px;
+    position: absolute;
+    top: 2%;
+    left: 2%;
+    width: 90%;
+    height:95%;
   }
   .bottom-right-class{
-    height: 290px;
+    position: absolute;
+    height: 28vh;
     background-image: url("../../assets/mapInfo.gif");
     background-size: 100% 100%;
+    width: 25%;
+    height: 25%;
+    bottom: 0vh;
+    right: 1vw;
     opacity: 0.8;
   }
   /** 右下角列表自动滚动*/
   .seamless-warp {
-    height: 250px;
+    height: 20vh;
     overflow: hidden;
   }
   .shipInfoItem ul {
     list-style: none;
   }
   .seamless-warp  li {
-    height: 40px;
-    line-height: 30px;
+    height: 5vh;
+    line-height: 2vh;
     display: flex;
     justify-content: space-around;
-    font-size: 15px;
+    font-size: 1.2vh;
   }/**/
 
   .middle-tool-content {
@@ -1612,6 +1635,28 @@
     outline: 0 !important;
     color: #409EFF !important;
     background: none !important;
+  }
+  .centTitle .el-submenu__title {
+    width: 12vw;
+    height: 4vh !important;
+    line-height: 3vh!important;
+    font-size: 60%;
+  }
+  /*主菜单栏*/
+  .centTitle .el-menu-item {
+    font-size: 60% !important;
+    background-color: cyan !important;
+  }
+  /*子菜单 外框*/
+  .centTitle .el-menu--collapse .el-menu .el-submenu, .el-menu--popup {
+    min-width: 10vw !important;
+    /*background-color: transparent!important;*/
+    opacity: 0.8;
+  }
+  /*子菜单*/
+  .centTitle .el-menu-item {
+    /*background-color: transparent  !important;*/
+    opacity: 0.8;
   }
 
   /*** table自定义 右下角表格变透明*/
@@ -1678,7 +1723,7 @@
   .background .el-dialog__header {
     color: white;
     text-align: center;
-    font-size: 24px;
+    font-size: 2.4vh;
     background-color: #5bb1ff;
     border-radius: 12px 12px 0px 0px;
   }
