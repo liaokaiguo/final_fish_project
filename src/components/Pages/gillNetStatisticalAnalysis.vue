@@ -98,6 +98,8 @@
 	export default {
 		data() {
 			return {
+				// 用户名
+				userName:"中电36所",
 				// Tips提示
 				tipMsg:{
 					thisPageName: '刺网作业方式统计分析',
@@ -108,7 +110,6 @@
 					checkTips: '查询结果',
 					resetTips: '重置条件',
 					saveTips: '保存结果',
-          name:"夹克",
 				},
 				// 默认时间设置
 				startDate: '2019-07-15',
@@ -481,7 +482,7 @@
 	  computed: {
 		  username() {
 			  let username = sessionStorage.getItem('ms_username');
-			  return username ? username : this.tipMsg.name;
+			  return username ? username : this.userName;
 		  }
 	  },
 		methods: {
