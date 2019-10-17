@@ -2,7 +2,7 @@
 	<div>
 		<!-- 背景 -->
 		<div id="backGround"></div>
-
+		<!--主要内容-->
 		<div id="main-content">
 			<!-- 主标题 -->
 			<div class="mainTitle">
@@ -64,10 +64,10 @@
 				<div id="leftbotBox">
 					<div class="msgTitle">
 						<span class="MainTitle">围网统计</span>
-						<router-link to="/purseSeineAnalysis">
+						<router-link to="/seineSA">
 							<span class="moreText">详情</span>
 						</router-link>
-						<router-link to="/purseSeineAnalysis">
+						<router-link to="/seineSA">
 							<img class="moreIco" src="../assets/moreICO.png" alt="更多">
 						</router-link>
 					</div>
@@ -123,19 +123,18 @@
 					</div>
 				</div>
 			</div>
-      <!--个人信息中心-->
-      <div class="userInfo">
-        <el-dropdown trigger="click" @command="handleCommand">
+			<!--个人信息中心-->
+			<div class="userInfo">
+				<el-dropdown trigger="click" @command="handleCommand">
             <span class="el-dropdown-link">
               <img class="user_logo" src="../assets/img/海天.jpg">
             </span>
-          <el-dropdown-menu slot="dropdown">
-            <el-dropdown-item command="userCenter">个人中心</el-dropdown-item>
-            <el-dropdown-item command="loginOut">退出</el-dropdown-item>
-          </el-dropdown-menu>
-        </el-dropdown>
-
-      </div>
+					<el-dropdown-menu slot="dropdown">
+						<el-dropdown-item command="userCenter">个人中心</el-dropdown-item>
+						<el-dropdown-item command="loginOut">退出</el-dropdown-item>
+					</el-dropdown-menu>
+				</el-dropdown>
+			</div>
 			<!--the whole right model-->
 			<div class="wholeright">
 				<div id="righttopBox">
@@ -149,7 +148,7 @@
 						</router-link>
 					</div>
 					<div class="msgContent">
-            <rightBottomEcharts v-bind:echartId="'rightTopEchartsId'" :OptionData="rightTopOption"></rightBottomEcharts>
+						<rightBottomEcharts v-bind:echartId="'rightTopEchartsId'" :OptionData="rightTopOption"></rightBottomEcharts>
 					</div>
 				</div>
 				<div id="rightmidBox">
@@ -163,16 +162,16 @@
 						</router-link>
 					</div>
 					<div class="msgContent">
-            <rightBottomEcharts v-bind:echartId="'rightMiddleEchartsId'" :OptionData="rightMiddleOption"></rightBottomEcharts>
+						<rightBottomEcharts v-bind:echartId="'rightMiddleEchartsId'" :OptionData="rightMiddleOption"></rightBottomEcharts>
 					</div>
 				</div>
 				<div id="rightbotBox">
 					<div class="msgTitle">
 						<span class="MainTitle">刺网统计</span>
-						<router-link to="gillNetStAnalysis">
+						<router-link to="gillSA">
 							<span class="moreText">详情</span>
 						</router-link>
-						<router-link to="gillNetStAnalysis">
+						<router-link to="gillSA">
 							<img class="moreIco" src="../assets/moreICO.png" alt="更多">
 						</router-link>
 					</div>
@@ -194,9 +193,9 @@
 						<router-link to="/passPort" class="lastbottomtext">渔船出入港</router-link>&nbsp;&nbsp;
 						<router-link to="/workModeSta" class="lastbottomtext">渔船作业方式统计及查询</router-link>&nbsp;&nbsp;
 						<router-link to="#" class="lastbottomtext">船舶明细</router-link>&nbsp;&nbsp;
-						<router-link to="/purseSeineAnalysis" class="lastbottomtext">围网作业方式统计及分析</router-link>&nbsp;&nbsp;
+						<router-link to="/seineSA" class="lastbottomtext">围网作业方式统计及分析</router-link>&nbsp;&nbsp;
 						<router-link to="/trawlSA" class="lastbottomtext">拖网作业方式统计及分析</router-link>&nbsp;&nbsp;
-						<router-link to="/gillNetStAnalysis" class="lastbottomtext">刺网作业方式统计及分析</router-link>&nbsp;&nbsp;
+						<router-link to="/gillSA" class="lastbottomtext">刺网作业方式统计及分析</router-link>&nbsp;&nbsp;
 						<router-link to="/stowSA" class="lastbottomtext">张网作业方式统计及分析</router-link>&nbsp;&nbsp;
 					</li>
 				</ul>
@@ -212,15 +211,17 @@
 	// the common echarts vue including the right-top,right-middle and right-bottom echarts
 	import rightBottomEcharts from "@/components/common/RightEchartsUtils";
 	import BottomNav from "@/components/common/BottomNav";
-	//the gill net statistical analysis in the fill
-	import gillNetStAnalysis from "@/components/Pages/gillNetStatisticalAnalysis";
-	import trawlSA from "@/components/Pages/trawlStatisticalAnalysis";
-	import seineSA from "@/components/Pages/seineStatisticalAnalysis";
-	import stowSA from "@/components/Pages/stowStatisticalAnalysis";
+	// 刺网
+	import gillSA from '@/components/Pages/gillStatisticalAnalysis'
+	// 拖网
+	import trawlSA from '@/components/Pages/trawlStatisticalAnalysis'
+	// 围网
+	import seineSA from '@/components/Pages/seineStatisticalAnalysis'
+	// 张网
+	import stowSA from '@/components/Pages/stowStatisticalAnalysis'
 	import mapShow from "@/components/Pages/BaiduMapShow";
 	import passPort from "@/components/Pages/EntryAndExitPort";
 	import workModeSta from "@/components/Pages/WorkModeStatistics";
-	import purseSeineAnalysis from "@/components/Pages/purseSeineAnalysis";
 
 	export default {
 		name: "WelCome",
@@ -247,12 +248,12 @@
 				shipLocationArr: [], //渔船位置数组
 				//define
 				leftMiddleOption: {
-          grid: {
-            left: "1%",
-            top: "10%",
-            width: "75%",
-            height: "100%",
-          },
+					grid: {
+						left: "1%",
+						top: "10%",
+						width: "75%",
+						height: "100%",
+					},
 					tooltip: {
 						trigger: "item",
 						formatter: "{a} <br/>{b} : {c} ({d}%)"
@@ -264,7 +265,7 @@
 						data: ["非法作业", "正常作业"],
 						textStyle: {
 							color: "default",
-              fontSize:"90%"
+							fontSize:"90%"
 						}
 					},
 					series: [{
@@ -272,13 +273,13 @@
 						type: "pie",
 						radius: "65%",
 						center: ["40%", "45%"],
-            label:{
+						label:{
 							fontSize:"90%",
-            },
-            labelLine:{
+						},
+						labelLine:{
 							length:8,
-              length2:6
-            },
+							length2:6
+						},
 						data: [
 							// { value: 890, name: "正常作业" },
 							// { value: 200, name: "非法作业" }// 请求后台
@@ -295,12 +296,12 @@
 				},
 				leftBottomOption: {
 					color: ["#f44"],
-          grid: {
-            left: "15%",
-            top: "10%",
-            width: "75%",
-            height: "75%",
-          },
+					grid: {
+						left: "15%",
+						top: "10%",
+						width: "75%",
+						height: "75%",
+					},
 					tooltip: {
 						trigger: "axis",
 						axisPointer: {
@@ -391,12 +392,12 @@
 				},
 				middleBottomLOption: {
 					color: ["#5b9bff", "#ed7d31"],
-          grid: {
-            left: "15%",
-            top: "10%",
-            width: "75%",
-            height: "75%",
-          },
+					grid: {
+						left: "15%",
+						top: "10%",
+						width: "75%",
+						height: "75%",
+					},
 					tooltip: {
 						trigger: "axis",
 						axisPointer: {
@@ -469,12 +470,12 @@
 				},
 				middleBottomROption: {
 					color: ["#f44"],
-          grid: {
-            left: "15%",
-            top: "10%",
-            width: "75%",
-            height: "75%",
-          },
+					grid: {
+						left: "15%",
+						top: "10%",
+						width: "75%",
+						height: "75%",
+					},
 					tooltip: {
 						trigger: "axis",
 						axisPointer: {
@@ -553,12 +554,12 @@
 						orient: "vertical",
 						left: "53%",
 						top: "20%",
-            width: "10%",
-            height:"70%",
+						width: "10%",
+						height:"70%",
 						data: ["围网","拖网", "张网", "刺网", "其它"],
 						textStyle: {
 							color: "default",
-              fontSize:12
+							fontSize:12
 						}
 					},
 					series: [{
@@ -596,26 +597,26 @@
 						"#eea5d1"]
 				},
 				rightMiddleOption: {
-          grid: {
-            left: "1%",
-            top: "10%",
-            width: "75%",
-            height: "100%",
-          },
+					grid: {
+						left: "1%",
+						top: "10%",
+						width: "75%",
+						height: "100%",
+					},
 					tooltip: {
 						trigger: "item",
 						formatter: "{a} <br/>{b} : {c} ({d}%)"
 					},
 					legend: {
 						orient: "vertical",
-            left: "53%",
-            top: "20%",
-            width: "10%",
-            height:"70%",
+						left: "53%",
+						top: "20%",
+						width: "10%",
+						height:"70%",
 						data: ["围网","拖网", "张网","刺网", "其它" ],
 						textStyle: {
 							color: "default",
-              fontSize:12
+							fontSize:12
 						}
 					},
 					series: [{
@@ -628,10 +629,10 @@
 							// { value: 123, name: "张网" },
 							// { value: 200, name: "围网" }
 						],
-            labelLine:{
-              length:8,
-              length2:6,
-            },
+						labelLine:{
+							length:8,
+							length2:6,
+						},
 						itemStyle: {
 							emphasis: {
 								shadowBlur: 10,
@@ -646,12 +647,12 @@
 				},
 				rightBottomOption: {
 					color: ["#f44"],
-          grid: {
-            left: "15%",
-            top: "10%",
-            width: "75%",
-            height: "75%",
-          },
+					grid: {
+						left: "15%",
+						top: "10%",
+						width: "75%",
+						height: "75%",
+					},
 					tooltip: {
 						trigger: "axis",
 						axisPointer: {
@@ -747,13 +748,12 @@
 			middleBottomLREcharts,
 			rightBottomEcharts,
 			BottomNav,
-			gillNetStAnalysis,
+			gillSA,
 			trawlSA,
 			seineSA,
 			mapShow,
 			passPort,
 			workModeSta,
-			purseSeineAnalysis,
 		},
 
 		computed: {
@@ -1404,7 +1404,7 @@
 		left: 4%;
 		top: 5%;
 		padding: 0;
-    position: absolute;
+		position: absolute;
 	}
 
 	table {
@@ -1525,30 +1525,30 @@
 		background-repeat: no-repeat;
 	}
 
-  /* #2.5 右上角个人信息中心栏目 */
-  #main-content .userInfo{
-    position:absolute;
-    right:2.8vw;
-    width:5vh;
-    margin-top: 3vh;
-    height: 5vh;
-    /*background-color: #a2cdff;*/
-  }
-  #main-content .el-dropdown-link {
-    display: inline-block;
-    width:5vh;
-    height:5vh;
-    cursor: pointer;
-    color: #fbffa4;
-  }
-  #main-content .user_logo{
-    position: absolute;
-    left:0vw;
-    width: 4.6vh;
-    height: 4.6vh;
-    top:0.6vh;
-    border-radius: 10%;
-  }
+	/* #2.5 右上角个人信息中心栏目 */
+	#main-content .userInfo{
+		position:absolute;
+		right:2.8vw;
+		width:5vh;
+		margin-top: 3vh;
+		height: 5vh;
+		/*background-color: #a2cdff;*/
+	}
+	#main-content .el-dropdown-link {
+		display: inline-block;
+		width:5vh;
+		height:5vh;
+		cursor: pointer;
+		color: #fbffa4;
+	}
+	#main-content .user_logo{
+		position: absolute;
+		left:0vw;
+		width: 4.6vh;
+		height: 4.6vh;
+		top:0.6vh;
+		border-radius: 10%;
+	}
 
 	/* #2.6 底部栏目 */
 	/*the last bottom image and text style*/
