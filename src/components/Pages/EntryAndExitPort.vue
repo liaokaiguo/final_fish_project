@@ -285,22 +285,23 @@ table {
 /*the center title sytle*/
 .centTitle {
   position: absolute;
-  float: left;
   left: 35vw;
   width: 30vw;
-  font-family: FZDHTJW--GB1-0;
-  font-size: 4.2vh;
-  font-weight: normal;
-  font-stretch: normal;
+  top: 0;
+  height: 5.4vh;
+  text-align:center;
+  font-family: Microsoft YaHei;
+  font-size: 2.3vw;
+  display: inline-block;
   letter-spacing: 0.2vw;
-  color: #58a0ee;
+  color: #5bb1ff;
 }
 .lefttext {
   position: absolute;
   float: left;
   left: 3%;
   top: 5vh;
-  font-size: 3.5vh;
+  font-size: 1.8vw;
   color: #ffffff;
 }
 .rightleftIcon {
