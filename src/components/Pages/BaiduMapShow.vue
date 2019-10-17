@@ -394,17 +394,17 @@
                     }
                 }, //时间选择项
                 selectLocation: {
-                    boatId: '',
-                    sailingTime: '',
+                    boatId: '29469',
+                    sailingTime: '2018-10-17 16:53:39',
                     workType: [],
                     businessType: [],
 
                 },//位置筛选条件名称
                 selectTrack: {
-                    boatId: '',
-                    beginDate: '',
-                    endDate: '',
-                    algorithmMode: '',
+                    boatId: '34517',
+                    beginDate: '2018-10-18 08:30:00',
+                    endDate: '2018-10-18 11:30:00',
+                    algorithmMode: '2',
                 },//轨迹筛选条件名称
                 shipTrackFormRules: {
                     boatId: [
