@@ -210,18 +210,8 @@
 	import middleBottomLREcharts from "@/components/common/MiddleBottomEchartsUtils";
 	// the common echarts vue including the right-top,right-middle and right-bottom echarts
 	import rightBottomEcharts from "@/components/common/RightEchartsUtils";
+
 	import BottomNav from "@/components/common/BottomNav";
-	// 刺网
-	import gillSA from '@/components/Pages/gillStatisticalAnalysis'
-	// 拖网
-	import trawlSA from '@/components/Pages/trawlStatisticalAnalysis'
-	// 围网
-	import seineSA from '@/components/Pages/seineStatisticalAnalysis'
-	// 张网
-	import stowSA from '@/components/Pages/stowStatisticalAnalysis'
-	import mapShow from "@/components/Pages/BaiduMapShow";
-	import passPort from "@/components/Pages/EntryAndExitPort";
-	import workModeSta from "@/components/Pages/WorkModeStatistics";
 
 	export default {
 		name: "WelCome",
@@ -741,16 +731,9 @@
 			};
 		},
 		components: {
-			// LeftTop
 			middleBottomLREcharts,
 			rightBottomEcharts,
 			BottomNav,
-			gillSA,
-			trawlSA,
-			seineSA,
-			mapShow,
-			passPort,
-			workModeSta,
 		},
 
 		computed: {
