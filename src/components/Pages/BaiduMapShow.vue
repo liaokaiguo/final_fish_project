@@ -556,7 +556,7 @@
                         {
                             name: '数量',
                             type: 'bar',
-                            data: [100, 100, 100, 100, 100, 100, 100],
+                            data: [0, 0, 0, 0, 0, 0, 0],
                             barWidth: '8vw',
                             barGap: 10,
                             smooth: true,
@@ -890,7 +890,7 @@
                         var twoMinAgo
 
                         //时间不填，则默认时间为2分钟前到现在
-                        if (this.selectLocation.sailingTime === '') {
+                        if (this.selectLocation.sailingTime === ''||this.selectLocation.sailingTime === null) {
                             sailingTime = this.getFormatTime(date)
                             date.setTime(date.getTime() - 120 * 1000);// 2分钟前
                             twoMinAgo = this.getFormatTime(date)
@@ -939,10 +939,12 @@
                                 })
                             } else {
                                 //画底部左半边echarts
-                                this.drawBottomLeftCharts();
-                                this.addShipMarker();
+                                // this.drawBottomLeftCharts();
+                                // this.addShipMarker();
                             }
 
+                            this.addShipMarker();
+                            this.drawBottomLeftCharts();
                         }).catch((response) => {
                             console.log(response)
                         })
