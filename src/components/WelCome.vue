@@ -72,11 +72,7 @@
 						</router-link>
 					</div>
 					<div class="msgContent">
-						<el-row>
-							<el-col :span="24">
-								<rightBottomEcharts v-bind:echartId="'leftBottomEchartsId'" :OptionData="leftBottomOption"></rightBottomEcharts>
-							</el-col>
-						</el-row>
+            <rightBottomEcharts v-bind:echartId="'leftBottomEchartsId'" :OptionData="leftBottomOption"></rightBottomEcharts>
 					</div>
 				</div>
 			</div>
@@ -95,11 +91,7 @@
 						</router-link>
 					</div>
 					<div class="msgContent">
-						<el-row>
-							<el-col :span="24">
-								<middleBottomLREcharts v-bind:echartId="'middleBottomLEchartsId'" :OptionData="middleBottomLOption"></middleBottomLREcharts>
-							</el-col>
-						</el-row>
+            <middleBottomLREcharts v-bind:echartId="'middleBottomLEchartsId'" :OptionData="middleBottomLOption"></middleBottomLREcharts>
 					</div>
 				</div>
 				<div id="midbotrightBox">
@@ -115,11 +107,7 @@
 						</router-link>
 					</div>
 					<div class="msgContent">
-						<el-row>
-							<el-col :span="24">
-								<middleBottomLREcharts v-bind:echartId="'middleBottomREchartsId'" :OptionData="middleBottomROption"></middleBottomLREcharts>
-							</el-col>
-						</el-row>
+            <middleBottomLREcharts v-bind:echartId="'middleBottomREchartsId'" :OptionData="middleBottomROption"></middleBottomLREcharts>
 					</div>
 				</div>
 			</div>
@@ -176,11 +164,7 @@
 						</router-link>
 					</div>
 					<div class="msgContent">
-						<el-row>
-							<el-col :span="24">
-								<rightBottomEcharts v-bind:echartId="'rightBottomEchartsId'" :OptionData="rightBottomOption"></rightBottomEcharts>
-							</el-col>
-						</el-row>
+            <rightBottomEcharts v-bind:echartId="'rightBottomEchartsId'" :OptionData="rightBottomOption"></rightBottomEcharts>
 					</div>
 				</div>
 			</div>
@@ -249,25 +233,25 @@
 					},
 					legend: {
 						orient: "vertical",
-						right: "1%",
+						right: "8%",
 						top: "10%",
 						data: ["非法作业", "正常作业"],
 						textStyle: {
 							color: "default",
-							fontSize:"90%"
+							fontSize:"120%"
 						}
 					},
 					series: [{
 						name: "占比情况",
 						type: "pie",
 						radius: "65%",
-						center: ["40%", "45%"],
+						center: ["42%", "55%"],
 						label:{
-							fontSize:"90%",
+							fontSize:"120%",
 						},
 						labelLine:{
-							length:8,
-							length2:6
+							length:18,
+							length2:12
 						},
 						data: [
 							// { value: 890, name: "正常作业" },
@@ -324,6 +308,7 @@
 					}],
 					yAxis: [{
 						type: "value",
+            minInterval:10,
 						axisLine: {
 							lineStyle: {
 								color: "#5bbdff"
@@ -420,6 +405,7 @@
 					}],
 					yAxis: [{
 						type: "value",
+            minInterval:10,
 						axisLine: {
 							lineStyle: {
 								color: "#5b9bff"
@@ -498,6 +484,7 @@
 					}],
 					yAxis: [{
 						type: "value",
+			      minInterval:10,
 						axisLine: {
 							lineStyle: {
 								color: "#5bbdff"
@@ -541,21 +528,22 @@
 					},
 					legend: {
 						orient: "vertical",
-						left: "60%",
-						top: "10%",
+						left: "70%",
+						top: "8%",
 						data: ["围网","拖网", "张网", "刺网", "其它"],
-            itemWidth:20,
-            itemHeight:12,
+            // itemWidth:20,
+            // itemHeight:14,
+            // itemGap:12,
 						textStyle: {
 							color: "default",
-							fontSize:"100%",
+							fontSize:"120%",
 						}
 					},
 					series: [{
 						name: "统计分析",
 						type: "pie",
-						center: ["30%", "50%"],
-						radius: ["35%", "70%"],
+						center: ["38%", "50%"],
+						radius: ["35%", "75%"],
 						avoidLabelOverlap: false,
 						label: {
 							normal: {
@@ -565,7 +553,7 @@
 							emphasis: {
 								show: true,
 								textStyle: {
-									fontSize: "100%",
+									fontSize: "140%",
 									fontWeight: "bold"
 								}
 							}
@@ -598,39 +586,30 @@
 					},
 					legend: {
 						orient: "vertical",
-						left: "60%",
-						top: "10%",
+						left: "70%",
+						top: "8%",
 						data: ["围网","拖网", "张网","刺网", "其它" ],
 						textStyle: {
 							color: "default",
-							fontSize:"100%"
+							fontSize:"120%"
 						}
 					},
 					series: [{
 						name: "占比情况",
 						type: "pie",
-						radius: "65%",
-						center: ["34%", "52%"],
+						radius: "75%",
+						center: ["38%", "55%"],
 						data: [
 							// { value: 890, name: "拖网" },
 							// { value: 123, name: "张网" },
 							// { value: 200, name: "围网" }
 						],
-						labelLine:{
-							length:8,
-							length2:6,
-						},
-						itemStyle: {
-							emphasis: {
-								shadowBlur: 10,
-								shadowOffsetX: 0,
-								shadowColor: "rgba(0, 0, 0, 0.5)"
-
-							}
-						}
+            label:{
+							show:false
+            }
 					}],
-					color: ["#62c1ff", "#eea5d1", "#d5fdff","#8ceed9",
-						"#beb1ff"]
+          color: ["#6bc1ff", "#3cedbc", "#eeb110", "#ffd989",
+            "#eea5d1"]
 				},
 				rightBottomOption: {
 					color: ["#f44"],
@@ -673,6 +652,7 @@
 					}],
 					yAxis: [{
 						type: "value",
+			      minInterval:10,
 						axisLine: {
 							lineStyle: {
 								color: "#5bbdff"

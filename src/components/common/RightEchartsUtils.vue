@@ -1,8 +1,6 @@
 <template>
-  <div>
-    <!--<div v-bind:id="echartId" :data="OptionData" class="middleBottomLREcharts"></div>-->
     <div v-bind:id="echartId" :data="OptionData" class="rightBottomEcharts"></div>
-  </div>
+
 </template>
 
 <script>
@@ -67,11 +65,11 @@ table {
   list-style: none;
 }
 .rightBottomEcharts {
-  width: 22vw;
-  height: 23vh;
+  width: 100%;
+  height: 100%;
   opacity: 1;
   left:0%;
-  top: 1%;
+  top: 0%;
   position: absolute;
 }
 </style>

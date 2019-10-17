@@ -67,11 +67,11 @@ table {
   list-style: none;
 }
 .middleBottomLREcharts{
-  width: 22vw;
-  height: 23vh;
+  width: 100%;
+  height: 100%;
   opacity: 1;
   left:0%;
-  top: 1%;
+  top: 0%;
   position: absolute;
 }
 </style>
