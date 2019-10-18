@@ -21,20 +21,28 @@
 				userName: '中电36所', //默认登录用户名
 			}
 		},
-		methods:{
+      created() {
+          this.getUserName();
+      },
+      methods: {
+          getUserName() {
+              let username = sessionStorage.getItem('ms_username');
+              return this.userName = (username != null) ? username : this.userName;
+          },
 			/*用户中心/退出*/
-			handleCommand(command) {
-				if (command == 'loginOut') {
-					sessionStorage.removeItem('ms_username')
-					this.$router.push('/');
-				} else if (command == 'userCenter') {
-					this.$message({
-						message: '尊敬的 ' + this.userName + ' ，您好！',
-						type: 'warning',
-					});
-				}
-			},
-		}
+          handleCommand(command) {
+              if (command == 'loginOut') {
+                  sessionStorage.removeItem('ms_username')
+                  this.$router.push('/');
+              } else if (command == 'userCenter') {
+                  this.$message({
+                      message: '尊敬的 ' + this.userName + ' ，您好！',
+                      type: 'info',
+                      duration: '3000',
+                  });
+              }
+          },
+      }
 	}
 </script>
 

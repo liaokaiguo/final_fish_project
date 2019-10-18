@@ -18,8 +18,12 @@
       <NavigaIcon></NavigaIcon>
       <!--个人信息中心-->
       <UserInfo></UserInfo>
+      <!-- 左侧透明导航栏 -->
+      <LeftNavigaList></LeftNavigaList>
     </div>
+
     <div>
+      <!--搜索框 -->
       <div class="searchBox">
         <el-form ref="selectForm" :model="select" :inline="true"
                  size="small"
@@ -66,6 +70,7 @@
         </el-form>
       </div>
 
+      <!-- 数据表显示-->
       <div class="dataBox">
         <el-table
           height="98%"
@@ -121,12 +126,14 @@
     import MainTitle from "@/components/common/MainTitle";
     import NavigaIcon from "@/components/common/NavigaIcon";
     import UserInfo from "@/components/common/UserInfo";
+    import LeftNavigaList from "@/components/common/LeftNavigaList";
 
     export default {
         components: {
             MainTitle,
             UserInfo,
             NavigaIcon,
+            LeftNavigaList
         },
         data() {
             return {
@@ -349,7 +356,7 @@
     position: absolute;
     width: 80%;
     height: 10%;
-    top: 12vh;
+    top: 10vh;
     left: 10vw;
   }
 
@@ -365,7 +372,7 @@
     position: absolute;
     width: 80%;
     height: 72%;
-    top: 20vh;
+    top: 18vh;
     left: 10vw;
   }
 
