@@ -39,6 +39,7 @@
                       message: '尊敬的 ' + this.userName + ' ，您好！',
                       type: 'info',
                       duration: '3000',
+	                  showClose: 'true',
                   });
               }
           },
