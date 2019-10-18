@@ -8,9 +8,23 @@
 			<div class="mainTitle">
 				<p class="title" @click="refreshPage" v-bind:title="tipMsg.thisPageName">渔船作业方式智能识别系统</p>
 			</div>
+			<!-- 右上角导航按钮 -->
+			<NavigaIcon></NavigaIcon>
+			<!--个人信息中心-->
+			<div class="userInfo">
+				<el-dropdown trigger="click" @command="handleCommand">
+            <span class="el-dropdown-link">
+                <img class="user_logo" src="../assets/img/海天.jpg">
+            </span>
+					<el-dropdown-menu slot="dropdown">
+						<el-dropdown-item command="userCenter">个人中心</el-dropdown-item>
+						<el-dropdown-item command="loginOut">退出</el-dropdown-item>
+					</el-dropdown-menu>
+				</el-dropdown>
+			</div>
 
-			<!--the left/ middle /right/ model-->
-			<!--the left model-->
+			<!--主要内容分为3栏-->
+			<!--左模块-->
 			<div class="wholeleft">
 				<!--the left-top model code-->
 				<div id="lefttopBox">
@@ -72,12 +86,11 @@
 						</router-link>
 					</div>
 					<div class="msgContent">
-            <rightBottomEcharts v-bind:echartId="'leftBottomEchartsId'" :OptionData="leftBottomOption"></rightBottomEcharts>
+						<rightBottomEcharts v-bind:echartId="'leftBottomEchartsId'" :OptionData="leftBottomOption"></rightBottomEcharts>
 					</div>
 				</div>
 			</div>
-
-			<!--the middle model-->
+			<!--中模块-->
 			<div class="wholemiddle">
 				<div class="middletopImage" id="MiddleTopMainMap"></div>
 				<div id="midbotleftBox">
@@ -91,12 +104,10 @@
 						</router-link>
 					</div>
 					<div class="msgContent">
-            <middleBottomLREcharts v-bind:echartId="'middleBottomLEchartsId'" :OptionData="middleBottomLOption"></middleBottomLREcharts>
+						<middleBottomLREcharts v-bind:echartId="'middleBottomLEchartsId'" :OptionData="middleBottomLOption"></middleBottomLREcharts>
 					</div>
 				</div>
 				<div id="midbotrightBox">
-
-
 					<div class="msgTitle">
 						<span class="msgMainTitle">张网统计</span>
 						<router-link to="/stowSA">
@@ -107,23 +118,11 @@
 						</router-link>
 					</div>
 					<div class="msgContent">
-            <middleBottomLREcharts v-bind:echartId="'middleBottomREchartsId'" :OptionData="middleBottomROption"></middleBottomLREcharts>
+						<middleBottomLREcharts v-bind:echartId="'middleBottomREchartsId'" :OptionData="middleBottomROption"></middleBottomLREcharts>
 					</div>
 				</div>
 			</div>
-			<!--个人信息中心-->
-			<div class="userInfo">
-				<el-dropdown trigger="click" @command="handleCommand">
-            <span class="el-dropdown-link">
-              <img class="user_logo" src="../assets/img/海天.jpg">
-            </span>
-					<el-dropdown-menu slot="dropdown">
-						<el-dropdown-item command="userCenter">个人中心</el-dropdown-item>
-						<el-dropdown-item command="loginOut">退出</el-dropdown-item>
-					</el-dropdown-menu>
-				</el-dropdown>
-			</div>
-			<!--the whole right model-->
+			<!--右模块-->
 			<div class="wholeright">
 				<div id="righttopBox">
 					<div class="msgTitle">
@@ -164,11 +163,10 @@
 						</router-link>
 					</div>
 					<div class="msgContent">
-            <rightBottomEcharts v-bind:echartId="'rightBottomEchartsId'" :OptionData="rightBottomOption"></rightBottomEcharts>
+						<rightBottomEcharts v-bind:echartId="'rightBottomEchartsId'" :OptionData="rightBottomOption"></rightBottomEcharts>
 					</div>
 				</div>
 			</div>
-
 			<!--底部导航栏-->
 			<BottomNav></BottomNav>
 		</div>
@@ -183,6 +181,7 @@
 	import rightBottomEcharts from "@/components/common/RightEchartsUtils";
 
 	import BottomNav from "@/components/common/BottomNav";
+	import NavigaIcon from "@/components/common/NavigaIcon";
 
 	export default {
 		name: "WelCome",
@@ -295,7 +294,7 @@
 					}],
 					yAxis: [{
 						type: "value",
-            minInterval:10,
+						minInterval:10,
 						axisLine: {
 							lineStyle: {
 								color: "#5bbdff"
@@ -392,7 +391,7 @@
 					}],
 					yAxis: [{
 						type: "value",
-            minInterval:10,
+						minInterval:10,
 						axisLine: {
 							lineStyle: {
 								color: "#5b9bff"
@@ -471,7 +470,7 @@
 					}],
 					yAxis: [{
 						type: "value",
-			      minInterval:10,
+						minInterval:10,
 						axisLine: {
 							lineStyle: {
 								color: "#5bbdff"
@@ -518,9 +517,9 @@
 						left: "70%",
 						top: "8%",
 						data: ["围网","拖网", "张网", "刺网", "其它"],
-            // itemWidth:20,
-            // itemHeight:14,
-            // itemGap:12,
+						// itemWidth:20,
+						// itemHeight:14,
+						// itemGap:12,
 						textStyle: {
 							color: "default",
 							fontSize:"120%",
@@ -591,12 +590,12 @@
 							// { value: 123, name: "张网" },
 							// { value: 200, name: "围网" }
 						],
-            label:{
+						label:{
 							show:false
-            }
+						}
 					}],
-          color: ["#6bc1ff", "#3cedbc", "#eeb110", "#ffd989",
-            "#eea5d1"]
+					color: ["#6bc1ff", "#3cedbc", "#eeb110", "#ffd989",
+						"#eea5d1"]
 				},
 				rightBottomOption: {
 					color: ["#f44"],
@@ -639,7 +638,7 @@
 					}],
 					yAxis: [{
 						type: "value",
-			      minInterval:10,
+						minInterval:10,
 						axisLine: {
 							lineStyle: {
 								color: "#5bbdff"
@@ -701,8 +700,8 @@
 			middleBottomLREcharts,
 			rightBottomEcharts,
 			BottomNav,
+			NavigaIcon,
 		},
-
 		computed: {
 			username() {
 				let username = sessionStorage.getItem('ms_username');

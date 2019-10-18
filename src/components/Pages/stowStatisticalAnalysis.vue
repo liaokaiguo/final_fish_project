@@ -10,12 +10,7 @@
 				<p class="title" @click="refreshPage" v-bind:title="tipMsg.thisPageName">张网作业方式统计分析</p>
 			</div>
 			<!-- 右上角导航按钮 -->
-			<div class="navigaIcon" id="navigaIcon">
-				<img class="goBack" src="../../assets/backico.png" alt="后退" v-on:click="goBack"
-				     v-bind:title="tipMsg.goBack">
-				<img class="goHome" src="../../assets/homeico.png" alt="主页" v-on:click="goHome"
-				     v-bind:title="tipMsg.goHome">
-			</div>
+			<NavigaIcon></NavigaIcon>
 			<!--个人信息中心-->
 			<div class="userInfo">
 				<el-dropdown trigger="click" @command="handleCommand">
@@ -95,6 +90,9 @@
 
 <script>
 	//张网 stow net statistic and analysis
+	import BottomNav from "@/components/common/BottomNav";
+	import NavigaIcon from "@/components/common/NavigaIcon";
+
 	export default {
 		data() {
 			return {
@@ -474,8 +472,10 @@
 				radarData:[],
 			};
 		},
-
-
+		components: {
+			BottomNav,
+			NavigaIcon,
+		},
 		mounted() {
 			this.initCharts();
 		},
@@ -790,30 +790,7 @@
 	}
 
 	/* #2.2 右上角导航按钮 */
-	#main-content .navigaIcon {
-		position: absolute;
-		right: 2vw;
-		width: 15vw;
-		height: 5vh;
-		margin-top: 3.3vh;
-		margin-bottom: 0.1vh;
-		/* background-color 测试用 */
-		/* background-color: #FFFFFF; */
-	}
 
-	#main-content .navigaIcon .goBack {
-		cursor: pointer;
-		position: absolute;
-		right: 50%;
-		height: 90%;
-	}
-
-	#main-content .navigaIcon .goHome {
-		cursor: pointer;
-		position: absolute;
-		right: 28%;
-		height: 90%;
-	}
 	/*右上角个人信息中心*/
 	#main-content .userInfo{
 		position:absolute;

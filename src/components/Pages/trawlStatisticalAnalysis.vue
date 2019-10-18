@@ -10,12 +10,7 @@
 				<p class="title" @click="refreshPage" v-bind:title="tipMsg.thisPageName">拖网作业方式统计分析</p>
 			</div>
 			<!-- 右上角导航按钮 -->
-			<div class="navigaIcon" id="navigaIcon">
-				<img class="goBack" src="../../assets/backico.png" alt="后退" v-on:click="goBack"
-				     v-bind:title="tipMsg.goBack">
-				<img class="goHome" src="../../assets/homeico.png" alt="主页" v-on:click="goHome"
-				     v-bind:title="tipMsg.goHome">
-			</div>
+			<NavigaIcon></NavigaIcon>
 			<!--个人信息中心-->
 			<div class="userInfo">
 				<el-dropdown trigger="click" @command="handleCommand">
@@ -94,6 +89,9 @@
 
 <script>
 	//拖网 stow net statistic and analysis
+	import BottomNav from "@/components/common/BottomNav";
+	import NavigaIcon from "@/components/common/NavigaIcon";
+
 	export default {
 		data() {
 			return {
@@ -473,8 +471,10 @@
 				radarData:[],
 			};
 		},
-
-
+		components: {
+			BottomNav,
+			NavigaIcon,
+		},
 		mounted() {
 			this.initCharts();
 		},
