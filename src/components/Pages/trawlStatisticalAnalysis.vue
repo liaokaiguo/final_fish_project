@@ -457,10 +457,7 @@
 			this.initCharts();
 		},
 		computed: {
-			username() {
-				let username = sessionStorage.getItem('ms_username');
-				return username ? username : this.userName;
-			}
+
 		},
 		methods: {
 			//初始化图表

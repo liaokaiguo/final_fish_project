@@ -699,10 +699,7 @@
 			BottomNav,
 		},
 		computed: {
-			username() {
-				let username = sessionStorage.getItem('ms_username');
-				return username ? username : this.userName;
-			}
+
 		},
 		mounted() {
 			this.initPortData() // 出港入港数量
