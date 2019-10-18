@@ -1,4 +1,5 @@
 <template>
+	<!-- 右上角导航按钮 -->
 	<div class="navigaIcon" id="navigaIconID">
 		<img class="goBack" src="../../assets/backico.png" alt="后退" v-on:click="goBack"
 		     v-bind:title="tipMsg.goBack">
@@ -11,6 +12,7 @@
 	export default {
 		data() {
 			return {
+				name: "NavigaIcon",
 				// Tips提示
 				tipMsg:{
 					goBack: '后退',

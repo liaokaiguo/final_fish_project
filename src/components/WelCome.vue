@@ -11,18 +11,7 @@
 			<!-- 右上角导航按钮 -->
 			<NavigaIcon></NavigaIcon>
 			<!--个人信息中心-->
-			<div class="userInfo">
-				<el-dropdown trigger="click" @command="handleCommand">
-            <span class="el-dropdown-link">
-                <img class="user_logo" src="../assets/img/海天.jpg">
-            </span>
-					<el-dropdown-menu slot="dropdown">
-						<el-dropdown-item command="userCenter">个人中心</el-dropdown-item>
-						<el-dropdown-item command="loginOut">退出</el-dropdown-item>
-					</el-dropdown-menu>
-				</el-dropdown>
-			</div>
-
+			<UserInfo></UserInfo>
 			<!--主要内容分为3栏-->
 			<!--左模块-->
 			<div class="wholeleft">
@@ -182,6 +171,7 @@
 
 	import BottomNav from "@/components/common/BottomNav";
 	import NavigaIcon from "@/components/common/NavigaIcon";
+	import UserInfo from "@/components/common/UserInfo";
 
 	export default {
 		name: "WelCome",
@@ -189,11 +179,7 @@
 			return {
 				tipMsg:{
 					thisPageName: '渔船作业方式智能识别系统',
-					goBack: '后退',
-					goHome: '主页',
 				},
-				userName: '中电36所', //默认登录用户名
-
 				//fishing number out or in the harbour
 				LoutNum: "",
 				LinNum: "",
@@ -697,6 +683,7 @@
 			};
 		},
 		components: {
+			UserInfo,
 			middleBottomLREcharts,
 			rightBottomEcharts,
 			BottomNav,
@@ -733,14 +720,6 @@
 		methods: {
 			refreshPage() {
 				this.$router.go(0);
-			},
-
-			goBack() {
-				this.$router.back(-1);
-			},
-
-			goHome() {
-				this.$router.push('/welcome')
 			},
 
 			/*获取当前日期yyyy-MM-dd HH:mm:ss*/
@@ -1465,29 +1444,6 @@
 	}
 
 	/* #2.5 右上角个人信息中心栏目 */
-	#main-content .userInfo{
-		position:absolute;
-		right:2.8vw;
-		width:5vh;
-		margin-top: 3vh;
-		height: 5vh;
-		/*background-color: #a2cdff;*/
-	}
-	#main-content .el-dropdown-link {
-		display: inline-block;
-		width:5vh;
-		height:5vh;
-		cursor: pointer;
-		color: #fbffa4;
-	}
-	#main-content .user_logo{
-		position: absolute;
-		left:0vw;
-		width: 4.6vh;
-		height: 4.6vh;
-		top:0.6vh;
-		border-radius: 10%;
-	}
 
 	/* #2.6 底部栏目 */
 
