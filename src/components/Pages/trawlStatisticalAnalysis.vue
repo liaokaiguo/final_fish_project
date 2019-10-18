@@ -743,26 +743,6 @@
 	}
 
 	/* #2.1 中心标题样式 */
-	.mainTitle {
-		position: absolute;
-		left: 35vw;
-		width: 30vw;
-		top: 0;
-		height: 5.4vh;
-		text-align:center;
-		/* background-color 测试用 */
-		/*background-color: #FFFFFF;*/
-	}
-	.mainTitle .title {
-		font-family: Microsoft YaHei;
-		color: #5bb1ff;
-		cursor: pointer;
-		letter-spacing: 0.2vw;
-		font-size: 4.3vh;
-		display: inline-block;
-		/* background-color 测试用 */
-		/*background-color: #ff5234;*/
-	}
 
 	/* #2.2 右上角导航按钮 */
 	#main-content .navigaIcon {
