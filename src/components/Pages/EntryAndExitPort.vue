@@ -3,7 +3,9 @@
     <div>
 
       <div class="lefttext">渔船出入港查询</div>
-      <div class="centTitle">渔船作业方式智能识别系统</div>
+      <!-- 主标题 -->
+      <MainTitle v-bind:titleName="titleName" v-bind:tip="tipMsg"></MainTitle>
+      <!--      <div class="centTitle">渔船作业方式智能识别系统</div>-->
       <!--          <div class="rightleftIcon">-->
       <!--            <span v-on:click="$router.back(-1)">-->
       <!--              <img class= "backico-class " src="../../assets/backico.png" style="cursor:pointer" alt="返回">-->
@@ -116,16 +118,20 @@
 </template>
 <script>
     //seine（围网）fishing vessel statistic and analysis
+    import MainTitle from "@/components/common/MainTitle";
     import NavigaIcon from "@/components/common/NavigaIcon";
     import UserInfo from "@/components/common/UserInfo";
 
     export default {
         components: {
+            MainTitle,
             UserInfo,
             NavigaIcon,
         },
         data() {
             return {
+                titleName:'渔船作业方式智能识别系统',
+                tipMsg:'渔船作业方式智能识别系统',
                 currentPage: 1, // 当前页码
                 total: 20, // 总条数
                 pageSize: 10, // 每页的数据条数
