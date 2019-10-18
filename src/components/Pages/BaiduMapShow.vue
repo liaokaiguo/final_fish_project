@@ -319,7 +319,7 @@
       <div slot="title" style="text-align: center;">
         <span>意见反馈</span>
       </div>
-      <el-form ref="feedBackForm" :model="feedBackForm"  :rules="feedBackFormRules">
+      <el-form ref="feedBackForm" :model="feedBackForm" label-width="10vw" :rules="feedBackFormRules">
         <el-form-item label="手机号码:" prop="phone" >
           <el-input class="select-input-data" v-model="feedBackForm.phone"
                     autocomplete="off" placeholder="您的联系电话" ></el-input>
@@ -334,7 +334,7 @@
                     autocomplete="off" placeholder="谢谢" ></el-input>
         </el-form-item>
         <el-form-item label="评分:" prop="star" >
-          <el-rate class="select-input-data" style="margin-left: 10px"
+          <el-rate class="select-input-data"
                    v-model="feedBackForm.star"
                    :colors="['#99A9BF', '#F7BA2A', '#FF9900']">
           </el-rate>
