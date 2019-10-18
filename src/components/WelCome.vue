@@ -1329,6 +1329,7 @@
 	.middletopImage {
 		/*float: left;*/
 		position: absolute;
+		border: 1.5px solid #22a9ff;
 		top:1%;
 		left: 2%;
 		width: 96%;
