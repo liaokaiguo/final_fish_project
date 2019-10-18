@@ -47,6 +47,6 @@
 		text-align: center;
 		color: white !important;
 		background-color: #5bb1ff ;
-		font-size: 22px !important;
+		font-size: 1.2vw !important;
 	}
 </style>

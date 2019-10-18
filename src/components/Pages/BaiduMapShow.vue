@@ -10,7 +10,6 @@
         <div class="centTitle"><a src="#">
           <el-menu
             class="el-menu-demo"
-            menu-trigger="click"
             mode="horizontal"
             @select="handleSelect"
             background-color="#ffffff"
@@ -71,20 +70,22 @@
                 <span>渔场图层取消</span>
               </el-menu-item>
             </el-submenu>
-
           </el-menu>
-
         </a></div>
-        <div class="rightleftIcon">
-            <span v-on:click="$router.back(-1)">
-              <img class="backico-class" src="../../assets/backico.png" style="cursor:pointer" alt="返回">
-            </span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-          <router-link to="/welcome">
-            <img class="homeico-class" src="../../assets/homeico.png">
-          </router-link>
-        </div>
-      </el-col>
 
+<!--        <div class="rightleftIcon">-->
+<!--            <span v-on:click="$router.back(-1)">-->
+<!--              <img class="backico-class" src="../../assets/backico.png" style="cursor:pointer" alt="返回">-->
+<!--            </span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-->
+<!--          <router-link to="/welcome">-->
+<!--            <img class="homeico-class" src="../../assets/homeico.png">-->
+<!--          </router-link>-->
+<!--        </div>-->
+        <!-- 右上角导航按钮 -->
+        <NavigaIcon></NavigaIcon>
+        <!--个人信息中心-->
+        <UserInfo></UserInfo>
+      </el-col>
     </el-row>
 
     <!--左侧工具栏 -->
@@ -94,14 +95,15 @@
           <el-popover
             placement="top"
             title="坐标定位"
-            width="300"
             trigger="click">
-            <el-form ref="reLocationForm" :model="reLocationForm" label-width="60px">
+            <el-form ref="reLocationForm" :model="reLocationForm" label-width="30%">
               <el-form-item label="经度:" prop="lng">
-                <el-input oninput="value=value.replace(/[^0-9.]/g,'')" v-model="reLocationForm.lng" style="width: 80%"></el-input>
+                <el-input oninput="value=value.replace(/[^0-9.]/g,'')"
+                          v-model="reLocationForm.lng" style="width: 80%;" size="small"></el-input>
               </el-form-item>
               <el-form-item label="纬度:" prop="lat">
-                <el-input oninput="value=value.replace(/[^0-9.]/g,'')" v-model="reLocationForm.lat" style="width: 80%"></el-input>
+                <el-input oninput="value=value.replace(/[^0-9.]/g,'')"
+                          v-model="reLocationForm.lat" style="width: 80%" size="small"></el-input>
               </el-form-item>
             </el-form>
             <div style="text-align: right; margin-right: 10px">
@@ -128,7 +130,6 @@
           <el-popover
             placement="bottom"
             title="客服专栏"
-            width="260"
             trigger="click">
             <div>
               <div><span>客服1:</span>
@@ -151,55 +152,55 @@
 
     <!--右下角 渔船信息 -->
 
-      <div class="bottom-left-class">
-        <div id="bottomLeftEchartId" class="bottomleftEchart"></div>
-      </div>
-      <div class="bottom-right-class">
-        <div class="shipInfoItem">
-          <!--          <el-table style="left:2%; width: 96%;  "-->
-          <!--                    height="280"-->
-          <!--                    :data=shipArr>-->
-          <!--            <el-table-column-->
-          <!--              prop="shipId"-->
-          <!--              label="渔船编号">-->
-          <!--            </el-table-column>-->
-          <!--            <el-table-column-->
-          <!--              prop="ship.shipName"-->
-          <!--              label="渔船名">-->
-          <!--            </el-table-column>-->
-          <!--            <el-table-column-->
-          <!--              prop="ship.jobType"-->
-          <!--              label="作业方式">-->
-          <!--            </el-table-column>-->
-          <!--            <el-table-column-->
-          <!--              prop="acqTime"-->
-          <!--              label="定位时间">-->
-          <!--            </el-table-column>-->
-          <!--          </el-table>-->
-          <!--渔船信息 自动滚动 -->
-          <ul>
-            <li>
-              <strong style="position: absolute; left: 5%;font-size: 2.0vh;">渔船Id</strong>
-              <strong style="position: absolute; left: 25%;font-size: 2.0vh;">渔船名</strong>
-              <strong style="position: absolute; left: 45%;font-size: 2.0vh;">作业类型</strong>
-              <strong style="position: absolute; left: 70%;font-size: 2.0vh;">定位时间</strong>
+    <div class="bottom-left-class">
+      <div id="bottomLeftEchartId" class="bottomleftEchart"></div>
+    </div>
+    <div class="bottom-right-class">
+      <div class="shipInfoItem">
+        <!--          <el-table style="left:2%; width: 96%;  "-->
+        <!--                    height="280"-->
+        <!--                    :data=shipArr>-->
+        <!--            <el-table-column-->
+        <!--              prop="shipId"-->
+        <!--              label="渔船编号">-->
+        <!--            </el-table-column>-->
+        <!--            <el-table-column-->
+        <!--              prop="ship.shipName"-->
+        <!--              label="渔船名">-->
+        <!--            </el-table-column>-->
+        <!--            <el-table-column-->
+        <!--              prop="ship.jobType"-->
+        <!--              label="作业方式">-->
+        <!--            </el-table-column>-->
+        <!--            <el-table-column-->
+        <!--              prop="acqTime"-->
+        <!--              label="定位时间">-->
+        <!--            </el-table-column>-->
+        <!--          </el-table>-->
+        <!--渔船信息 自动滚动 -->
+        <ul>
+          <li>
+            <strong style="position: absolute; left: 5%;font-size: 2.0vh;">渔船Id</strong>
+            <strong style="position: absolute; left: 25%;font-size: 2.0vh;">渔船名</strong>
+            <strong style="position: absolute; left: 45%;font-size: 2.0vh;">作业类型</strong>
+            <strong style="position: absolute; left: 70%;font-size: 2.0vh;">定位时间</strong>
+          </li>
+          <br>
+          <vue-seamless-scroll
+            :data="shipArr"
+            :class-option="seamlessOptionSetting"
+            class="seamless-warp">
+            <li v-for="(item,key) in shipArr" :key>
+              <span v-text="item.shipId"></span>
+              <span v-text="item.ship.shipName"></span>
+              <span v-text="item.ship.jobType"></span>
+              <span v-text="item.acqTime"></span>
             </li>
-            <br>
-            <vue-seamless-scroll
-              :data="shipArr"
-              :class-option="seamlessOptionSetting"
-              class="seamless-warp">
-              <li v-for="(item,key) in shipArr" :key>
-                <span v-text="item.shipId"></span>
-                <span v-text="item.ship.shipName"></span>
-                <span v-text="item.ship.jobType"></span>
-                <span v-text="item.acqTime"></span>
-              </li>
-            </vue-seamless-scroll>
-          </ul>
+          </vue-seamless-scroll>
+        </ul>
 
-        </div>
       </div>
+    </div>
 
 
     <!--渔船位置信息选择弹出框-->
@@ -349,7 +350,13 @@
 
 </template>
 <script>
+    import NavigaIcon from "@/components/common/NavigaIcon";
+    import UserInfo from "@/components/common/UserInfo";
     export default {
+        components: {
+            UserInfo,
+            NavigaIcon,
+        },
         data() {
             return {
                 user: {},
@@ -602,6 +609,12 @@
 
         },
 
+        /*离开页面关闭定时器*/
+        beforeDestroy() {
+            if(this.timer) { //如果定时器还在运行 或者直接关闭，不用判断
+                clearInterval(this.timer); //关闭
+            }
+        },
         computed: {
             /*自动滚动插件配置参数*/
             seamlessOptionSetting() {
@@ -937,10 +950,6 @@
                                     showClose: 'true',
                                     duration: 4000,
                                 })
-                            } else {
-                                //画底部左半边echarts
-                                // this.drawBottomLeftCharts();
-                                // this.addShipMarker();
                             }
 
                             this.addShipMarker();
@@ -1417,40 +1426,43 @@
                     document.getElementById("bottomLeftEchartId")
                 );
                 bottomLeftCharts.setOption(this.bottomLeftOption);
-                bottomLeftCharts.setOption({ //数据添加
-                    series: [{
-                        data: [
-                            {
-                                value: this.jobTypeCount.围网,
-                                name: "围网"
-                            },
-                            {
-                                value: this.jobTypeCount.拖网,
-                                name: "拖网"
-                            },
-                            {
-                                value: this.jobTypeCount.张网,
-                                name: "张网"
-                            },
-                            {
-                                value: this.jobTypeCount.刺网,
-                                name: "刺网"
-                            },
-                            {
-                                value: this.jobTypeCount.钓具,
-                                name: "钓具"
-                            },
-                            {
-                                value:this.jobTypeCount.杂渔具,
-                                name: "杂渔具"
-                            },
-                            {
-                                value: this.jobTypeCount.笼壶,
-                                name: "笼壶"
-                            }
-                        ]
-                    }]
-                })
+                if(this.jobTypeCount != null){
+                    bottomLeftCharts.setOption({ //数据添加
+                        series: [{
+                            data: [
+                                {
+                                    value: this.jobTypeCount.围网,
+                                    name: "围网"
+                                },
+                                {
+                                    value: this.jobTypeCount.拖网,
+                                    name: "拖网"
+                                },
+                                {
+                                    value: this.jobTypeCount.张网,
+                                    name: "张网"
+                                },
+                                {
+                                    value: this.jobTypeCount.刺网,
+                                    name: "刺网"
+                                },
+                                {
+                                    value: this.jobTypeCount.钓具,
+                                    name: "钓具"
+                                },
+                                {
+                                    value:this.jobTypeCount.杂渔具,
+                                    name: "杂渔具"
+                                },
+                                {
+                                    value: this.jobTypeCount.笼壶,
+                                    name: "笼壶"
+                                }
+                            ]
+                        }]
+                    })
+                }
+
                 window.addEventListener("resize", function() {
                     bottomLeftCharts.resize();
                 });
@@ -1647,7 +1659,6 @@
   /*主菜单栏*/
   .centTitle .el-menu-item {
     font-size: 60% !important;
-    background-color: cyan !important;
   }
   /*子菜单 外框*/
   .centTitle .el-menu--collapse .el-menu .el-submenu, .el-menu--popup {
