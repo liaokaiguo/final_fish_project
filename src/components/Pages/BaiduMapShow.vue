@@ -1546,6 +1546,13 @@
     height: 4vh !important;
   }
 
+  /deep/ #leftNavigaList .leftNavTitle{
+    color: white!important;
+  }
+  /deep/ #leftNavigaList li a{
+    color: white!important;
+  }
+
   .mapContext {
 
     margin-top: 0px;
