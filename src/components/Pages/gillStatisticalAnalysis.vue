@@ -474,18 +474,6 @@
 			}
 		},
 		methods: {
-			refreshPage() {
-				this.$router.go(0);
-			},
-
-			goBack() {
-				this.$router.back(-1);
-			},
-
-			goHome() {
-				this.$router.push('/welcome')
-			},
-
 			//初始化图表
 			initCharts(){
 				var myDate = new Date();
