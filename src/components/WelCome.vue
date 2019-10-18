@@ -684,10 +684,10 @@
 		},
 		components: {
 			UserInfo,
+			NavigaIcon,
+			BottomNav,
 			middleBottomLREcharts,
 			rightBottomEcharts,
-			BottomNav,
-			NavigaIcon,
 		},
 		computed: {
 			username() {

@@ -12,18 +12,7 @@
 			<!-- 右上角导航按钮 -->
 			<NavigaIcon></NavigaIcon>
 			<!--个人信息中心-->
-			<div class="userInfo">
-				<el-dropdown trigger="click" @command="handleCommand">
-            <span class="el-dropdown-link">
-              <img class="user_logo" src="../../assets/img/海天.jpg">
-            </span>
-					<el-dropdown-menu slot="dropdown">
-						<el-dropdown-item command="userCenter">个人中心</el-dropdown-item>
-						<el-dropdown-item command="loginOut">退出</el-dropdown-item>
-					</el-dropdown-menu>
-				</el-dropdown>
-
-			</div>
+			<UserInfo></UserInfo>
 			<!-- 菜单栏 -->
 			<div class="setMenu">
 				<!-- 选择时间菜单 -->
@@ -92,6 +81,7 @@
 	//刺网 stow net statistic and analysis
 	import BottomNav from "@/components/common/BottomNav";
 	import NavigaIcon from "@/components/common/NavigaIcon";
+	import UserInfo from "@/components/common/UserInfo";
 
 	export default {
 		data() {
@@ -473,8 +463,9 @@
 			};
 		},
 		components: {
-			BottomNav,
+			UserInfo,
 			NavigaIcon,
+			BottomNav,
 		},
 		mounted() {
 			this.initCharts();
