@@ -32,19 +32,7 @@
 				</div>
 			</div>
 			<!-- 左侧透明导航栏 -->
-			<div id="leftNavigaList" >
-				<ul>
-					<li class="leftNavTitle">目&nbsp;&nbsp;&nbsp;&nbsp;录</li>
-					<li><router-link to="/mapShow">地图显示</router-link></li>
-					<li><router-link to="/passPort" >渔船出入港</router-link></li>
-					<li><router-link to="/workModeSta" >渔船作业方式<br>统计及查询</router-link></li>
-					<li><router-link to="#" >船舶明细</router-link></li>
-					<li><router-link to="/seineSA" >围网作业方式<br>统计及分析</router-link></li>
-					<li><router-link to="/trawlSA" >拖网作业方式<br>统计及分析</router-link></li>
-					<li><router-link to="/gillSA" >刺网作业方式<br>统计及分析</router-link></li>
-					<li><router-link to="/stowSA" >张网作业方式<br>统计及分析</router-link></li>
-				</ul>
-			</div>
+			<LeftNavigaList></LeftNavigaList>
 
 			<!--主要内容展示区域-->
 			<div id="showResult">
@@ -80,6 +68,7 @@
 	import BottomNav from "@/components/common/BottomNav";
 	import NavigaIcon from "@/components/common/NavigaIcon";
 	import UserInfo from "@/components/common/UserInfo";
+	import LeftNavigaList from "@/components/common/LeftNavigaList";
 
 	export default {
 		data() {
@@ -461,6 +450,7 @@
 			MainTitle,
 			UserInfo,
 			NavigaIcon,
+			LeftNavigaList,
 			BottomNav,
 		},
 		mounted() {
