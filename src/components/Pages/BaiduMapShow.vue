@@ -88,6 +88,9 @@
       </el-col>
     </el-row>
 
+    <!-- 左侧透明导航栏 -->
+    <LeftNavigaList></LeftNavigaList>
+
     <!--左侧工具栏 -->
     <div class="middle-tool-content">
       <div class="location-content">
@@ -151,7 +154,6 @@
     </div>
 
     <!--右下角 渔船信息 -->
-
     <div class="bottom-left-class">
       <div id="bottomLeftEchartId" class="bottomleftEchart"></div>
     </div>
@@ -201,7 +203,6 @@
 
       </div>
     </div>
-
 
     <!--渔船位置信息选择弹出框-->
     <el-dialog :modal="false" :visible.sync="shipLocationDialog"
@@ -352,10 +353,12 @@
 <script>
     import NavigaIcon from "@/components/common/NavigaIcon";
     import UserInfo from "@/components/common/UserInfo";
+    import LeftNavigaList from "@/components/common/LeftNavigaList";
     export default {
         components: {
             UserInfo,
             NavigaIcon,
+            LeftNavigaList
         },
         data() {
             return {
@@ -1529,6 +1532,19 @@
     left: 50%;
     width: 18%;
   }
+  /*修改子组件样式*/
+  /deep/ .navigaIcon  {
+    height: 4vh !important;
+    margin-top: 0vh!important;
+  }
+  /deep/ .userInfo{
+    margin-top: 0vh !important;
+  }
+  /deep/ .userInfo .user_logo{
+    top:0vh !important;
+    width: 4vh !important;
+    height: 4vh !important;
+  }
 
   .mapContext {
 
@@ -1603,7 +1619,7 @@
   .middle-tool-content {
     position: absolute;
     top:40%;
-    left: 2%;
+    right: 2%;
     width: 3%;
     height: 20%;
     float: left;
@@ -1655,6 +1671,12 @@
     height: 4vh !important;
     line-height: 3vh!important;
     font-size: 60%;
+    background-color: #909399 !important;
+    color: white !important;
+  }
+  .centTitle .el-menu{
+    background-color: #909399 !important;
+
   }
   /*主菜单栏*/
   .centTitle .el-menu-item {
