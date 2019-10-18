@@ -10,6 +10,7 @@
 			<NavigaIcon></NavigaIcon>
 			<!--个人信息中心-->
 			<UserInfo></UserInfo>
+
 			<!--主要内容分为3栏-->
 			<!--左模块-->
 			<div class="wholeleft">
@@ -25,7 +26,7 @@
 						</router-link>
 					</div>
 					<div class="msgContent">
-						<table class="leftTopTable">
+						<table id="leftTopTable">
 							<tr>
 								<td>
 									<span></span>
@@ -58,7 +59,7 @@
 						</router-link>
 					</div>
 					<div class="msgContent">
-						<div id="leftmiddleEchartId" class="leftmiddleEchart"></div>
+						<div id="L_M_EchartID" class="myEchart"></div>
 					</div>
 				</div>
 				<!--the left-bottom model code-->
@@ -73,13 +74,15 @@
 						</router-link>
 					</div>
 					<div class="msgContent">
-						<rightBottomEcharts v-bind:echartId="'leftBottomEchartsId'" :OptionData="leftBottomOption"></rightBottomEcharts>
+						<div id="L_B_EchartID" class="myEchart"></div>
 					</div>
 				</div>
 			</div>
 			<!--中模块-->
 			<div class="wholemiddle">
+				<!--上方地图-->
 				<div class="middletopImage" id="MiddleTopMainMap"></div>
+				<!--下方两个Echarts-->
 				<div id="midbotleftBox">
 					<div class="msgTitle">
 						<span class="msgMainTitle">拖网统计</span>
@@ -91,7 +94,7 @@
 						</router-link>
 					</div>
 					<div class="msgContent">
-						<middleBottomLREcharts v-bind:echartId="'middleBottomLEchartsId'" :OptionData="middleBottomLOption"></middleBottomLREcharts>
+						<div id="M_B_L_EchartID" class="myEchart"></div>
 					</div>
 				</div>
 				<div id="midbotrightBox">
@@ -105,7 +108,7 @@
 						</router-link>
 					</div>
 					<div class="msgContent">
-						<middleBottomLREcharts v-bind:echartId="'middleBottomREchartsId'" :OptionData="middleBottomROption"></middleBottomLREcharts>
+						<div id="M_B_R_EchartID" class="myEchart"></div>
 					</div>
 				</div>
 			</div>
@@ -122,7 +125,7 @@
 						</router-link>
 					</div>
 					<div class="msgContent">
-						<rightBottomEcharts v-bind:echartId="'rightTopEchartsId'" :OptionData="rightTopOption"></rightBottomEcharts>
+						<div id="R_T_EchartID" class="myEchart"></div>
 					</div>
 				</div>
 				<div id="rightmidBox">
@@ -136,7 +139,7 @@
 						</router-link>
 					</div>
 					<div class="msgContent">
-						<rightBottomEcharts v-bind:echartId="'rightMiddleEchartsId'" :OptionData="rightMiddleOption"></rightBottomEcharts>
+						<div id="R_M_EchartID" class="myEchart"></div>
 					</div>
 				</div>
 				<div id="rightbotBox">
@@ -150,10 +153,11 @@
 						</router-link>
 					</div>
 					<div class="msgContent">
-						<rightBottomEcharts v-bind:echartId="'rightBottomEchartsId'" :OptionData="rightBottomOption"></rightBottomEcharts>
+						<div id="R_B_EchartID" class="myEchart"></div>
 					</div>
 				</div>
 			</div>
+
 			<!--底部导航栏-->
 			<BottomNav></BottomNav>
 		</div>
@@ -162,11 +166,6 @@
 </template>
 
 <script>
-	// the common line echarts vue including the middle-bottom-left and the middle-bottom-right echarts
-	import middleBottomLREcharts from "@/components/common/MiddleBottomEchartsUtils";
-	// the common echarts vue including the right-top,right-middle and right-bottom echarts
-	import rightBottomEcharts from "@/components/common/RightEchartsUtils";
-
 	import MainTitle from "@/components/common/MainTitle";
 	import BottomNav from "@/components/common/BottomNav";
 	import NavigaIcon from "@/components/common/NavigaIcon";
@@ -217,13 +216,24 @@
 						name: "占比情况",
 						type: "pie",
 						radius: "65%",
-						center: ["45%", "55%"],
-						label:{
-							fontSize:"120%",
+						center: ["30%", "55%"],
+						label: {
+							normal: {
+								show: false,
+								position: "center"
+							},
+							emphasis: {
+								show: false,
+								textStyle: {
+									fontSize: "140%",
+									fontWeight: "bold"
+								}
+							}
 						},
-						labelLine:{
-							length:18,
-							length2:10
+						labelLine: {
+							normal: {
+								show: false
+							}
 						},
 						data: [
 							// { value: 890, name: "正常作业" },
@@ -687,8 +697,6 @@
 			UserInfo,
 			NavigaIcon,
 			BottomNav,
-			middleBottomLREcharts,
-			rightBottomEcharts,
 		},
 		computed: {
 			username() {
@@ -697,18 +705,8 @@
 			}
 		},
 		mounted() {
-			//the draw left-bottom echarts function
-			this.drawLeftMiddleCharts();
-			/*var leftbottomChart = this.$echarts.init(
-			  document.getElementById("leftbottomEchartId")
-			);
-			leftbottomChart.setOption(this.leftBottomOption);
-			window.addEventListener("resize", function() {
-			  leftbottomChart.resize();
-			});*/
-
-			/* 向后台请求数据 */
 			this.initPortData() // 出港入港数量
+			this.initWorkProportionData(); // 作业占比数据
 			this.initLeftBottomEchartsOption(); //围网
 			this.initMiddleBottomLEchartsOption(); //拖网
 			this.initMiddleBottomREchartsOption(); //张网
@@ -735,47 +733,6 @@
 				return currentDate;
 			},
 
-			//the function of draw left-bottom echarts 左下角
-			drawLeftMiddleCharts() {
-				var leftmiddleChart = this.$echarts.init(
-					document.getElementById("leftmiddleEchartId")
-				);
-				leftmiddleChart.setOption(this.leftMiddleOption);
-				//数据没有加载出来显示加载动画,样式添加todo
-				leftmiddleChart.showLoading();
-				//获取数据
-				this.axios({
-					method: 'post',
-					url: '/getIllegal',
-					data: {
-						dateTime: ""
-					}
-				}).then(res => {
-					// setTimeout(()=>{  //未来让加载动画效果明显,这里加入了setTimeout,实现2s延时
-					this.normalFishingNum = res.data.normal;
-					this.illegelFishingNum = res.data.illegal;
-					leftmiddleChart.hideLoading(); //加载出来隐藏加载动画
-					leftmiddleChart.setOption({ //数据添加
-						series: [{
-							data: [{
-								value: res.data.normal,
-								name: "正常作业"
-							},
-								{
-									value: res.data.illegal,
-									name: "非法作业"
-								}
-							]
-						}]
-					})
-					// }, 1000 )
-				})
-
-				window.addEventListener("resize", function() {
-					leftmiddleChart.resize();
-				});
-			},
-
 			/*出入港口后台数据 */
 			initPortData() {
 				// this.axios.get('/getPortTraffic').then((response) => {
@@ -792,17 +749,56 @@
 				this.NLoutNum = 189;
 			},
 
+			/*作业占比数据*/
+			initWorkProportionData() {
+				var leftmiddleEchart = this.$echarts.init(
+					document.getElementById("L_M_EchartID")
+				);
+				leftmiddleEchart.setOption(this.leftMiddleOption);
+				//数据没有加载出来显示加载动画,样式添加todo
+				leftmiddleEchart.showLoading();
+				//获取数据
+				this.axios({
+					method: 'post',
+					url: '/getIllegal',
+					data: {
+						dateTime: ""
+					}
+				}).then(res => {
+					this.normalFishingNum = res.data.normal;
+					this.illegelFishingNum = res.data.illegal;
+					leftmiddleEchart.hideLoading(); //加载出来隐藏加载动画
+					leftmiddleEchart.setOption({ //数据添加
+						series: [{
+							data: [{
+								value: res.data.normal,
+								name: "正常作业"
+							},
+								{
+									value: res.data.illegal,
+									name: "非法作业"
+								}
+							]
+						}]
+					})
+				});
+				window.addEventListener("resize", function() {
+					leftmiddleEchart.resize();
+				});
+			},
+
 			/*围网后台数据 */
 			initLeftBottomEchartsOption() {
+				//获得当前年份
 				var date = new Date();
 				var year = date.getFullYear();
-				console.log(year)
-				var leftBottomEChart = this.$echarts.init(
-					document.getElementById("leftBottomEchartsId")
+				var leftbottomEchart = this.$echarts.init(
+					document.getElementById("L_B_EchartID")
 				);
-				leftBottomEChart.setOption(this.leftBottomOption);
+				leftbottomEchart.setOption(this.leftBottomOption);
 				//数据没有加载出来显示加载动画,样式添加todo
-				leftBottomEChart.showLoading();
+				leftbottomEchart.showLoading();
+				//获取数据
 				this.axios({
 					method: 'post',
 					url: '/getDataByMonthOrDay',
@@ -813,26 +809,29 @@
 						byDay: 0,
 					}
 				}).then(res => {
-					leftBottomEChart.hideLoading(); //加载出来隐藏加载动画
-					leftBottomEChart.setOption({ //数据添加
+					leftbottomEchart.hideLoading(); //加载出来隐藏加载动画
+					leftbottomEchart.setOption({ //数据添加
 						series: [{
 							data: res.data.total
 						}]
 					})
-
-				})
+				});
+				window.addEventListener("resize", function() {
+					leftbottomEchart.resize();
+				});
 			},
 
 			/*拖网后台数据 */
 			initMiddleBottomLEchartsOption() {
+				//获得当前年份
 				var date = new Date();
 				var year = date.getFullYear();
-				var middleBottomLeftEChart = this.$echarts.init(
-					document.getElementById("middleBottomLEchartsId")
+				var middleBottomLeftEchart = this.$echarts.init(
+					document.getElementById("M_B_L_EchartID")
 				);
-				middleBottomLeftEChart.setOption(this.middleBottomLOption);
+				middleBottomLeftEchart.setOption(this.middleBottomLOption);
 				//数据没有加载出来显示加载动画,样式添加todo
-				middleBottomLeftEChart.showLoading();
+				middleBottomLeftEchart.showLoading();
 				this.axios({
 					method: 'post',
 					url: '/getDataByMonthOrDay',
@@ -843,26 +842,28 @@
 						byDay: 0,
 					}
 				}).then(res => {
-					middleBottomLeftEChart.hideLoading(); //加载出来隐藏加载动画
-					middleBottomLeftEChart.setOption({ //数据添加
+					middleBottomLeftEchart.hideLoading(); //加载出来隐藏加载动画
+					middleBottomLeftEchart.setOption({ //数据添加
 						series: [{
 							data: res.data.total
 						}]
 					})
-
-				})
+				});
+				window.addEventListener("resize", function() {
+					middleBottomLeftEchart.resize();
+				});
 			},
 
 			/*张网后台数据 */
 			initMiddleBottomREchartsOption() {
 				var date = new Date();
 				var year = date.getFullYear();
-				var middleBottomRightEChart = this.$echarts.init(
-					document.getElementById("middleBottomREchartsId")
+				var middleBottomRightEchart = this.$echarts.init(
+					document.getElementById("M_B_R_EchartID")
 				);
-				middleBottomRightEChart.setOption(this.middleBottomROption);
+				middleBottomRightEchart.setOption(this.middleBottomROption);
 				//数据没有加载出来显示加载动画,样式添加todo
-				middleBottomRightEChart.showLoading();
+				middleBottomRightEchart.showLoading();
 				this.axios({
 					method: 'post',
 					url: '/getDataByMonthOrDay',
@@ -873,24 +874,26 @@
 						byDay: 0,
 					}
 				}).then(res => {
-					middleBottomRightEChart.hideLoading(); //加载出来隐藏加载动画
-					middleBottomRightEChart.setOption({ //数据添加
+					middleBottomRightEchart.hideLoading(); //加载出来隐藏加载动画
+					middleBottomRightEchart.setOption({ //数据添加
 						series: [{
 							data: res.data.total
 						}]
 					})
-
-				})
+				});
+				window.addEventListener("resize", function() {
+					middleBottomRightEchart.resize();
+				});
 			},
 
 			/*作业方式统计后台数据 */
 			initRightTopEchartsOption() {
-				var rightTopEChart = this.$echarts.init(
-					document.getElementById("rightTopEchartsId")
+				var rightTopEchart = this.$echarts.init(
+					document.getElementById("R_T_EchartID")
 				);
-				rightTopEChart.setOption(this.rightTopOption);
+				rightTopEchart.setOption(this.rightTopOption);
 				//数据没有加载出来显示加载动画,样式添加todo
-				rightTopEChart.showLoading();
+				rightTopEchart.showLoading();
 				this.axios({
 					method: 'post',
 					url: '/statisShipJob',
@@ -899,8 +902,8 @@
 						idtfyFlag: "",
 					}
 				}).then(res => {
-					rightTopEChart.hideLoading(); //加载出来隐藏加载动画
-					rightTopEChart.setOption({ //数据添加
+					rightTopEchart.hideLoading(); //加载出来隐藏加载动画
+					rightTopEchart.setOption({ //数据添加
 						series: [{
 							data: [
 								{
@@ -926,18 +929,20 @@
 							]
 						}]
 					})
-
-				})
+				});
+				window.addEventListener("resize", function() {
+					rightTopEchart.resize();
+				});
 			},
 
 			/*非法作业方式统计后台数据 */
 			initRightMiddleEchartsOption() {
-				var rightMiddleEChart = this.$echarts.init(
-					document.getElementById("rightMiddleEchartsId")
+				var rightMiddleEchart = this.$echarts.init(
+					document.getElementById("R_M_EchartID")
 				);
-				rightMiddleEChart.setOption(this.rightMiddleOption);
+				rightMiddleEchart.setOption(this.rightMiddleOption);
 				//数据没有加载出来显示加载动画,样式添加todo
-				rightMiddleEChart.showLoading();
+				rightMiddleEchart.showLoading();
 				this.axios({
 					method: 'post',
 					url: '/statisShipJob',
@@ -946,9 +951,8 @@
 						idtfyFlag: 0,
 					}
 				}).then(res => {
-					console.log(res.data);
-					rightMiddleEChart.hideLoading(); //加载出来隐藏加载动画
-					rightMiddleEChart.setOption({ //数据添加
+					rightMiddleEchart.hideLoading(); //加载出来隐藏加载动画
+					rightMiddleEchart.setOption({ //数据添加
 						series: [{
 							data: [
 								{
@@ -974,20 +978,22 @@
 							]
 						}]
 					})
-
-				})
+				});
+				window.addEventListener("resize", function() {
+					rightMiddleEchart.resize();
+				});
 			},
 
 			/*刺网后台数据 */
 			initRightBottomEchartsOption() {
 				var date = new Date();
 				var year = date.getFullYear();
-				var rightBottomEChart = this.$echarts.init(
-					document.getElementById("rightBottomEchartsId")
+				var rightBottomEchart = this.$echarts.init(
+					document.getElementById("R_B_EchartID")
 				);
-				rightBottomEChart.setOption(this.rightBottomOption);
+				rightBottomEchart.setOption(this.rightBottomOption);
 				//数据没有加载出来显示加载动画,样式添加todo
-				rightBottomEChart.showLoading();
+				rightBottomEchart.showLoading();
 				this.axios({
 					method: 'post',
 					url: '/getDataByMonthOrDay',
@@ -998,14 +1004,16 @@
 						byDay: 0,
 					}
 				}).then(res => {
-					rightBottomEChart.hideLoading(); //加载出来隐藏加载动画
-					rightBottomEChart.setOption({ //数据添加
+					rightBottomEchart.hideLoading(); //加载出来隐藏加载动画
+					rightBottomEchart.setOption({ //数据添加
 						series: [{
 							data: res.data.total
 						}]
 					})
-
-				})
+				});
+				window.addEventListener("resize", function() {
+					rightBottomEchart.resize();
+				});
 			},
 
 
@@ -1042,8 +1050,8 @@
 				var now = this.getFormatTime(date);
 				date.setTime(date.getTime() - 1000 * 60 * 2); // 2分钟前
 				var before = this.getFormatTime(date);
-				console.log(now)
-				console.log(before)
+				// console.log("现在：" + now)
+				// console.log("2分钟前：" + before)
 				this.axios({
 					method: 'post',
 					url: '/queryTrail',
@@ -1058,7 +1066,7 @@
 				}).then(res => {
 
 					this.shipLocationArr = res.data.tAcqDatas;
-					console.log("渔船数量" + this.shipLocationArr.length)
+					// console.log("渔船数量：" + this.shipLocationArr.length)
 					// console.log(this.shipLocationArr)
 					this.addShipMarker();
 
@@ -1283,7 +1291,7 @@
 	}
 
 	/*左上表格的样式*/
-	.leftTopTable {
+	#leftTopTable {
 		position: absolute;
 		left: 4%;
 		top: 2.5%;
@@ -1293,12 +1301,12 @@
 		border: #55a6ee solid 0.1em;
 	}
 
-	.leftTopTable td {
+	#leftTopTable td {
 		border: #55a6ee solid 0.1em;
 		color: #f7f7f7;
 	}
 
-	.leftmiddleEchart {
+	.myEchart {
 		position: absolute;
 		width: 100%;
 		height: 100%;
@@ -1414,17 +1422,17 @@
 </style>
 
 <style>
-  /* 地图 infowindow 边框圆角 */
-  .middletopImage .BMap_pop div:nth-child(1) div{
-    border-radius:12px 0 0 0;
-  }
-  .middletopImage .BMap_pop div:nth-child(3) div{
-    border-radius:0 12px 0 0 ;
-  }
-  .middletopImage .BMap_pop div:nth-child(5) div{
-    border-radius:0 0 0 12px;
-  }
-  .middletopImage .BMap_pop div:nth-child(7) div {
-    border-radius:0 0 12px 0;
-  }
+	/* 地图 infowindow 边框圆角 */
+	.middletopImage .BMap_pop div:nth-child(1) div{
+		border-radius:12px 0 0 0;
+	}
+	.middletopImage .BMap_pop div:nth-child(3) div{
+		border-radius:0 12px 0 0 ;
+	}
+	.middletopImage .BMap_pop div:nth-child(5) div{
+		border-radius:0 0 0 12px;
+	}
+	.middletopImage .BMap_pop div:nth-child(7) div {
+		border-radius:0 0 12px 0;
+	}
 </style>
