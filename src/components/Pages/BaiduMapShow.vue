@@ -609,6 +609,12 @@
 
         },
 
+        /*离开页面关闭定时器*/
+        beforeDestroy() {
+            if(this.timer) { //如果定时器还在运行 或者直接关闭，不用判断
+                clearInterval(this.timer); //关闭
+            }
+        },
         computed: {
             /*自动滚动插件配置参数*/
             seamlessOptionSetting() {
