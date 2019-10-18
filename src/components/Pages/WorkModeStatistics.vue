@@ -17,8 +17,9 @@
       <!--个人信息中心-->
       <UserInfo></UserInfo>
     </div>
-    <div>
 
+    <div>
+      <!-- 搜索框 -->
       <div class="searchBox">
         <el-form ref="selectForm"
                  size="small"
@@ -61,6 +62,10 @@
         </el-form>
       </div>
 
+      <!-- 左侧透明导航栏 -->
+      <LeftNavigaList></LeftNavigaList>
+
+      <!-- 数据表显示 -->
       <div class="dataBox">
         <el-table
           class="table-data-class"
@@ -129,12 +134,14 @@
     import MainTitle from "@/components/common/MainTitle";
     import NavigaIcon from "@/components/common/NavigaIcon";
     import UserInfo from "@/components/common/UserInfo";
+    import LeftNavigaList from "@/components/common/LeftNavigaList";
 
     export default {
         components: {
             MainTitle,
             UserInfo,
             NavigaIcon,
+            LeftNavigaList
         },
         data() {
             return {
@@ -225,7 +232,7 @@
                                 emphasis: {
                                     show: true,
                                     textStyle: {
-                                        fontSize: "90%",
+                                        fontSize: "150%",
                                         fontWeight: "bold"
                                     }
                                 }
@@ -257,7 +264,24 @@
             this.initWorkModeStatistic();
         },
         methods: {
-            //分页
+            /*获取日期yyyy-MM-dd*/
+            getFormatDate(date) {
+
+                var month = date.getMonth() + 1;
+                var strDate = date.getDate();
+                if (month >= 1 && month <= 9) {
+                    month = "0" + month;
+                }
+                if (strDate >= 0 && strDate <= 9) {
+                    strDate = "0" + strDate;
+                }
+
+                // todo 只有去年数据
+                var currentDate = date.getFullYear() + "-" + month + "-" + strDate;
+                return currentDate;
+            },
+
+            /*分页*/
             handleSizeChange(val) {
                 // console.log(`每页 ${val} 条`);
                 this.currentPage = 1;
@@ -313,12 +337,15 @@
 
             /*列表数据初始加载*/
             initWorkModeStatistic() {
+                var date = new Date();
+                var nowDay = this.getFormatDate(date);
+                console.log("渔船作业方式统计初始请求日期:"+nowDay);
                 this.tableDataLoading = true; //先loading动画
                 this.axios({
                     method: "post",
                     url: "/queryShipJob",
                     data: {
-                        dateTime: "",
+                        dateTime: nowDay,
                         idtfyJobtype: "",
                         idtfyFlag: "",
                     }
@@ -451,7 +478,7 @@
     width: 60%;
     height: 10%;
     top: 10vh;
-    left: 3vw;
+    left: 10vw;
     overflow: hidden;
   }
 
@@ -468,7 +495,7 @@
     width: 60%;
     height: 75%;
     top: 18vh;
-    left: 3vw;
+    left: 10vw;
   }
 
   .table-data-class {
@@ -482,7 +509,7 @@
     position: absolute;
     width: 50%;
     height: 6%;
-    left: 2vw;
+    left: 10vw;
     bottom: 1vh;
   }
 
@@ -495,7 +522,7 @@
     width: 30%;
     height: 45%;
     top: 30vh;
-    right: 5vw;
+    right: 1vw;
   }
 
   .work-mode-class {
