@@ -5,9 +5,7 @@
 		<!--主要内容-->
 		<div id="main-content">
 			<!-- 主标题 -->
-			<div class="mainTitle">
-				<p class="title" @click="refreshPage" v-bind:title="tipMsg.thisPageName">渔船作业方式智能识别系统</p>
-			</div>
+			<MainTitle v-bind:titleName="titleName" v-bind:tip="tipMsg.pageName"></MainTitle>
 			<!-- 右上角导航按钮 -->
 			<NavigaIcon></NavigaIcon>
 			<!--个人信息中心-->
@@ -169,6 +167,7 @@
 	// the common echarts vue including the right-top,right-middle and right-bottom echarts
 	import rightBottomEcharts from "@/components/common/RightEchartsUtils";
 
+	import MainTitle from "@/components/common/MainTitle";
 	import BottomNav from "@/components/common/BottomNav";
 	import NavigaIcon from "@/components/common/NavigaIcon";
 	import UserInfo from "@/components/common/UserInfo";
@@ -177,8 +176,9 @@
 		name: "WelCome",
 		data() {
 			return {
+				titleName: '渔船作业方式智能识别系统', //标题名字
 				tipMsg:{
-					thisPageName: '渔船作业方式智能识别系统',
+					pageName: '渔船作业方式智能识别系统', //用于鼠标悬停提示
 				},
 				//fishing number out or in the harbour
 				LoutNum: "",
@@ -683,6 +683,7 @@
 			};
 		},
 		components: {
+			MainTitle,
 			UserInfo,
 			NavigaIcon,
 			BottomNav,
@@ -718,10 +719,6 @@
 			this.getShipLocationArr(); //获取后台渔船位置数据并标注
 		},
 		methods: {
-			refreshPage() {
-				this.$router.go(0);
-			},
-
 			/*获取当前日期yyyy-MM-dd HH:mm:ss*/
 			getFormatTime(date) {
 				// var date = new Date();
@@ -1167,26 +1164,6 @@
 	}
 
 	/* #2.1 中心标题样式 */
-	.mainTitle {
-		position: absolute;
-		left: 35vw;
-		width: 30vw;
-		top: 1vh;
-		height: 5vh;
-		text-align:center;
-		/* background-color 测试用 */
-		/*background-color: #FFFFFF;*/
-	}
-	.mainTitle .title {
-		font-family: Microsoft YaHei;
-		color: #5bb1ff;
-		cursor: pointer;
-		letter-spacing: 0.2vw;
-		font-size: 2.2vw;
-		display: inline-block;
-		/* background-color 测试用 */
-		/*background-color: #ff5234;*/
-	}
 
 	/* #2.2 左侧栏目 */
 	/*the whole div style*/

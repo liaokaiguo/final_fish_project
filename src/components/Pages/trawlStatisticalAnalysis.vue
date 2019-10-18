@@ -6,9 +6,7 @@
 		<!-- 主要内容 -->
 		<div id="main-content">
 			<!-- 主标题 -->
-			<div class="mainTitle">
-				<p class="title" @click="refreshPage" v-bind:title="tipMsg.thisPageName">拖网作业方式统计分析</p>
-			</div>
+			<MainTitle v-bind:titleName="titleName" v-bind:tip="tipMsg.pageName"></MainTitle>
 			<!-- 右上角导航按钮 -->
 			<NavigaIcon></NavigaIcon>
 			<!--个人信息中心-->
@@ -78,6 +76,7 @@
 
 <script>
 	//拖网 stow net statistic and analysis
+	import MainTitle from "@/components/common/MainTitle";
 	import BottomNav from "@/components/common/BottomNav";
 	import NavigaIcon from "@/components/common/NavigaIcon";
 	import UserInfo from "@/components/common/UserInfo";
@@ -85,13 +84,10 @@
 	export default {
 		data() {
 			return {
-				// 用户名
-				userName:"中电36所",
+				titleName: '拖网作业方式统计分析', //标题名字
 				// Tips提示
 				tipMsg:{
-					thisPageName: '拖网作业方式统计分析',
-					goBack: '后退',
-					goHome: '主页',
+					pageName: '拖网作业方式统计分析', //用于鼠标悬停提示
 					startDateTips: '请选择起始日期',
 					endDateTips: '请选择终止日期',
 					checkTips: '查询结果',
@@ -462,6 +458,7 @@
 			};
 		},
 		components: {
+			MainTitle,
 			UserInfo,
 			NavigaIcon,
 			BottomNav,
