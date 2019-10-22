@@ -2,7 +2,7 @@
 	<div class="BottomNav">
 		<ul>
 			<li>
-				<router-link to="/mapShow" class="BottomNavText">地图显示</router-link>&nbsp;&nbsp;
+				<router-link to="/mapShow" class="BottomNavText" @click.native="refreshPage">地图显示</router-link>&nbsp;&nbsp;
 				<router-link to="/passPort" class="BottomNavText">渔船出入港</router-link>&nbsp;&nbsp;
 				<router-link to="/workModeSta" class="BottomNavText">渔船作业方式统计及查询</router-link>&nbsp;&nbsp;
 				<router-link to="#" class="BottomNavText">船舶明细</router-link>&nbsp;&nbsp;
@@ -18,6 +18,12 @@
 <script>
 	export default {
 		name: "BottomNav",
+      methods:{
+          //router-link 单次渲染， 每次重新刷新进入地图页面，否则地图实例销毁不了，路径回放出错
+          refreshPage(){
+              this.$router.go(0);
+          }
+      }
 	}
 </script>
 
@@ -40,4 +46,4 @@
 		text-decoration: none;
 	}
 </style>
-    
+

@@ -3,7 +3,7 @@
 	<div id="leftNavigaList" >
 		<ul>
 			<li class="leftNavTitle">目&nbsp;&nbsp;&nbsp;&nbsp;录</li>
-			<li><router-link to="/mapShow">地图显示</router-link></li>
+			<li><router-link to="/mapShow" @click.native="refreshPage">地图显示</router-link></li>
 			<li><router-link to="/passPort" >渔船出入港</router-link></li>
 			<li><router-link to="/workModeSta" >渔船作业方式<br>统计及查询</router-link></li>
 			<li><router-link to="#" >船舶明细</router-link></li>
@@ -18,6 +18,12 @@
 <script>
 	export default {
 		name: "LeftNavigaList",
+      methods:{
+          //router-link 单次渲染， 每次重新刷新进入地图页面，否则地图实例销毁不了，路径回放出错
+		    refreshPage(){
+		        this.$router.go(0);
+        }
+      }
 	}
 </script>
 
