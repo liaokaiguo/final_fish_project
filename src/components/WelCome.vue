@@ -702,7 +702,7 @@
 
 		},
 		mounted() {
-			this.initPortData() // 出港入港数量
+			this.initPortData();// 出港入港数量
 			this.initWorkProportionData(); // 作业占比数据
 			this.initLeftBottomEchartsOption(); //围网
 			this.initMiddleBottomLEchartsOption(); //拖网

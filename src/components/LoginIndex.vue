@@ -47,7 +47,7 @@
             </el-form-item>
 
             <el-form-item >
-             <el-button  @click="login" class="loginCmt" >登&nbsp&nbsp&nbsp&nbsp录</el-button>
+             <el-button  @click="login" class="loginCmt" id="loginCmtButton">登&nbsp&nbsp&nbsp&nbsp录</el-button>
             </el-form-item>
           </el-form>
           </div>
@@ -77,7 +77,13 @@
                 }
             }
         },
+	    mounted(){
+		    this.focusOnLogincmt();
+	    },
         methods:{
+        	focusOnLogincmt(){
+		        document.getElementById("loginCmtButton").focus();
+	        },
             login(){
                 this.$refs.loginForm.validate((valid) => {
                     if(valid){
