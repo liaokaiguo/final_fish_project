@@ -23,7 +23,7 @@ Vue.use(Router)
 
 export default new Router({
 	mode:'hash',
-  base:'./',
+  base:'/myApp/',
 	routes: [
 		{
 			path: '/',
