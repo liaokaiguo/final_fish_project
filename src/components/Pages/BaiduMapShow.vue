@@ -1113,16 +1113,24 @@
             loadTrackPath() {
                 // 轨迹线设置
                 var sy = new BMap.Symbol(BMap_Symbol_SHAPE_BACKWARD_OPEN_ARROW, {
-                    scale: 0.5,//图标缩放大小
+                    scale: 0.3,//图标缩放大小
                     strokeColor: '#fff',//设置矢量图标的线填充颜色
                     strokeWeight: '2',//设置线宽
                 });
                 var icons = new BMap.IconSequence(sy, '10', '30');
 
+                var linecolor='';
                 // 创建polyline对象
                 var pois = [];
                 for (var i = 0; i < this.shipTrackArr.length; i++) {//遍历添加轨迹点
                     pois.push(new BMap.Point(this.shipTrackArr[i].longitude, this.shipTrackArr[i].latitude));
+                   // 根据作业识别结果改变路径颜色
+                    if(this.shipTrackArr[i].ship.jobType != this.shipTrackArr[i].idtfyShipJob.idtfyJobtype){
+                        linecolor="red";
+                    }else{
+                        linecolor="green";
+                    }
+
                 }
                 this.trackPolyline = new BMap.Polyline(pois, {
                     enableEditing: false,//是否启用线编辑，默认为false
@@ -1130,7 +1138,8 @@
                     icons: [icons],
                     strokeWeight: '5',//折线的宽度，以像素为单位
                     strokeOpacity: 0.5,//折线的透明度，取值范围0 - 1
-                    strokeColor: "#18a45b" //折线颜色
+                    // strokeColor: "#18a45b" //折线颜色
+                    strokeColor: linecolor //动态改变折线颜色
                 });
 
                 map.addOverlay(this.trackPolyline);          //增加折线
