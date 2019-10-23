@@ -872,7 +872,7 @@
                             // height: 300, // 信息窗口高度
                             title: "渔船信息", // 信息窗口标题
                         }
-                        var Content = "<div style='width:300px;'>"
+                        var Content = "<div >"
                             + "<p>渔船id：" + _this.shipArr[i].shipId + "</p>"
                             + "<p>渔船编号：" + _this.shipArr[i].ship.shipNo + "</p>"
                             + "<p>渔船名：" + _this.shipArr[i].ship.shipName + "</p>"
@@ -1165,7 +1165,7 @@
                     });
                     // marker[i].setLabel(label);
                     info[i] = new window.BMap.InfoWindow(
-                        "<div style='width:300px;'>"
+                        "<div >"
                         + "<p>渔船id：" + this.shipTrackArr[i].shipId + "</p>"
                         + "<p>渔船编号：" + this.shipTrackArr[i].ship.shipNo + "</p>"
                         + "<p>渔船名：" + this.shipTrackArr[i].ship.shipName + "</p>"
@@ -1727,7 +1727,7 @@
     padding-top:5px;
     border-bottom:1px solid #16ddff;
     background-color: #3ebde4;
-    border-radius:12px 12px 0 0;
+    border-radius:22px 22px 22px 22px;
   }
   /* 消息内容 */
   .mapContext .BMap_bubble_content {
@@ -1738,8 +1738,8 @@
   }
   /* 右上角删除按键 */
   .mapContext .BMap_pop img {
-    top: 26px !important;
-    left: 290px !important;
+    /*top: 26px !important;*/
+    /*left: 290px !important;*/
   }
 
   /* 边框圆角 */
