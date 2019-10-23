@@ -47,6 +47,8 @@ exports.cssLoaders = function (options) {
     if (options.extract) {
       return ExtractTextPlugin.extract({
         use: loaders,
+        //添加publicPath熟悉，解决vue部署到tomcat后无法找到静态图片的bug
+        publicPath:'../../',
         fallback: 'vue-style-loader'
       })
     } else {

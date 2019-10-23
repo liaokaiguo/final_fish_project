@@ -1,5 +1,8 @@
 #!/bin/bash
 npm install chalk
+
+rm -rf dist/
+
 npm run build
 
 APPNAME=myApp
