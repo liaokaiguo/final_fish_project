@@ -1244,12 +1244,12 @@
 					var lat_center = (points[0].lat + points[2].lat) / 2  //点击网格的中心维度
 					var point_center = new BMap.Point(lng_center, lat_center);
 					var opts = {
-						width: 400,     // 信息窗口宽度
-						height: 130,     // 信息窗口高度
+						// width: 400,     // 信息窗口宽度
+						// height: 130,     // 信息窗口高度
 						title: "渔场信息", // 信息窗口标题
 					};
 					// 窗口显示内容
-					var text = "<div style='width:300px;'>"
+					var text = "<div >"
 						+ "<p>渔场名称：(" + '舟山渔场' + _this.level + "纬" + lat_center + ')' + "</p>"
 						+ "<p>位置（经纬度）：(" + lng_center + ',' + lat_center + ')' + "</p>"
 
