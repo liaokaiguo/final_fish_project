@@ -294,6 +294,8 @@
 
 			/*画饼图*/
 			drawGraph() {
+          var date = new Date();
+          var nowDay = this.getFormatDate(date);
 				let myEcharts = this.$echarts.init(document.getElementById("workModeEcharts"));
 				myEcharts.setOption(this.workModeEchartsOption);
 				//获取后端数据
@@ -302,7 +304,7 @@
 						method: 'post',
 						url: '/statisShipJob',
 						data: {
-							dateTime: "",
+							dateTime: nowDay,
 							idtfyFlag: "",
 						}
 					}).then(res => {
