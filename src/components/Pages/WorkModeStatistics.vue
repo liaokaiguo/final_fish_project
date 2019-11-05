@@ -277,7 +277,7 @@
 				}
 
 				// todo 只有去年数据
-				var currentDate = date.getFullYear() + "-" + month + "-" + strDate;
+				var currentDate = (date.getFullYear()-1) + "-" + month + "-" + strDate;
 				return currentDate;
 			},
 
