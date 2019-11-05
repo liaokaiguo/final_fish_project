@@ -494,7 +494,7 @@
 
 	.dataBox {
 		position: absolute;
-		width: 60%;
+		width: 62%;
 		height: 75%;
 		top: 18vh;
 		left: 10vw;
