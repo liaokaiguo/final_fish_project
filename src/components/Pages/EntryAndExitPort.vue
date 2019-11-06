@@ -86,10 +86,10 @@
             label="渔船编号">
           </el-table-column>
           <el-table-column
-            prop="iof"
+            prop="iofFlag"
             label="出港/入港">
             <template slot-scope="scope">
-              <span>{{scope.row.iof===-1?'出港':'入港'}}</span>
+              <span>{{scope.row.iofFlag===-1?'出港':'入港'}}</span>
             </template>
           </el-table-column>
           <el-table-column
