@@ -84,8 +84,8 @@
 					saveTips: '保存结果',
 				},
 				// 默认时间设置
-				startDate: '2019-07-15',
-				endDate: '2019-08-31',
+				startDate: '2019-09-16',
+				endDate: '2019-10-15',
 				//正常作业柱状图选项
 				NormalBarOption:{
 					grid:{
